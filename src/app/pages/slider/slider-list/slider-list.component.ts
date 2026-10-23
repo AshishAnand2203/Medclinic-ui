@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -16,6 +17,7 @@ import {
   standalone: false,
   selector: 'app-slider-list',
   templateUrl: './slider-list.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./slider-list.component.css']
 })
 export class SliderListComponent

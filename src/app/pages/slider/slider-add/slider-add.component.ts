@@ -1,6 +1,7 @@
 import {
   Component,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -23,6 +24,7 @@ import * as ClassicEditor
   standalone: false,
   selector: 'app-slider-add',
   templateUrl: './slider-add.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./slider-add.component.css']
 })
 export class SliderAddComponent implements OnDestroy {

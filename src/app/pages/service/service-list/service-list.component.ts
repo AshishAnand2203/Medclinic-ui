@@ -1,6 +1,7 @@
 import {
-    Component,
-    OnInit
+  Component,
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -16,6 +17,7 @@ import {
   standalone: false,
     selector: 'app-service-list',
     templateUrl: './service-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./service-list.component.css']
 })
 export class ServiceListComponent implements OnInit {

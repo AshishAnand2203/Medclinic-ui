@@ -1,6 +1,7 @@
 import {
-    Component,
-    OnInit
+  Component,
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -24,6 +25,7 @@ import { APP_CONFIG } from '../../../config/app.config';
   standalone: false,
     selector: 'app-page-edit',
     templateUrl: './page-edit.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./page-edit.component.css']
 })
 export class PageEditComponent implements OnInit {

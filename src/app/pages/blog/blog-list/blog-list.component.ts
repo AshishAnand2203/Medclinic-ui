@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
   standalone: false,
     selector: 'app-blog-list',
     templateUrl: './blog-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./blog-list.component.css']
 })
 export class BlogListComponent implements OnInit {

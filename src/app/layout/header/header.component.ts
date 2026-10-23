@@ -1,7 +1,8 @@
 import {
-    Component,
-    EventEmitter,
-    Output
+  Component,
+  EventEmitter,
+  Output,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -13,6 +14,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
   standalone: false,
     selector: 'app-header',
     templateUrl: './header.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {

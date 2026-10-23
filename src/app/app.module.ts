@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+
 import { FormsModule } from '@angular/forms';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,7 +15,7 @@ import { PageListComponent } from './pages/page/page-list/page-list.component';
 import { PageAddComponent } from './pages/page/page-add/page-add.component';
 import { PageEditComponent } from './pages/page/page-edit/page-edit.component';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { ImageCropperModule } from 'ngx-image-cropper';
+import { ImageCropperComponent } from 'ngx-image-cropper';
 import { ServiceListComponent } from './pages/service/service-list/service-list.component';
 import { ServiceAddComponent } from './pages/service/service-add/service-add.component';
 import { ServiceEditComponent } from './pages/service/service-edit/service-edit.component';
@@ -32,6 +32,7 @@ import { BlogListComponent } from './pages/blog/blog-list/blog-list.component';
 import { BlogAddComponent } from './pages/blog/blog-add/blog-add.component';
 import { BlogEditComponent } from './pages/blog/blog-edit/blog-edit.component';
 import { SettingsComponent } from './pages/settings/settings/settings.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -61,9 +62,11 @@ import { SettingsComponent } from './pages/settings/settings/settings.component'
         BlogEditComponent,
         SettingsComponent,
     ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+    bootstrap: [AppComponent], 
+    imports: [BrowserModule,
         AppRoutingModule,
         FormsModule,
         CKEditorModule,
-        ImageCropperModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
+        ImageCropperComponent], 
+        providers: [provideHttpClient(withXhr(), withInterceptorsFromDi())] })
 export class AppModule {}

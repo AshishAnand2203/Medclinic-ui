@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
@@ -7,6 +7,7 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
   standalone: false,
     selector: 'app-testimonial-edit',
     templateUrl: './testimonial-edit.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./testimonial-edit.component.css']
 })
 export class TestimonialEditComponent implements OnInit {

@@ -1,6 +1,7 @@
 import {
-    Component,
-    OnInit
+  Component,
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -25,6 +26,7 @@ import * as ClassicEditor
   standalone: false,
     selector: 'app-slider-edit',
     templateUrl: './slider-edit.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./slider-edit.component.css']
 })
 export class SliderEditComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { Router } from '@angular/router';
 
@@ -13,6 +13,7 @@ import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
   standalone: false,
   selector: 'app-doctor-add',
   templateUrl: './doctor-add.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./doctor-add.component.css'],
 })
 export class DoctorAddComponent implements OnInit {

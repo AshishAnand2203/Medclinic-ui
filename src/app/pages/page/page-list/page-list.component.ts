@@ -1,6 +1,7 @@
 import {
-    Component,
-    OnInit
+  Component,
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -13,6 +14,7 @@ import { ApiService }
   standalone: false,
     selector: 'app-page-list',
     templateUrl: './page-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./page-list.component.css']
 })
 export class PageListComponent implements OnInit {

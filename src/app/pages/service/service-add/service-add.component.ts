@@ -1,6 +1,7 @@
 import {
-    Component,
-    OnInit
+  Component,
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -24,6 +25,7 @@ import { APP_CONFIG } from '../../../config/app.config';
   standalone: false,
     selector: 'app-service-add',
     templateUrl: './service-add.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./service-add.component.css']
 })
 export class ServiceAddComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
@@ -7,6 +7,7 @@ import { ImageCroppedEvent } from 'ngx-image-cropper';
   standalone: false,
     selector: 'app-testimonial-add',
     templateUrl: './testimonial-add.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./testimonial-add.component.css']
 })
 export class TestimonialAddComponent {

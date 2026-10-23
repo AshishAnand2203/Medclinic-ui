@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   standalone: false,
     selector: 'app-admin-layout',
     templateUrl: './admin-layout.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./admin-layout.component.css']
 })
 export class AdminLayoutComponent {

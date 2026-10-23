@@ -1,6 +1,7 @@
 import {
-    Component,
-    OnInit
+  Component,
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 
 import {
@@ -29,6 +30,7 @@ import * as ClassicEditor
   standalone: false,
     selector: 'app-doctor-edit',
     templateUrl: './doctor-edit.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./doctor-edit.component.css']
 })
 export class DoctorEditComponent implements OnInit {

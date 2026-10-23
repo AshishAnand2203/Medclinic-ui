@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -6,6 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
   standalone: false,
     selector: 'app-testimonial-list',
     templateUrl: './testimonial-list.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./testimonial-list.component.css']
 })
 export class TestimonialListComponent implements OnInit {

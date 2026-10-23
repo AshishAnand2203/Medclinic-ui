@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 
 type SettingsTab =
@@ -12,6 +12,7 @@ type SettingsTab =
   standalone: false,
     selector: 'app-settings',
     templateUrl: './settings.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {

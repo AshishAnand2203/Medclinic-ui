@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ApiService } from '../../services/api.service';
@@ -9,6 +9,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
   standalone: false,
     selector: 'app-login',
     templateUrl: './login.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./login.component.css']
 })
 

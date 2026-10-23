@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
@@ -10,6 +10,7 @@ import * as ClassicEditor
   standalone: false,
     selector: 'app-blog-add',
     templateUrl: './blog-add.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./blog-add.component.css']
 })
 export class BlogAddComponent {

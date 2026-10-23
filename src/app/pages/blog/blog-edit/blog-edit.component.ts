@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ApiService } from 'src/app/services/api.service';
@@ -13,6 +13,7 @@ import * as ClassicEditor
   standalone: false,
     selector: 'app-blog-edit',
     templateUrl: './blog-edit.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./blog-edit.component.css']
 })
 export class BlogEditComponent implements OnInit {

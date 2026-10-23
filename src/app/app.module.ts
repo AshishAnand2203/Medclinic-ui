@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,44 +33,37 @@ import { BlogAddComponent } from './pages/blog/blog-add/blog-add.component';
 import { BlogEditComponent } from './pages/blog/blog-edit/blog-edit.component';
 import { SettingsComponent } from './pages/settings/settings/settings.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    LoginComponent,
-    DashboardComponent,
-    AdminLayoutComponent,
-    HeaderComponent,
-    SidebarComponent,
-    FooterComponent,
-    PageListComponent,
-    PageAddComponent,
-    PageEditComponent,
-    ServiceListComponent,
-    ServiceAddComponent,
-    ServiceEditComponent,
-    DoctorListComponent,
-    DoctorAddComponent,
-    DoctorEditComponent,
-    SliderListComponent,
-    SliderAddComponent,
-    SliderEditComponent,
-    TestimonialListComponent,
-    TestimonialAddComponent,
-    TestimonialEditComponent,
-    BlogListComponent,
-    BlogAddComponent,
-    BlogEditComponent,
-    SettingsComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    CKEditorModule,
-    ImageCropperModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        LoginComponent,
+        DashboardComponent,
+        AdminLayoutComponent,
+        HeaderComponent,
+        SidebarComponent,
+        FooterComponent,
+        PageListComponent,
+        PageAddComponent,
+        PageEditComponent,
+        ServiceListComponent,
+        ServiceAddComponent,
+        ServiceEditComponent,
+        DoctorListComponent,
+        DoctorAddComponent,
+        DoctorEditComponent,
+        SliderListComponent,
+        SliderAddComponent,
+        SliderEditComponent,
+        TestimonialListComponent,
+        TestimonialAddComponent,
+        TestimonialEditComponent,
+        BlogListComponent,
+        BlogAddComponent,
+        BlogEditComponent,
+        SettingsComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        CKEditorModule,
+        ImageCropperModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {}

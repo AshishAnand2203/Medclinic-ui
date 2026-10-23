@@ -13,6 +13,7 @@ import {
 
 
 @Component({
+  standalone: false,
     selector: 'app-doctor-list',
     templateUrl: './doctor-list.component.html',
     styleUrls: ['./doctor-list.component.css']

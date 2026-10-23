@@ -7,6 +7,7 @@ import * as ClassicEditor
     from '@ckeditor/ckeditor5-build-classic';
 
 @Component({
+  standalone: false,
     selector: 'app-blog-add',
     templateUrl: './blog-add.component.html',
     styleUrls: ['./blog-add.component.css']

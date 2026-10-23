@@ -20,6 +20,7 @@ import * as ClassicEditor
 
 
 @Component({
+  standalone: false,
   selector: 'app-slider-add',
   templateUrl: './slider-add.component.html',
   styleUrls: ['./slider-add.component.css']

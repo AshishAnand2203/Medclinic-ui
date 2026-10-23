@@ -4,6 +4,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
+  standalone: false,
     selector: 'app-testimonial-edit',
     templateUrl: './testimonial-edit.component.html',
     styleUrls: ['./testimonial-edit.component.css']

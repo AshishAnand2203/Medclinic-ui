@@ -13,6 +13,7 @@ import {
 
 
 @Component({
+  standalone: false,
     selector: 'app-service-list',
     templateUrl: './service-list.component.html',
     styleUrls: ['./service-list.component.css']

@@ -26,6 +26,7 @@ import * as ClassicEditor
 
 
 @Component({
+  standalone: false,
     selector: 'app-doctor-edit',
     templateUrl: './doctor-edit.component.html',
     styleUrls: ['./doctor-edit.component.css']

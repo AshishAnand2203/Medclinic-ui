@@ -13,6 +13,7 @@ import {
 
 
 @Component({
+  standalone: false,
   selector: 'app-slider-list',
   templateUrl: './slider-list.component.html',
   styleUrls: ['./slider-list.component.css']

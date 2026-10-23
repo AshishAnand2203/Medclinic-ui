@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
+  standalone: false,
     selector: 'app-testimonial-list',
     templateUrl: './testimonial-list.component.html',
     styleUrls: ['./testimonial-list.component.css']

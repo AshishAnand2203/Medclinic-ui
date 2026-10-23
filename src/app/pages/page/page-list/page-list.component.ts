@@ -10,6 +10,7 @@ import { ApiService }
 
 
 @Component({
+  standalone: false,
     selector: 'app-page-list',
     templateUrl: './page-list.component.html',
     styleUrls: ['./page-list.component.css']

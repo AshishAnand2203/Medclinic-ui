@@ -22,6 +22,7 @@ import * as ClassicEditor
 
 
 @Component({
+  standalone: false,
     selector: 'app-slider-edit',
     templateUrl: './slider-edit.component.html',
     styleUrls: ['./slider-edit.component.css']

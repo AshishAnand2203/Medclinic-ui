@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 
 @Component({
+  standalone: false,
     selector: 'app-blog-list',
     templateUrl: './blog-list.component.html',
     styleUrls: ['./blog-list.component.css']

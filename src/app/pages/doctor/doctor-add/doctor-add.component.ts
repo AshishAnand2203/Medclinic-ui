@@ -10,6 +10,7 @@ import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 
 @Component({
+  standalone: false,
   selector: 'app-doctor-add',
   templateUrl: './doctor-add.component.html',
   styleUrls: ['./doctor-add.component.css'],

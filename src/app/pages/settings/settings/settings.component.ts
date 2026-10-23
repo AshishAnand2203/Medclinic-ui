@@ -9,6 +9,7 @@ type SettingsTab =
     | 'advanced';
 
 @Component({
+  standalone: false,
     selector: 'app-settings',
     templateUrl: './settings.component.html',
     styleUrls: ['./settings.component.css']

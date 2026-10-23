@@ -22,6 +22,7 @@ import * as ClassicEditor
 import { APP_CONFIG } from '../../../config/app.config';
 
 @Component({
+  standalone: false,
     selector: 'app-service-edit',
     templateUrl: './service-edit.component.html',
     styleUrls: ['./service-edit.component.css']

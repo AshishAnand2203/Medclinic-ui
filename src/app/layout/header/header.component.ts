@@ -10,6 +10,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
 
 
 @Component({
+  standalone: false,
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.css']

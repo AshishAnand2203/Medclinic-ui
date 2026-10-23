@@ -5,6 +5,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
 
 
 @Component({
+  standalone: false,
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.css']

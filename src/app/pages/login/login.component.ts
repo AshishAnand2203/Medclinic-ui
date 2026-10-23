@@ -6,6 +6,7 @@ import { TokenStorageService } from '../../services/token-storage.service';
 
 
 @Component({
+  standalone: false,
     selector: 'app-login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']

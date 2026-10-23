@@ -10,6 +10,7 @@ import * as ClassicEditor
 
 
 @Component({
+  standalone: false,
     selector: 'app-blog-edit',
     templateUrl: './blog-edit.component.html',
     styleUrls: ['./blog-edit.component.css']

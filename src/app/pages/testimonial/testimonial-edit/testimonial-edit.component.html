@@ -1,0 +1,983 @@
+<!-- =========================================================
+     PAGE HEADER
+========================================================= -->
+
+<div class="page-header">
+
+    <div>
+
+        <div class="breadcrumb-text">
+
+            Content Management
+
+            <span>/</span>
+
+            <a routerLink="/testimonial/list">
+                Testimonials
+            </a>
+
+            <span>/</span>
+
+            <strong>
+                Edit Testimonial
+            </strong>
+
+        </div>
+
+        <h1>
+            Edit Testimonial
+        </h1>
+
+        <p>
+            Update testimonial information, rating and patient image.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     SUCCESS / ERROR
+========================================================= -->
+
+<div
+    class="message-box success-message"
+    *ngIf="successMessage">
+
+    <i class="fa-solid fa-circle-check"></i>
+
+    <span>
+        {{ successMessage }}
+    </span>
+
+</div>
+
+
+<div
+    class="message-box error-message"
+    *ngIf="errorMessage">
+
+    <i class="fa-solid fa-circle-exclamation"></i>
+
+    <span>
+        {{ errorMessage }}
+    </span>
+
+</div>
+
+
+<!-- =========================================================
+     LOADING
+========================================================= -->
+
+<div
+    class="page-loading-card"
+    *ngIf="isLoading">
+
+    <span class="page-spinner"></span>
+
+    <strong>
+        Loading testimonial...
+    </strong>
+
+</div>
+
+
+<!-- =========================================================
+     FORM
+========================================================= -->
+
+<form
+    *ngIf="!isLoading"
+    #testimonialForm="ngForm"
+    (ngSubmit)="submitForm()"
+    novalidate>
+
+
+    <!-- DO NOT ADD align-items-start -->
+
+    <div class="row g-3">
+
+
+        <!-- =================================================
+             LEFT
+        ================================================== -->
+
+        <div class="col-xl-8 col-lg-7">
+
+
+            <!-- =============================================
+                 INFORMATION
+            ============================================== -->
+
+            <div class="form-card">
+
+                <div class="form-card-header">
+
+                    <div class="card-heading-wrap">
+
+                        <div class="card-icon">
+                            <i class="fa-regular fa-user"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Testimonial Information
+                            </h3>
+
+                            <p>
+                                Update the patient or customer information.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-card-body">
+
+                    <div class="row g-3">
+
+
+                        <!-- NAME -->
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+                                    Name
+                                    <span class="required">*</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="name"
+                                    class="form-control-custom"
+                                    [(ngModel)]="formData.name"
+                                    #name="ngModel"
+                                    required
+                                    maxlength="150"
+                                    placeholder="e.g. Sarah Williams">
+
+                                <div
+                                    class="field-error"
+                                    *ngIf="
+                                        name.invalid &&
+                                        (name.dirty || name.touched)
+                                    ">
+
+                                    Name is required.
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DESIGNATION -->
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+
+                                <label>
+                                    Designation / Role
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="designation"
+                                    class="form-control-custom"
+                                    [(ngModel)]="formData.designation"
+                                    maxlength="150"
+                                    placeholder="e.g. Patient">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 CONTENT
+            ============================================== -->
+
+            <div class="form-card">
+
+                <div class="form-card-header">
+
+                    <div class="card-heading-wrap">
+
+                        <div class="card-icon">
+                            <i class="fa-regular fa-comment-dots"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Testimonial Content
+                            </h3>
+
+                            <p>
+                                Update the testimonial and patient rating.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-card-body">
+
+
+                    <!-- TESTIMONIAL -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Testimonial
+                            <span class="required">*</span>
+                        </label>
+
+                        <textarea
+                            name="testimonial"
+                            class="form-control-custom testimonial-textarea"
+                            [(ngModel)]="formData.testimonial"
+                            #testimonial="ngModel"
+                            required
+                            rows="7"
+                            placeholder="Enter the testimonial...">
+                        </textarea>
+
+
+                        <div class="field-footer">
+
+                            <span>
+                                Enter the testimonial exactly as it should appear.
+                            </span>
+
+                            <span>
+                                {{ formData.testimonial?.length || 0 }}
+                                characters
+                            </span>
+
+                        </div>
+
+
+                        <div
+                            class="field-error"
+                            *ngIf="
+                                testimonial.invalid &&
+                                (testimonial.dirty || testimonial.touched)
+                            ">
+
+                            Testimonial is required.
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RATING -->
+
+                    <div class="form-group rating-form-group">
+
+                        <label>
+                            Rating
+                        </label>
+
+
+                        <div class="rating-selector">
+
+                            <button
+                                *ngFor="let rating of ratings"
+                                type="button"
+                                class="rating-star"
+                                [class.active]="rating <= formData.rating"
+                                (click)="setRating(rating)">
+
+                                <i class="fa-solid fa-star"></i>
+
+                            </button>
+
+
+                            <div class="rating-value">
+
+                                <strong>
+                                    {{ formData.rating }}.0
+                                </strong>
+
+                                <span>
+                                    out of 5
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="rating-description">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                            Click a star to change the rating.
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =============================================
+                 IMAGE
+            ============================================== -->
+
+            <div class="form-card">
+
+                <div class="form-card-header">
+
+                    <div class="card-heading-wrap">
+
+                        <div class="card-icon">
+                            <i class="fa-regular fa-image"></i>
+                        </div>
+
+                        <div>
+
+                            <h3>
+                                Patient Image
+                            </h3>
+
+                            <p>
+                                Change or remove the testimonial profile image.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-card-body">
+
+
+                    <!-- =====================================
+                         EXISTING IMAGE
+                    ====================================== -->
+
+                    <div
+                        class="testimonial-image-box"
+                        *ngIf="formData.image_url">
+
+
+                        <div class="testimonial-image-preview">
+
+                            <img
+                                [src]="formData.image_url"
+                                [alt]="formData.name || 'Testimonial image'">
+
+                        </div>
+
+
+                        <div class="testimonial-image-info">
+
+
+                            <div class="image-ready-status">
+
+                                <div class="ready-icon">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong>
+                                        Patient Image Ready
+                                    </strong>
+
+                                    <span>
+                                        500 × 500 pixel profile image
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="image-actions">
+
+                                <label
+                                    for="testimonialEditImageInput"
+                                    class="image-btn change-image-btn">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                    Change Image
+
+                                </label>
+
+
+                                <button
+                                    type="button"
+                                    class="image-btn remove-image-btn"
+                                    [disabled]="isRemovingImage"
+                                    (click)="removeImage()">
+
+                                    <ng-container
+                                        *ngIf="!isRemovingImage">
+
+                                        <i class="fa-regular fa-trash-can"></i>
+
+                                        Remove
+
+                                    </ng-container>
+
+
+                                    <ng-container
+                                        *ngIf="isRemovingImage">
+
+                                        <span class="small-spinner red-spinner"></span>
+
+                                        Removing...
+
+                                    </ng-container>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =====================================
+                         NO IMAGE
+                    ====================================== -->
+
+                    <label
+                        class="testimonial-image-upload"
+                        for="testimonialEditImageInput"
+                        *ngIf="!formData.image_url">
+
+
+                        <div class="upload-icon">
+
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                        </div>
+
+
+                        <strong>
+                            Upload Patient Image
+                        </strong>
+
+
+                        <span>
+                            Click to select JPG, PNG or WEBP
+                        </span>
+
+
+                        <small>
+                            Optional • Maximum 5 MB • Output 500 × 500 px
+                        </small>
+
+                    </label>
+
+
+                    <input
+                        id="testimonialEditImageInput"
+                        type="file"
+                        hidden
+                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                        (change)="onFileSelected($event)">
+
+
+                    <!-- IMAGE ERROR -->
+
+                    <div
+                        class="image-error"
+                        *ngIf="imageError">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        <span>
+                            {{ imageError }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- REQUIREMENT -->
+
+                    <div class="image-requirement-box">
+
+                        <div class="requirement-icon">
+
+                            <i class="fa-solid fa-circle-info"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Image Requirements
+                            </strong>
+
+                            <p>
+                                New images are cropped to
+                                <b>500 × 500 pixels</b>.
+                                JPG, PNG and WEBP files up to 5 MB are supported.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT
+        ================================================== -->
+
+        <div class="col-xl-4 col-lg-5">
+
+
+            <!-- =============================================
+                 PUBLISH
+            ============================================== -->
+
+            <div class="publish-card">
+
+
+                <div class="publish-header">
+
+                    <div>
+
+                        <h3>
+                            Update
+                        </h3>
+
+                        <p>
+                            Configure and update this testimonial.
+                        </p>
+
+                    </div>
+
+
+                    <div class="publish-icon">
+
+                        <i class="fa-solid fa-pen-to-square"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div class="publish-body">
+
+
+                    <!-- STATUS -->
+
+                    <div class="publish-field">
+
+                        <label>
+                            Status
+                        </label>
+
+
+                        <div class="status-options">
+
+
+                            <label
+                                class="status-option"
+                                [class.selected]="formData.status == 1">
+
+                                <input
+                                    type="radio"
+                                    name="status"
+                                    [value]="1"
+                                    [(ngModel)]="formData.status">
+
+                                <span class="status-radio"></span>
+
+                                <div>
+
+                                    <strong>
+                                        Active
+                                    </strong>
+
+                                    <small>
+                                        Visible on the website
+                                    </small>
+
+                                </div>
+
+                            </label>
+
+
+                            <label
+                                class="status-option"
+                                [class.selected]="formData.status == 0">
+
+                                <input
+                                    type="radio"
+                                    name="status"
+                                    [value]="0"
+                                    [(ngModel)]="formData.status">
+
+                                <span class="status-radio"></span>
+
+                                <div>
+
+                                    <strong>
+                                        Inactive
+                                    </strong>
+
+                                    <small>
+                                        Hidden from the website
+                                    </small>
+
+                                </div>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SORT -->
+
+                    <div class="publish-field">
+
+                        <label>
+                            Sort Order
+                        </label>
+
+                        <input
+                            type="number"
+                            name="sort_order"
+                            class="form-control-custom"
+                            [(ngModel)]="formData.sort_order"
+                            min="0">
+
+                        <small class="field-help">
+                            Lower numbers appear first.
+                        </small>
+
+                    </div>
+
+
+                    <!-- SUMMARY -->
+
+                    <div class="publish-summary">
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Testimonial ID
+                            </span>
+
+                            <strong>
+                                #{{ testimonialId }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Rating
+                            </span>
+
+                            <strong class="summary-rating">
+
+                                <i class="fa-solid fa-star"></i>
+
+                                {{ formData.rating }}/5
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Image
+                            </span>
+
+                            <strong
+                                [class.ready]="formData.image_url">
+
+                                {{
+                                    formData.image_url
+                                        ? 'Ready'
+                                        : 'No Image'
+                                }}
+
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Status
+                            </span>
+
+                            <strong
+                                [class.active-status]="formData.status == 1">
+
+                                {{
+                                    formData.status == 1
+                                        ? 'Active'
+                                        : 'Inactive'
+                                }}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+
+                <div class="publish-footer">
+
+                    <button
+                        type="button"
+                        class="cancel-btn"
+                        [disabled]="isSubmitting"
+                        (click)="cancel()">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="save-btn"
+                        [disabled]="
+                            isSubmitting ||
+                            testimonialForm.invalid
+                        ">
+
+
+                        <ng-container
+                            *ngIf="!isSubmitting">
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Update Testimonial
+
+                        </ng-container>
+
+
+                        <ng-container
+                            *ngIf="isSubmitting">
+
+                            <span class="button-spinner"></span>
+
+                            Updating...
+
+                        </ng-container>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+<!-- =========================================================
+     CROPPER MODAL
+========================================================= -->
+
+<div
+    class="cropper-backdrop"
+    *ngIf="showCropperModal">
+
+
+    <div class="cropper-modal">
+
+
+        <!-- HEADER -->
+
+        <div class="cropper-modal-header">
+
+            <div>
+
+                <h3>
+                    Crop Patient Image
+                </h3>
+
+                <p>
+                    Adjust the image inside the square crop area.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="cropper-close"
+                [disabled]="isUploadingImage"
+                (click)="cancelCrop()">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- BODY -->
+
+        <div class="cropper-modal-body">
+
+
+            <div
+                class="cropper-loading"
+                *ngIf="cropperLoading">
+
+                <span class="cropper-spinner"></span>
+
+                Loading image...
+
+            </div>
+
+
+            <image-cropper
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="1 / 1"
+                [resizeToWidth]="500"
+                [resizeToHeight]="500"
+                [onlyScaleDown]="false"
+                [cropperMinWidth]="500"
+                [format]="'jpeg'"
+                [imageQuality]="92"
+                [alignImage]="'center'"
+                (imageCropped)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()"
+                (loadImageFailed)="loadImageFailed()">
+            </image-cropper>
+
+
+            <div class="cropper-size-info">
+
+                <i class="fa-solid fa-crop-simple"></i>
+
+                Final output:
+
+                <strong>
+                    500 × 500 px
+                </strong>
+
+            </div>
+
+
+            <div
+                class="image-error cropper-error"
+                *ngIf="imageError">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                {{ imageError }}
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="cropper-modal-footer">
+
+            <button
+                type="button"
+                class="crop-cancel-btn"
+                [disabled]="isUploadingImage"
+                (click)="cancelCrop()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                type="button"
+                class="crop-apply-btn"
+                [disabled]="
+                    !croppedBlob ||
+                    isUploadingImage
+                "
+                (click)="applyCrop()">
+
+
+                <ng-container
+                    *ngIf="!isUploadingImage">
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Apply & Upload
+
+                </ng-container>
+
+
+                <ng-container
+                    *ngIf="isUploadingImage">
+
+                    <span class="button-spinner"></span>
+
+                    Uploading...
+
+                </ng-container>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

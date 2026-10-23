@@ -1,0 +1,1679 @@
+<div class="service-form-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="page-heading">
+
+        <div>
+
+            <div class="breadcrumb-text">
+
+                <span>
+                    Content Management
+                </span>
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+                <a routerLink="/service/list">
+                    Services
+                </a>
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+                <strong>
+                    Edit Service
+                </strong>
+
+            </div>
+
+            <h1>
+                Edit Service
+            </h1>
+
+            <p *ngIf="!isLoading">
+                Update service information, content, SEO and publishing settings.
+            </p>
+
+        </div>
+
+
+        <a
+            routerLink="/service/list"
+            class="back-btn">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Back to Services
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         LOADING
+    ====================================================== -->
+
+    <div
+        class="page-loading"
+        *ngIf="isLoading">
+
+        <div class="spinner-border"></div>
+
+        <strong>
+            Loading service...
+        </strong>
+
+        <span>
+            Please wait while we retrieve the service information.
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         PAGE CONTENT
+    ====================================================== -->
+
+    <ng-container *ngIf="!isLoading">
+
+
+        <!-- =================================================
+             SUCCESS MESSAGE
+        ================================================== -->
+
+        <div
+            class="alert-box success"
+            *ngIf="successMessage">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            <div>
+
+                <strong>
+                    Service Updated
+                </strong>
+
+                <span>
+                    {{ successMessage }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ERROR MESSAGE
+        ================================================== -->
+
+        <div
+            class="alert-box error"
+            *ngIf="errorMessage">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <div>
+
+                <strong>
+                    Unable to update service
+                </strong>
+
+                <span>
+                    {{ errorMessage }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <form
+            #serviceForm="ngForm"
+            (ngSubmit)="updateService(serviceForm)"
+            novalidate>
+
+            <div class="row g-4">
+
+
+                <!-- =================================================
+                     LEFT SECTION
+                ================================================== -->
+
+                <div class="col-xl-8">
+
+
+                    <!-- =============================================
+                         SERVICE TYPE
+                    ============================================== -->
+
+                    <div class="form-card">
+
+
+
+
+                        <div class="form-card-body">
+
+                            <div class="service-type-grid">
+
+
+                                <!-- =================================
+                                     MAIN SERVICE
+                                ================================== -->
+
+                                <label
+                                    class="service-type-option"
+                                    [class.selected]="
+                                        service.service_type === 'main'
+                                    ">
+
+                                    <input
+                                        type="radio"
+                                        name="service_type"
+                                        [(ngModel)]="service.service_type"
+                                        value="main"
+                                        (change)="onServiceTypeChange()">
+
+
+                                    <div class="type-icon">
+
+                                        <i class="fa-solid fa-layer-group"></i>
+
+                                    </div>
+
+
+                                    <div class="type-content">
+
+                                        <strong>
+                                            Main Service
+                                        </strong>
+
+                                        <span>
+                                            A primary medical service displayed
+                                            in the main services directory.
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="type-check">
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                    </div>
+
+                                </label>
+
+
+                                <!-- =================================
+                                     SUB SERVICE
+                                ================================== -->
+
+                                <label
+                                    class="service-type-option"
+                                    [class.selected]="
+                                        service.service_type === 'sub'
+                                    ">
+
+                                    <input
+                                        type="radio"
+                                        name="service_type"
+                                        [(ngModel)]="service.service_type"
+                                        value="sub"
+                                        (change)="onServiceTypeChange()">
+
+
+                                    <div class="type-icon green">
+
+                                        <i class="fa-solid fa-code-branch"></i>
+
+                                    </div>
+
+
+                                    <div class="type-content">
+
+                                        <strong>
+                                            Sub Service
+                                        </strong>
+
+                                        <span>
+                                            A service displayed underneath
+                                            a selected main service.
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="type-check">
+
+                                        <i class="fa-solid fa-check"></i>
+
+                                    </div>
+
+                                </label>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 PARENT SERVICE
+                            ====================================== -->
+
+                            <div
+                                class="parent-service-box"
+                                *ngIf="
+                                    service.service_type === 'sub'
+                                ">
+
+                                <div class="form-group mb-0">
+
+                                    <label>
+
+                                        Parent Service
+
+                                        <span class="required">
+                                            *
+                                        </span>
+
+                                    </label>
+
+
+                                    <select
+                                        name="parent_id"
+                                        class="form-control-custom"
+                                        [(ngModel)]="service.parent_id"
+                                        #parentId="ngModel"
+                                        required>
+
+                                        <option value="">
+                                            Select main service
+                                        </option>
+
+
+                                        <option
+                                            *ngFor="
+                                                let parent of parentServices
+                                            "
+                                            [value]="parent.id">
+
+                                            {{ parent.title }}
+
+                                        </option>
+
+                                    </select>
+
+
+                                    <div
+                                        class="field-error"
+                                        *ngIf="
+                                            (
+                                                parentId.invalid &&
+                                                parentId.touched
+                                            ) ||
+                                            errors.parent_id
+                                        ">
+
+                                        {{
+                                            errors.parent_id ||
+                                            'Please select a parent service.'
+                                        }}
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =============================================
+                         SERVICE INFORMATION
+                    ============================================== -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon">
+
+                                <i class="fa-solid fa-stethoscope"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Service Information
+                                </h3>
+
+                                <p>
+                                    Update the basic details for this service.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+
+                            <!-- =====================================
+                                 TITLE
+                            ====================================== -->
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Service Title
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    name="title"
+                                    class="form-control-custom"
+                                    [(ngModel)]="service.title"
+                                    #title="ngModel"
+                                    (ngModelChange)="onTitleChange()"
+                                    required
+                                    maxlength="255"
+                                    placeholder="e.g. General Practice">
+
+
+                                <div
+                                    class="field-error"
+                                    *ngIf="
+                                        (
+                                            title.invalid &&
+                                            title.touched
+                                        ) ||
+                                        errors.title
+                                    ">
+
+                                    {{
+                                        errors.title ||
+                                        'Service title is required.'
+                                    }}
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 SLUG
+                            ====================================== -->
+
+                            <div class="form-group">
+
+                                <label>
+
+                                    Service URL
+
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+
+                                <div class="slug-input">
+
+                                    <span>
+                                        /services/
+                                    </span>
+
+
+                                    <input
+                                        type="text"
+                                        name="slug"
+                                        [(ngModel)]="service.slug"
+                                        #slug="ngModel"
+                                        (input)="onSlugInput()"
+                                        required
+                                        maxlength="255"
+                                        placeholder="general-practice">
+
+                                </div>
+
+
+                                <div
+                                    class="field-error"
+                                    *ngIf="
+                                        (
+                                            slug.invalid &&
+                                            slug.touched
+                                        ) ||
+                                        errors.slug
+                                    ">
+
+                                    {{
+                                        errors.slug ||
+                                        'Service URL is required.'
+                                    }}
+
+                                </div>
+
+
+                                <div class="field-help">
+
+                                    <i class="fa-solid fa-circle-info"></i>
+
+                                    Changing the URL of an existing service may
+                                    affect existing links and search rankings.
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 SHORT DESCRIPTION
+                            ====================================== -->
+
+                            <div class="form-group mb-0">
+
+                                <label>
+                                    Short Description
+                                </label>
+
+
+                                <textarea
+                                    name="short_description"
+                                    class="form-control-custom"
+                                    [(ngModel)]="service.short_description"
+                                    rows="4"
+                                    placeholder="Enter a short description of this service...">
+                                </textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =============================================
+                         SERVICE CONTENT
+                    ============================================== -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon green">
+
+                                <i class="fa-solid fa-align-left"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Service Content
+                                </h3>
+
+                                <p>
+                                    Add detailed information about this
+                                    medical service.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+
+                            <div class="editor-heading">
+
+                                <label>
+                                    Content
+                                </label>
+
+
+                                <div class="editor-mode-switch">
+
+
+                                    <!-- VISUAL -->
+
+                                    <button
+                                        type="button"
+                                        [class.active]="
+                                            editorMode === 'visual'
+                                        "
+                                        (click)="
+                                            setEditorMode('visual')
+                                        ">
+
+                                        <i
+                                            class="
+                                                fa-regular
+                                                fa-pen-to-square
+                                            ">
+                                        </i>
+
+                                        Visual
+
+                                    </button>
+
+
+                                    <!-- HTML -->
+
+                                    <button
+                                        type="button"
+                                        [class.active]="
+                                            editorMode === 'source'
+                                        "
+                                        (click)="
+                                            setEditorMode('source')
+                                        ">
+
+                                        <i class="fa-solid fa-code"></i>
+
+                                        HTML
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 VISUAL EDITOR
+                            ====================================== -->
+
+                            <div
+                                class="editor-wrapper"
+                                [hidden]="
+                                    editorMode !== 'visual'
+                                ">
+
+                                <ckeditor
+                                    [editor]="Editor"
+                                    [config]="editorConfig"
+                                    [(ngModel)]="service.content"
+                                    name="content"
+                                    (ready)="onEditorReady($event)">
+                                </ckeditor>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 HTML EDITOR
+                            ====================================== -->
+
+                            <div
+                                class="html-editor-wrapper"
+                                *ngIf="
+                                    editorMode === 'source'
+                                ">
+
+                                <div class="html-editor-toolbar">
+
+                                    <div>
+
+                                        <i class="fa-solid fa-code"></i>
+
+                                        HTML Source
+
+                                    </div>
+
+
+                                    <span>
+                                        Edit service markup
+                                    </span>
+
+                                </div>
+
+
+                                <textarea
+                                    name="content_source"
+                                    [(ngModel)]="service.content"
+                                    class="html-source-editor"
+                                    spellcheck="false">
+                                </textarea>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 EDITOR HELP
+                            ====================================== -->
+
+                            <div class="editor-help">
+
+                                <span>
+
+                                    <i class="fa-solid fa-image"></i>
+
+                                    Upload Images
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="fa-solid fa-code"></i>
+
+                                    HTML Source
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="fa-solid fa-table-cells"></i>
+
+                                    Tables
+
+                                </span>
+
+
+                                <span>
+
+                                    <i class="fa-solid fa-link"></i>
+
+                                    Links
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- =============================================
+     SERVICE IMAGE & ICON
+============================================== -->
+
+<div class="form-card">
+
+    <div class="form-card-header">
+
+        <div class="card-icon image">
+            <i class="fa-regular fa-image"></i>
+        </div>
+
+        <div>
+            <h3>
+                Service Image & Icon
+            </h3>
+
+            <p>
+                Manage the featured image and display icon for this service.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="form-card-body">
+
+        <div class="row g-4">
+
+            <!-- =================================
+                 SERVICE IMAGE
+            ================================== -->
+
+            <div class="col-lg-7">
+
+                <div class="section-field-title">
+
+                    <label>
+                        Service Image
+                    </label>
+
+                    <span>
+                        Used as the featured image for this service.
+                    </span>
+
+                </div>
+
+
+                <!-- NO IMAGE -->
+
+                <label
+                    class="service-image-upload"
+                    *ngIf="!service.image">
+
+                    <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        (change)="onImageSelected($event)">
+
+
+                    <ng-container *ngIf="!isUploadingImage">
+
+                        <div class="upload-icon">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+
+                        <strong>
+                            Upload Service Image
+                        </strong>
+
+                        <span>
+                            Click to browse or select an image
+                        </span>
+
+                        <small>
+                            JPG, PNG or WEBP • Maximum 5 MB
+                        </small>
+
+                    </ng-container>
+
+
+                    <ng-container *ngIf="isUploadingImage">
+
+                        <div
+                            class="spinner-border"
+                            role="status">
+                        </div>
+
+                        <strong>
+                            Uploading image...
+                        </strong>
+
+                        <span>
+                            Please wait while the image is uploaded.
+                        </span>
+
+                    </ng-container>
+
+                </label>
+
+
+                <!-- IMAGE PREVIEW -->
+
+                <div
+                    class="service-image-preview"
+                    *ngIf="service.image">
+
+                    <div class="preview-image">
+
+                        <img
+                            [src]="service.image"
+                            [alt]="service.title || 'Service image'">
+
+                    </div>
+
+
+                    <div class="preview-image-footer">
+
+                        <div>
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            <span>
+                                Service image uploaded
+                            </span>
+
+                        </div>
+
+
+                        <div class="image-actions">
+
+                            <label
+                                class="change-image-btn"
+                                title="Change Image">
+
+                                <input
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    (change)="onImageSelected($event)">
+
+                                <i class="fa-solid fa-pen"></i>
+
+                                Change
+
+                            </label>
+
+
+                            <button
+                                type="button"
+                                class="remove-image-btn"
+                                title="Remove Image"
+                                (click)="removeImage()">
+
+                                <i class="fa-solid fa-trash"></i>
+
+                                Remove
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="field-error"
+                    *ngIf="imageError">
+
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                    {{ imageError }}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 SERVICE ICON
+            ================================== -->
+
+            <div class="col-lg-5">
+
+                <div class="section-field-title">
+
+                    <label>
+                        Service Icon
+                    </label>
+
+                    <span>
+                        Optional Font Awesome icon class.
+                    </span>
+
+                </div>
+
+
+                <div class="icon-field-box">
+
+                    <!-- ICON PREVIEW -->
+
+                    <div class="service-icon-preview">
+
+                        <i
+                            *ngIf="service.icon"
+                            [class]="service.icon">
+                        </i>
+
+                        <i
+                            *ngIf="!service.icon"
+                            class="fa-solid fa-stethoscope">
+                        </i>
+
+                    </div>
+
+
+                    <div class="icon-input-area">
+
+                        <label>
+                            Font Awesome Class
+                        </label>
+
+                        <input
+                            type="text"
+                            name="icon"
+                            class="form-control-custom"
+                            [(ngModel)]="service.icon"
+                            placeholder="fa-solid fa-stethoscope">
+
+                    </div>
+
+                </div>
+
+
+                <div class="icon-examples">
+
+                    <span>
+                        Examples
+                    </span>
+
+
+                    <button
+                        type="button"
+                        title="Stethoscope"
+                        (click)="
+                            service.icon =
+                                'fa-solid fa-stethoscope'
+                        ">
+
+                        <i class="fa-solid fa-stethoscope"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        title="Heart Pulse"
+                        (click)="
+                            service.icon =
+                                'fa-solid fa-heart-pulse'
+                        ">
+
+                        <i class="fa-solid fa-heart-pulse"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        title="User Doctor"
+                        (click)="
+                            service.icon =
+                                'fa-solid fa-user-doctor'
+                        ">
+
+                        <i class="fa-solid fa-user-doctor"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        title="Syringe"
+                        (click)="
+                            service.icon =
+                                'fa-solid fa-syringe'
+                        ">
+
+                        <i class="fa-solid fa-syringe"></i>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        title="Notes Medical"
+                        (click)="
+                            service.icon =
+                                'fa-solid fa-notes-medical'
+                        ">
+
+                        <i class="fa-solid fa-notes-medical"></i>
+
+                    </button>
+
+                </div>
+
+
+                <div class="field-help icon-help">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Enter any Font Awesome Free icon class, for example
+                    <strong>fa-solid fa-heart-pulse</strong>.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+                    <!-- =============================================
+                         SEO SETTINGS
+                    ============================================== -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon seo">
+
+                                <i class="fa-solid fa-magnifying-glass"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    SEO Settings
+                                </h3>
+
+                                <p>
+                                    Configure search engine information
+                                    for this service.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+
+                            <!-- =====================================
+                                 META TITLE
+                            ====================================== -->
+
+                            <div class="form-group">
+
+                                <div class="label-row">
+
+                                    <label>
+                                        Meta Title
+                                    </label>
+
+
+                                    <span
+                                        [class.limit-warning]="
+                                            metaTitleLength > 60
+                                        ">
+
+                                        {{ metaTitleLength }}/60
+
+                                    </span>
+
+                                </div>
+
+
+                                <input
+                                    type="text"
+                                    name="meta_title"
+                                    class="form-control-custom"
+                                    [(ngModel)]="service.meta_title"
+                                    (input)="
+                                        metaTitleManuallyEdited = true
+                                    "
+                                    maxlength="255"
+                                    placeholder="SEO title for this service">
+
+                                <div class="field-help">
+
+                                    Recommended length:
+                                    approximately 50–60 characters.
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 META DESCRIPTION
+                            ====================================== -->
+
+                            <div class="form-group">
+
+                                <div class="label-row">
+
+                                    <label>
+                                        Meta Description
+                                    </label>
+
+
+                                    <span
+                                        [class.limit-warning]="
+                                            metaDescriptionLength > 160
+                                        ">
+
+                                        {{ metaDescriptionLength }}/160
+
+                                    </span>
+
+                                </div>
+
+
+                                <textarea
+                                    name="meta_description"
+                                    class="form-control-custom"
+                                    [(ngModel)]="service.meta_description"
+                                    rows="4"
+                                    placeholder="Write a concise description for search engines...">
+                                </textarea>
+
+
+                                <div class="field-help">
+
+                                    Recommended length:
+                                    approximately 140–160 characters.
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 META KEYWORDS
+                            ====================================== -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Meta Keywords
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    name="meta_keywords"
+                                    class="form-control-custom"
+                                    [(ngModel)]="service.meta_keywords"
+                                    placeholder="general practice, doctor, medical care">
+
+                                <div class="field-help">
+
+                                    Separate keywords with commas.
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 CANONICAL URL
+                            ====================================== -->
+
+                            <div class="form-group mb-0">
+
+                                <label>
+                                    Canonical URL
+                                </label>
+
+
+                                <input
+                                    type="url"
+                                    name="canonical_url"
+                                    class="form-control-custom"
+                                    [(ngModel)]="service.canonical_url"
+                                    placeholder="https://{{ appConfig.domain }}/services/general-practice/">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =============================================
+                         SEARCH PREVIEW
+                    ============================================== -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon search-preview-icon">
+
+                                <i class="fa-brands fa-google"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Search Preview
+                                </h3>
+
+                                <p>
+                                    Preview how this service may appear
+                                    in Google search results.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+
+                            <div class="search-preview-box">
+
+
+                                <!-- =================================
+                                     SITE
+                                ================================== -->
+
+                                <div class="search-preview-site">
+
+                                    <div class="search-site-icon">
+
+                                        <i class="fa-solid fa-stethoscope"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            {{ appConfig.projectName}}
+                                        </strong>
+
+                                        <span>
+                                            {{ appConfig.domain }}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- =================================
+                                     URL
+                                ================================== -->
+
+                                <div class="google-url">
+
+                                    https://www.{{ appConfig.domain }} › services
+
+                                    <span *ngIf="service.slug">
+                                        › {{ service.slug }}
+                                    </span>
+
+                                </div>
+
+
+                                <!-- =================================
+                                     TITLE
+                                ================================== -->
+
+                                <div class="google-title">
+
+                                    {{
+                                        service.meta_title ||
+                                        service.title ||
+                                        'Service Title'
+                                    }}
+
+                                </div>
+
+
+                                <!-- =================================
+                                     DESCRIPTION
+                                ================================== -->
+
+                                <div class="google-description">
+
+                                    {{
+                                        service.meta_description ||
+                                        service.short_description ||
+                                        'Add a meta description to preview how this service may appear in Google search results.'
+                                    }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     RIGHT SECTION
+                ================================================== -->
+
+                <div class="col-xl-4">
+
+
+                    <!-- =============================================
+                         PUBLISH
+                    ============================================== -->
+
+                    <div class="form-card sticky-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon publish">
+
+                                <i class="fa-solid fa-globe"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Publish
+                                </h3>
+
+                                <p>
+                                    Manage service visibility and display order.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+
+                            <!-- =====================================
+                                 STATUS
+                            ====================================== -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Status
+                                </label>
+
+
+                                <div class="status-options">
+
+
+                                    <!-- ACTIVE -->
+
+                                    <label
+                                        [class.selected]="
+                                            service.status == 1
+                                        ">
+
+                                        <input
+                                            type="radio"
+                                            name="status"
+                                            [(ngModel)]="service.status"
+                                            [value]="1">
+
+
+                                        <span class="status-dot"></span>
+
+
+                                        <div>
+
+                                            <strong>
+                                                Active
+                                            </strong>
+
+                                            <small>
+                                                Visible on website
+                                            </small>
+
+                                        </div>
+
+                                    </label>
+
+
+                                    <!-- INACTIVE -->
+
+                                    <label
+                                        [class.selected]="
+                                            service.status == 0
+                                        ">
+
+                                        <input
+                                            type="radio"
+                                            name="status"
+                                            [(ngModel)]="service.status"
+                                            [value]="0">
+
+
+                                        <span class="status-dot"></span>
+
+
+                                        <div>
+
+                                            <strong>
+                                                Inactive
+                                            </strong>
+
+                                            <small>
+                                                Hidden from website
+                                            </small>
+
+                                        </div>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 DISPLAY ORDER
+                            ====================================== -->
+
+                            <div class="form-group">
+
+                                <label>
+                                    Display Order
+                                </label>
+
+
+                                <input
+                                    type="number"
+                                    name="sort_order"
+                                    class="form-control-custom"
+                                    [(ngModel)]="service.sort_order"
+                                    min="0">
+
+
+                                <div class="field-help">
+
+                                    <i class="fa-solid fa-circle-info"></i>
+
+                                    Lower numbers appear first.
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 SERVICE TYPE SUMMARY
+                            ====================================== -->
+
+                            <div class="publish-info-row">
+
+                                <span>
+                                    Service Type
+                                </span>
+
+
+                                <strong
+                                    *ngIf="
+                                        service.service_type === 'main'
+                                    ">
+
+                                    <i class="fa-solid fa-layer-group"></i>
+
+                                    Main Service
+
+                                </strong>
+
+
+                                <strong
+                                    class="sub"
+                                    *ngIf="
+                                        service.service_type === 'sub'
+                                    ">
+
+                                    <i class="fa-solid fa-code-branch"></i>
+
+                                    Sub Service
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 URL
+                            ====================================== -->
+
+                            <div class="publish-url">
+
+                                <span>
+                                    Service URL
+                                </span>
+
+
+                                <strong>
+
+                                    /services/{{
+                                        service.slug ||
+                                        'service-url'
+                                    }}
+
+                                </strong>
+
+                            </div>
+
+
+                            <!-- =====================================
+                                 UPDATE
+                            ====================================== -->
+
+                            <button
+                                type="submit"
+                                class="save-btn"
+                                [disabled]="isSaving">
+
+                                <ng-container
+                                    *ngIf="!isSaving">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                    Update Service
+
+                                </ng-container>
+
+
+                                <ng-container
+                                    *ngIf="isSaving">
+
+                                    <span
+                                        class="
+                                            spinner-border
+                                            spinner-border-sm
+                                        ">
+                                    </span>
+
+                                    Updating...
+
+                                </ng-container>
+
+                            </button>
+
+
+                            <!-- =====================================
+                                 CANCEL
+                            ====================================== -->
+
+                            <button
+                                type="button"
+                                class="cancel-btn"
+                                [disabled]="isSaving"
+                                (click)="cancel()">
+
+                                Cancel
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- =============================================
+                         QUICK INFO
+                    ============================================== -->
+
+                    <div class="form-card quick-info-card">
+
+                        <div class="form-card-body">
+
+                            <div class="quick-info-title">
+
+                                <i class="fa-solid fa-circle-info"></i>
+
+                                Service Information
+
+                            </div>
+
+
+                            <div class="quick-info-row">
+
+                                <span>
+                                    ID
+                                </span>
+
+                                <strong>
+                                    #{{ serviceId }}
+                                </strong>
+
+                            </div>
+
+
+                            <div class="quick-info-row">
+
+                                <span>
+                                    Type
+                                </span>
+
+                                <strong>
+
+                                    {{
+                                        service.service_type === 'main'
+                                            ? 'Main Service'
+                                            : 'Sub Service'
+                                    }}
+
+                                </strong>
+
+                            </div>
+
+
+                            <div class="quick-info-row">
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong
+                                    [class.active-text]="
+                                        service.status == 1
+                                    ">
+
+                                    {{
+                                        service.status == 1
+                                            ? 'Active'
+                                            : 'Inactive'
+                                    }}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </ng-container>
+
+</div>

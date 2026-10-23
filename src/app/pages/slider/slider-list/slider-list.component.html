@@ -1,0 +1,614 @@
+<div class="slider-management-page">
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div>
+
+            <div class="breadcrumb-text">
+                Content Management
+                <i class="fa-solid fa-chevron-right"></i>
+                <strong>Sliders</strong>
+            </div>
+
+            <h1>
+                Slider Management
+            </h1>
+
+            <p>
+                Manage homepage slider images, content,
+                call-to-action buttons and display order.
+            </p>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="add-slider-btn"
+            (click)="addSlider()">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Add New Slider
+
+        </button>
+
+    </div>
+
+
+    <!-- ALERTS -->
+
+    <div
+        class="alert-success-custom"
+        *ngIf="successMessage">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        {{ successMessage }}
+
+    </div>
+
+
+    <div
+        class="alert-error-custom"
+        *ngIf="errorMessage">
+
+        <i class="fa-solid fa-circle-exclamation"></i>
+
+        {{ errorMessage }}
+
+    </div>
+
+
+    <!-- FILTER -->
+
+    <div class="filter-card">
+
+        <div class="filter-left">
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    [(ngModel)]="searchText"
+                    (keyup.enter)="applyFilters()"
+                    placeholder="Search sliders...">
+
+            </div>
+
+
+            <select
+                class="status-select"
+                [(ngModel)]="statusFilter"
+                (change)="applyFilters()">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option value="1">
+                    Active
+                </option>
+
+                <option value="0">
+                    Inactive
+                </option>
+
+            </select>
+
+
+            <button
+                type="button"
+                class="search-btn"
+                (click)="applyFilters()">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                Search
+
+            </button>
+
+
+            <button
+                type="button"
+                class="reset-btn"
+                *ngIf="searchText || statusFilter !== ''"
+                (click)="resetFilters()">
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+            </button>
+
+        </div>
+
+
+        <div class="filter-right">
+
+            <span>
+                Show
+            </span>
+
+            <select
+                [(ngModel)]="pageSize"
+                (change)="changePageSize()">
+
+                <option [ngValue]="10">
+                    10
+                </option>
+
+                <option [ngValue]="25">
+                    25
+                </option>
+
+                <option [ngValue]="50">
+                    50
+                </option>
+
+            </select>
+
+            <span>
+                entries
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="table-card">
+
+        <div class="table-responsive">
+
+            <table class="slider-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th class="number-column">
+                            #
+                        </th>
+
+                        <th class="image-column">
+                            Image
+                        </th>
+
+                        <th>
+                            Slider
+                        </th>
+
+                        <th>
+                            Button
+                        </th>
+
+                        <th class="order-column">
+                            Order
+                        </th>
+
+                        <th class="status-column">
+                            Status
+                        </th>
+
+                        <th class="action-column">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    <!-- LOADING -->
+
+                    <tr *ngIf="isLoading">
+
+                        <td
+                            colspan="7"
+                            class="loading-cell">
+
+                            <span class="table-spinner"></span>
+
+                            Loading sliders...
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- DATA -->
+
+                    <tr
+                        *ngFor="
+                            let slider of paginatedSliders;
+                            let i = index;
+                            trackBy: trackBySlider
+                        ">
+
+
+                        <td class="number-cell">
+
+                            {{
+                                (
+                                    currentPage - 1
+                                ) * pageSize +
+                                i + 1
+                            }}
+
+                        </td>
+
+
+                        <!-- IMAGE -->
+
+                        <td>
+
+                            <div class="slider-thumb">
+
+                                <img
+                                    *ngIf="slider.image_url"
+                                    [src]="slider.image_url"
+                                    [alt]="
+                                        slider.title ||
+                                        'Slider'
+                                    "
+                                    (error)="onImageError($event)">
+
+                                <div class="thumb-placeholder">
+
+                                    <i class="fa-regular fa-image"></i>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- CONTENT -->
+
+                        <td>
+
+                            <div class="slider-details">
+
+                                <strong>
+                                    {{
+                                        slider.title ||
+                                        'Untitled Slider'
+                                    }}
+                                </strong>
+
+                                <div
+                                    class="slider-subtitle"
+                                    *ngIf="slider.subtitle"
+                                    [innerHTML]="slider.subtitle">
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- BUTTON -->
+
+                        <td>
+
+                            <div
+                                class="button-info"
+                                *ngIf="slider.button_text">
+
+                                <strong>
+                                    {{ slider.button_text }}
+                                </strong>
+
+                                <span *ngIf="slider.button_link">
+                                    {{ slider.button_link }}
+                                </span>
+
+                            </div>
+
+
+                            <span
+                                class="not-set"
+                                *ngIf="!slider.button_text">
+
+                                —
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- ORDER -->
+
+                        <td>
+
+                            <span class="order-badge">
+
+                                {{
+                                    slider.sort_order || 0
+                                }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="status-badge"
+                                [class.active]="
+                                    slider.status == 1
+                                "
+                                [class.inactive]="
+                                    slider.status != 1
+                                "
+                                [disabled]="
+                                    statusUpdatingId === slider.id
+                                "
+                                (click)="changeStatus(slider)">
+
+                                <span
+                                    *ngIf="
+                                        statusUpdatingId !== slider.id
+                                    "
+                                    class="status-dot">
+                                </span>
+
+                                <span
+                                    *ngIf="
+                                        statusUpdatingId === slider.id
+                                    "
+                                    class="status-spinner">
+                                </span>
+
+                                {{
+                                    slider.status == 1
+                                        ? 'Active'
+                                        : 'Inactive'
+                                }}
+
+                            </button>
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+                            <div class="action-buttons">
+
+                                <button
+                                    type="button"
+                                    class="action-btn edit"
+                                    title="Edit Slider"
+                                    (click)="editSlider(slider)">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="action-btn delete"
+                                    title="Delete Slider"
+                                    (click)="openDeleteModal(slider)">
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+
+                    <!-- EMPTY -->
+
+                    <tr
+                        *ngIf="
+                            !isLoading &&
+                            paginatedSliders.length === 0
+                        ">
+
+                        <td
+                            colspan="7"
+                            class="empty-cell">
+
+                            <div class="empty-icon">
+
+                                <i class="fa-regular fa-images"></i>
+
+                            </div>
+
+                            <strong>
+                                No sliders found
+                            </strong>
+
+                            <span>
+                                Try changing your filters or
+                                add a new slider.
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- TABLE FOOTER -->
+
+        <div
+            class="table-footer"
+            *ngIf="
+                !isLoading &&
+                filteredSliders.length > 0
+            ">
+
+            <div class="table-info">
+
+                Showing
+
+                <strong>
+                    {{ startRecord }}
+                </strong>
+
+                to
+
+                <strong>
+                    {{ endRecord }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ filteredSliders.length }}
+                </strong>
+
+                entries
+
+            </div>
+
+
+            <div class="pagination">
+
+                <button
+                    type="button"
+                    [disabled]="currentPage === 1"
+                    (click)="goToPage(currentPage - 1)">
+
+                    <i class="fa-solid fa-chevron-left"></i>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    *ngFor="let page of visiblePages"
+                    [class.active]="page === currentPage"
+                    (click)="goToPage(page)">
+
+                    {{ page }}
+
+                </button>
+
+
+                <button
+                    type="button"
+                    [disabled]="
+                        currentPage === totalPages
+                    "
+                    (click)="goToPage(currentPage + 1)">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- DELETE MODAL -->
+
+<div
+    class="modal-backdrop-custom"
+    *ngIf="showDeleteModal">
+
+    <div class="delete-modal">
+
+        <div class="delete-modal-icon">
+
+            <i class="fa-solid fa-trash"></i>
+
+        </div>
+
+        <h3>
+            Delete Slider?
+        </h3>
+
+        <p>
+
+            Are you sure you want to delete
+
+            <strong>
+                {{
+                    deleteSliderData?.title ||
+                    'this slider'
+                }}
+            </strong>?
+
+            This action cannot be undone.
+
+        </p>
+
+
+        <div class="delete-modal-actions">
+
+            <button
+                type="button"
+                class="modal-cancel"
+                [disabled]="deletingId !== null"
+                (click)="closeDeleteModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                type="button"
+                class="modal-delete"
+                [disabled]="deletingId !== null"
+                (click)="confirmDelete()">
+
+                <ng-container
+                    *ngIf="deletingId === null">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                    Delete Slider
+
+                </ng-container>
+
+
+                <ng-container
+                    *ngIf="deletingId !== null">
+
+                    <span class="delete-spinner"></span>
+
+                    Deleting...
+
+                </ng-container>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,390 @@
+<div class="dashboard-page">
+
+
+    <!-- WELCOME -->
+
+    <div class="dashboard-heading">
+
+        <div>
+
+            <h1>
+                Welcome back,
+                {{ user?.name || 'Administrator' }}
+            </h1>
+
+            <p>
+                Here's what's happening with Medclinic Family Practice.
+            </p>
+
+        </div>
+
+
+        <div class="heading-date">
+
+            <i class="fa-regular fa-calendar"></i>
+
+            <span>
+                Admin Dashboard
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="row g-4">
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+
+                    <i class="fa-regular fa-file-lines"></i>
+
+                </div>
+
+
+                <div class="stat-content">
+
+                    <span>Total Pages</span>
+
+                    <strong>
+                        {{ stats.pages }}
+                    </strong>
+
+                    <a routerLink="/page/list">
+                        Manage Pages
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+
+                    <i class="fa-solid fa-stethoscope"></i>
+
+                </div>
+
+
+                <div class="stat-content">
+
+                    <span>Services</span>
+
+                    <strong>
+                        {{ stats.services }}
+                    </strong>
+
+                    <a routerLink="/service/list">
+                        Manage Services
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon black">
+
+                    <i class="fa-solid fa-user-doctor"></i>
+
+                </div>
+
+
+                <div class="stat-content">
+
+                    <span>Doctors</span>
+
+                    <strong>
+                        {{ stats.doctors }}
+                    </strong>
+
+                    <a routerLink="/doctor/list">
+                        Manage Doctors
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+
+                    <i class="fa-regular fa-envelope"></i>
+
+                </div>
+
+
+                <div class="stat-content">
+
+                    <span>Enquiries</span>
+
+                    <strong>
+                        {{ stats.enquiries }}
+                    </strong>
+
+                    <a routerLink="/enquiry/list">
+                        View Enquiries
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONTENT -->
+
+    <div class="row g-4 mt-1">
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="col-xl-4">
+
+            <div class="dashboard-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <h3>Quick Actions</h3>
+
+                        <p>Frequently used actions</p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+                    <a
+                        routerLink="/page/add"
+                        class="quick-action">
+
+                        <div class="quick-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Add New Page</strong>
+
+                            <span>Create website content</span>
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <a
+                        routerLink="/service/add"
+                        class="quick-action">
+
+                        <div class="quick-icon">
+                            <i class="fa-solid fa-stethoscope"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Add Service</strong>
+
+                            <span>Add a medical service</span>
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <a
+                        routerLink="/doctor/add"
+                        class="quick-action">
+
+                        <div class="quick-icon">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Add Doctor</strong>
+
+                            <span>Create doctor profile</span>
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+
+                    <a
+                        routerLink="/blog/add"
+                        class="quick-action">
+
+                        <div class="quick-icon">
+                            <i class="fa-regular fa-newspaper"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Add Blog</strong>
+
+                            <span>Publish new article</span>
+
+                        </div>
+
+                        <i class="fa-solid fa-chevron-right"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RECENT ENQUIRIES -->
+
+        <div class="col-xl-8">
+
+            <div class="dashboard-card">
+
+                <div class="card-heading">
+
+                    <div>
+
+                        <h3>Recent Enquiries</h3>
+
+                        <p>Latest website enquiries</p>
+
+                    </div>
+
+
+                    <a
+                        routerLink="/enquiry/list"
+                        class="view-all">
+
+                        View All
+
+                        <i class="fa-solid fa-arrow-right"></i>
+
+                    </a>
+
+                </div>
+
+
+                <div
+                    class="empty-state"
+                    *ngIf="
+                        !isLoading &&
+                        recentEnquiries.length === 0
+                    ">
+
+                    <i class="fa-regular fa-envelope-open"></i>
+
+                    <strong>No enquiries yet</strong>
+
+                    <span>
+                        New website enquiries will appear here.
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="table-responsive"
+                    *ngIf="recentEnquiries.length > 0">
+
+                    <table class="table enquiry-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Name</th>
+
+                                <th>Email</th>
+
+                                <th>Phone</th>
+
+                                <th>Date</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr
+                                *ngFor="let enquiry of recentEnquiries">
+
+                                <td>
+                                    <strong>
+                                        {{ enquiry.name }}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    {{ enquiry.email }}
+                                </td>
+
+                                <td>
+                                    {{ enquiry.phone || '-' }}
+                                </td>
+
+                                <td>
+                                    {{ enquiry.created_at }}
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

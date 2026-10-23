@@ -1,0 +1,141 @@
+<header class="admin-header">
+
+    <div class="header-left">
+
+        <button
+            type="button"
+            class="header-menu desktop-menu"
+            (click)="desktopToggle()">
+
+            <i class="fa-solid fa-bars-staggered"></i>
+
+        </button>
+
+
+        <button
+            type="button"
+            class="header-menu mobile-menu"
+            (click)="mobileToggle()">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+
+        <div class="header-title">
+
+            <strong>Administration</strong>
+
+            <span>Medclinic Family Practice</span>
+
+        </div>
+
+    </div>
+
+
+    <div class="header-right">
+
+        <button
+            type="button"
+            class="notification-btn">
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span class="notification-dot"></span>
+
+        </button>
+
+
+        <div class="dropdown">
+
+            <button
+                class="user-button"
+                type="button"
+                data-bs-toggle="dropdown">
+
+                <div class="user-avatar">
+
+                    <span *ngIf="!user?.image">
+                        {{ user?.name?.charAt(0) || 'A' }}
+                    </span>
+
+                    <img
+                        *ngIf="user?.image"
+                        [src]="user.image"
+                        alt="Admin">
+
+                </div>
+
+
+                <div class="user-info">
+
+                    <strong>
+                        {{ user?.name || 'Administrator' }}
+                    </strong>
+
+                    <span>
+                        {{ user?.role || 'Admin' }}
+                    </span>
+
+                </div>
+
+
+                <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+
+            </button>
+
+
+            <ul class="dropdown-menu dropdown-menu-end">
+
+                <li>
+
+                    <a class="dropdown-item" href="javascript:void(0)">
+
+                        <i class="fa-regular fa-user"></i>
+
+                        My Profile
+
+                    </a>
+
+                </li>
+
+                <li>
+
+                    <a
+                        class="dropdown-item"
+                        routerLink="/setting">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        Settings
+
+                    </a>
+
+                </li>
+
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+
+                <li>
+
+                    <button
+                        type="button"
+                        class="dropdown-item logout-item"
+                        (click)="logout()">
+
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                        Logout
+
+                    </button>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</header>

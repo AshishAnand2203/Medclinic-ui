@@ -1,0 +1,780 @@
+<div class="doctor-page">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <div class="page-heading">
+
+        <div>
+
+            <div class="breadcrumb-text">
+
+                <span>
+                    Content Management
+                </span>
+
+                <i class="fa-solid fa-chevron-right"></i>
+
+                <strong>
+                    Doctors
+                </strong>
+
+            </div>
+
+
+            <h1>
+                Doctors
+            </h1>
+
+            <p>
+                Manage doctors, practitioners and their profile information.
+            </p>
+
+        </div>
+
+
+        <a
+            routerLink="/doctor/add"
+            class="add-doctor-btn">
+
+            <i class="fa-solid fa-plus"></i>
+
+            Add Doctor
+
+        </a>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUCCESS
+    ====================================================== -->
+
+    <div
+        class="doctor-alert success"
+        *ngIf="successMessage">
+
+        <i class="fa-solid fa-circle-check"></i>
+
+        <div>
+
+            <strong>
+                Success
+            </strong>
+
+            <span>
+                {{ successMessage }}
+            </span>
+
+        </div>
+
+
+        <button
+            type="button"
+            (click)="successMessage = ''">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         ERROR
+    ====================================================== -->
+
+    <div
+        class="doctor-alert error"
+        *ngIf="errorMessage">
+
+        <i class="fa-solid fa-circle-exclamation"></i>
+
+        <div>
+
+            <strong>
+                Something went wrong
+            </strong>
+
+            <span>
+                {{ errorMessage }}
+            </span>
+
+        </div>
+
+
+        <button
+            type="button"
+            (click)="errorMessage = ''">
+
+            <i class="fa-solid fa-xmark"></i>
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTER CARD
+    ====================================================== -->
+
+    <div class="filter-card">
+
+        <div class="filter-main">
+
+
+            <!-- SEARCH -->
+
+            <div class="search-box">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    [(ngModel)]="search"
+                    (keyup.enter)="applyFilters()"
+                    placeholder="Search doctor, qualification or language...">
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <select
+                [(ngModel)]="categoryId"
+                (change)="applyFilters()">
+
+                <option value="">
+                    All Categories
+                </option>
+
+                <option
+                    *ngFor="let category of categories"
+                    [value]="category.id">
+
+                    {{ category.name }}
+
+                </option>
+
+            </select>
+
+
+            <!-- STATUS -->
+
+            <select
+                [(ngModel)]="status"
+                (change)="applyFilters()">
+
+                <option value="">
+                    All Status
+                </option>
+
+                <option value="1">
+                    Active
+                </option>
+
+                <option value="0">
+                    Inactive
+                </option>
+
+            </select>
+
+
+            <button
+                type="button"
+                class="filter-btn"
+                (click)="applyFilters()">
+
+                <i class="fa-solid fa-filter"></i>
+
+                Filter
+
+            </button>
+
+
+            <button
+                type="button"
+                class="clear-btn"
+                (click)="clearFilters()">
+
+                <i class="fa-solid fa-rotate-left"></i>
+
+                Clear
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TABLE CARD
+    ====================================================== -->
+
+    <div class="doctor-table-card">
+
+
+        <!-- TABLE HEADER -->
+
+        <div class="table-card-header">
+
+            <div>
+
+                <h3>
+                    Doctor Directory
+                </h3>
+
+                <span>
+                    {{ total }} doctor{{ total === 1 ? '' : 's' }} found
+                </span>
+
+            </div>
+
+
+            <div class="per-page">
+
+                <span>
+                    Show
+                </span>
+
+                <select
+                    [(ngModel)]="limit"
+                    (change)="changeLimit()">
+
+                    <option [ngValue]="10">
+                        10
+                    </option>
+
+                    <option [ngValue]="20">
+                        20
+                    </option>
+
+                    <option [ngValue]="50">
+                        50
+                    </option>
+
+                    <option [ngValue]="100">
+                        100
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             LOADING
+        ================================================== -->
+
+        <div
+            class="table-loading"
+            *ngIf="isLoading">
+
+            <div class="spinner-border"></div>
+
+            <span>
+                Loading doctors...
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             TABLE
+        ================================================== -->
+
+        <div
+            class="table-responsive"
+            *ngIf="!isLoading && doctors.length">
+
+            <table class="doctor-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Doctor
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Qualification
+                        </th>
+
+                        <th>
+                            Languages
+                        </th>
+
+                        <th>
+                            Order
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th class="text-end">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr
+                        *ngFor="let doctor of doctors">
+
+                        <!-- DOCTOR -->
+
+                        <td>
+
+                            <div class="doctor-profile">
+
+                                <div class="doctor-photo">
+
+                                    <img
+                                        *ngIf="doctor.image"
+                                        [src]="doctor.image"
+                                        [alt]="doctor.name">
+
+
+                                    <div
+                                        class="doctor-placeholder"
+                                        *ngIf="!doctor.image">
+
+                                        <i class="fa-solid fa-user-doctor"></i>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="doctor-name">
+
+                                    <strong>
+                                        {{ doctor.name }}
+                                    </strong>
+
+                                    <span *ngIf="doctor.short_description">
+
+                                        {{
+                                            doctor.short_description
+                                                | slice:0:70
+                                        }}
+
+                                        <ng-container
+                                            *ngIf="
+                                                doctor.short_description.length > 70
+                                            ">
+                                            ...
+                                        </ng-container>
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- CATEGORY -->
+
+                        <td>
+
+                            <span
+                                class="category-badge"
+                                *ngIf="doctor.category_name">
+
+                                <i class="fa-solid fa-user-group"></i>
+
+                                {{ doctor.category_name }}
+
+                            </span>
+
+
+                            <span
+                                class="empty-value"
+                                *ngIf="!doctor.category_name">
+
+                                No category
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- QUALIFICATION -->
+
+                        <td>
+
+                            <span class="qualification">
+
+                                {{
+                                    doctor.qualification ||
+                                    '—'
+                                }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- LANGUAGES -->
+
+                        <td>
+
+                            <span class="languages">
+
+                                {{
+                                    doctor.languages ||
+                                    '—'
+                                }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- ORDER -->
+
+                        <td>
+
+                            <span class="order-badge">
+
+                                {{ doctor.sort_order }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="status-toggle"
+                                [class.active]="
+                                    doctor.status == 1
+                                "
+                                (click)="changeStatus(doctor)">
+
+                                <span class="toggle-track">
+
+                                    <span class="toggle-thumb"></span>
+
+                                </span>
+
+
+                                <span>
+
+                                    {{
+                                        doctor.status == 1
+                                            ? 'Active'
+                                            : 'Inactive'
+                                    }}
+
+                                </span>
+
+                            </button>
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td class="text-end">
+
+                            <div class="action-buttons">
+
+                                <button
+                                    type="button"
+                                    class="action-btn edit"
+                                    title="Edit Doctor"
+                                    (click)="editDoctor(doctor)">
+
+                                    <i class="fa-solid fa-pen"></i>
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="action-btn delete"
+                                    title="Delete Doctor"
+                                    (click)="openDeleteModal(doctor)">
+
+                                    <i class="fa-solid fa-trash"></i>
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =================================================
+             EMPTY
+        ================================================== -->
+
+        <div
+            class="empty-state"
+            *ngIf="
+                !isLoading &&
+                doctors.length === 0
+            ">
+
+            <div class="empty-icon">
+
+                <i class="fa-solid fa-user-doctor"></i>
+
+            </div>
+
+
+            <h3>
+                No Doctors Found
+            </h3>
+
+
+            <p>
+                No doctors match your current search or filters.
+            </p>
+
+
+            <a
+                routerLink="/doctor/add"
+                class="add-doctor-btn">
+
+                <i class="fa-solid fa-plus"></i>
+
+                Add Doctor
+
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             PAGINATION
+        ================================================== -->
+
+        <div
+            class="pagination-wrapper"
+            *ngIf="
+                !isLoading &&
+                totalPages > 1
+            ">
+
+            <div class="pagination-info">
+
+                Page
+
+                <strong>
+                    {{ page }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ totalPages }}
+                </strong>
+
+            </div>
+
+
+            <div class="pagination-buttons">
+
+                <button
+                    type="button"
+                    [disabled]="page <= 1"
+                    (click)="previousPage()">
+
+                    <i class="fa-solid fa-chevron-left"></i>
+
+                </button>
+
+
+                <button
+                    type="button"
+                    *ngFor="let pageNumber of pages"
+                    [class.active]="
+                        pageNumber === page
+                    "
+                    (click)="goToPage(pageNumber)">
+
+                    {{ pageNumber }}
+
+                </button>
+
+
+                <button
+                    type="button"
+                    [disabled]="page >= totalPages"
+                    (click)="nextPage()">
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     DELETE MODAL
+========================================================== -->
+
+<div
+    class="delete-modal-backdrop"
+    *ngIf="showDeleteModal"
+    (click)="closeDeleteModal()">
+
+    <div
+        class="delete-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <div class="delete-modal-icon">
+
+            <i class="fa-solid fa-trash-can"></i>
+
+        </div>
+
+
+        <div class="delete-modal-content">
+
+            <h3>
+                Delete Doctor?
+            </h3>
+
+
+            <p>
+
+                Are you sure you want to delete
+
+                <strong>
+                    "{{ selectedDoctor?.name }}"
+                </strong>?
+
+            </p>
+
+
+            <div class="delete-warning">
+
+                <i class="fa-solid fa-triangle-exclamation"></i>
+
+                <div>
+
+                    <strong>
+                        Permanent deletion
+                    </strong>
+
+                    <span>
+                        The doctor's profile, areas of interest and
+                        availability records will also be deleted.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="delete-error"
+                *ngIf="deleteError">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                {{ deleteError }}
+
+            </div>
+
+
+            <div class="delete-note">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                This action cannot be undone.
+
+            </div>
+
+        </div>
+
+
+        <div class="delete-modal-actions">
+
+            <button
+                type="button"
+                class="modal-cancel-btn"
+                [disabled]="isDeleting"
+                (click)="closeDeleteModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                type="button"
+                class="modal-delete-btn"
+                [disabled]="isDeleting"
+                (click)="deleteDoctor()">
+
+
+                <ng-container
+                    *ngIf="!isDeleting">
+
+                    <i class="fa-solid fa-trash-can"></i>
+
+                    Delete Doctor
+
+                </ng-container>
+
+
+                <ng-container
+                    *ngIf="isDeleting">
+
+                    <span
+                        class="
+                            spinner-border
+                            spinner-border-sm
+                        ">
+                    </span>
+
+                    Deleting...
+
+                </ng-container>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,1445 @@
+<div class="doctor-form-page">
+
+    <!-- ======================================================
+         LOADING
+    ======================================================= -->
+
+    <div
+        class="doctor-page-loading"
+        *ngIf="isLoading">
+
+        <div class="spinner-border"></div>
+
+        <strong>
+            Loading Doctor...
+        </strong>
+
+        <span>
+            Please wait while the doctor profile is loaded.
+        </span>
+
+    </div>
+
+
+    <ng-container *ngIf="!isLoading">
+
+
+        <!-- ==================================================
+             PAGE HEADER
+        =================================================== -->
+
+        <div class="page-heading">
+
+            <div>
+
+                <div class="breadcrumb-text">
+
+                    <span>
+                        Doctors
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right"></i>
+
+                    <strong>
+                        Edit Doctor
+                    </strong>
+
+                </div>
+
+
+                <h1>
+                    Edit Doctor
+                </h1>
+
+
+                <p>
+                    Update doctor information, services and availability.
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="back-btn"
+                (click)="cancel()">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+                Back to Doctors
+
+            </button>
+
+        </div>
+
+
+        <!-- ==================================================
+             SUCCESS
+        =================================================== -->
+
+        <div
+            class="form-alert success"
+            *ngIf="successMessage">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            <div>
+
+                <strong>
+                    Doctor Updated
+                </strong>
+
+                <span>
+                    {{ successMessage }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             ERROR
+        =================================================== -->
+
+        <div
+            class="form-alert error"
+            *ngIf="errorMessage">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
+            <div>
+
+                <strong>
+                    Unable to Update Doctor
+                </strong>
+
+                <span>
+                    {{ errorMessage }}
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             FORM
+        =================================================== -->
+
+        <form
+            #doctorForm="ngForm"
+            (ngSubmit)="updateDoctor(doctorForm)"
+            novalidate>
+
+
+            <div class="row g-4">
+
+
+                <!-- ==========================================
+                     LEFT
+                =========================================== -->
+
+                <div class="col-xl-8">
+
+
+                    <!-- ======================================
+                         DOCTOR INFORMATION
+                    ======================================= -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon">
+
+                                <i class="fa-solid fa-user-doctor"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Doctor Information
+                                </h3>
+
+                                <p>
+                                    Update the doctor's basic professional information.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+                            <div class="row g-3">
+
+
+                                <!-- CATEGORY -->
+
+                                <div class="col-md-6">
+
+                                    <label class="field-label">
+
+                                        Category
+
+                                        <span>*</span>
+
+                                    </label>
+
+
+                                    <select
+                                        name="category_id"
+                                        class="form-control-custom"
+                                        [(ngModel)]="doctor.category_id"
+                                        required>
+
+                                        <option value="">
+
+                                            {{
+                                                isLoadingCategories
+                                                    ? 'Loading Categories...'
+                                                    : 'Select Category'
+                                            }}
+
+                                        </option>
+
+
+                                        <option
+                                            *ngFor="let category of categories"
+                                            [value]="category.id">
+
+                                            {{ category.name }}
+
+                                        </option>
+
+                                    </select>
+
+
+                                    <div
+                                        class="field-error"
+                                        *ngIf="
+                                            errors.category_id ||
+                                            (
+                                                doctorForm.submitted &&
+                                                !doctor.category_id
+                                            )
+                                        ">
+
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                                        {{
+                                            errors.category_id ||
+                                            'Please select a doctor category.'
+                                        }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- QUALIFICATION -->
+
+                                <div class="col-md-6">
+
+                                    <label class="field-label">
+                                        Qualification
+                                    </label>
+
+
+                                    <input
+                                        type="text"
+                                        name="qualification"
+                                        class="form-control-custom"
+                                        [(ngModel)]="doctor.qualification"
+                                        placeholder="e.g. MBBS FRACGP">
+
+                                </div>
+
+
+                                <!-- NAME -->
+
+                                <div class="col-12">
+
+                                    <label class="field-label">
+
+                                        Doctor Name
+
+                                        <span>*</span>
+
+                                    </label>
+
+
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        class="form-control-custom"
+                                        [(ngModel)]="doctor.name"
+                                        placeholder="Doctor name"
+                                        required>
+
+
+                                    <div
+                                        class="field-error"
+                                        *ngIf="
+                                            errors.name ||
+                                            (
+                                                doctorForm.submitted &&
+                                                !doctor.name
+                                            )
+                                        ">
+
+                                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                                        {{
+                                            errors.name ||
+                                            'Doctor name is required.'
+                                        }}
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- SHORT DESCRIPTION -->
+
+                                <div class="col-12">
+
+                                    <label class="field-label">
+                                        Short Description
+                                    </label>
+
+
+                                    <textarea
+                                        name="short_description"
+                                        class="
+                                            form-control-custom
+                                            textarea-small
+                                        "
+                                        [(ngModel)]="doctor.short_description"
+                                        placeholder="Enter a short introduction about the doctor...">
+                                    </textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         PROFILE IMAGE
+                    ======================================= -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon image">
+
+                                <i class="fa-regular fa-image"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Doctor Profile Image
+                                </h3>
+
+                                <p>
+                                    Change or remove the doctor's profile photograph.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+
+                            <!-- NO IMAGE -->
+
+                            <label
+                                class="doctor-image-upload"
+                                *ngIf="!doctor.image">
+
+                                <input
+                                    type="file"
+                                    accept="
+                                        image/jpeg,
+                                        image/png,
+                                        image/webp
+                                    "
+                                    [disabled]="isUploadingImage"
+                                    (change)="onImageSelected($event)">
+
+
+                                <div class="upload-icon">
+
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                                </div>
+
+
+                                <strong>
+                                    Upload Doctor Image
+                                </strong>
+
+
+                                <span>
+                                    Select an image and crop it before uploading.
+                                </span>
+
+
+                                <small>
+                                    JPG, PNG or WEBP • Maximum 5 MB
+                                </small>
+
+                            </label>
+
+
+                            <!-- IMAGE -->
+
+                            <div
+                                class="doctor-image-preview"
+                                *ngIf="doctor.image">
+
+
+                                <div class="doctor-preview-photo">
+
+                                    <img
+                                        [src]="doctor.image"
+                                        [alt]="doctor.name">
+
+                                </div>
+
+
+                                <div class="doctor-preview-info">
+
+                                    <div class="image-success">
+
+                                        <i class="fa-solid fa-circle-check"></i>
+
+
+                                        <div>
+
+                                            <strong>
+                                                Current Profile Image
+                                            </strong>
+
+                                            <span>
+                                                Upload another image if you want to replace it.
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="image-actions">
+
+
+                                        <label class="change-image-btn">
+
+                                            <input
+                                                type="file"
+                                                accept="
+                                                    image/jpeg,
+                                                    image/png,
+                                                    image/webp
+                                                "
+                                                (change)="onImageSelected($event)">
+
+                                            <i class="fa-solid fa-crop-simple"></i>
+
+                                            Change & Crop
+
+                                        </label>
+
+
+                                        <button
+                                            type="button"
+                                            class="remove-image-btn"
+                                            (click)="removeImage()">
+
+                                            <i class="fa-solid fa-trash"></i>
+
+                                            Remove
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="field-error"
+                                *ngIf="imageError">
+
+                                <i class="fa-solid fa-circle-exclamation"></i>
+
+                                {{ imageError }}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         ABOUT
+                    ======================================= -->
+
+                    <div class="form-card">
+
+                        <div
+                            class="
+                                form-card-header
+                                editor-header
+                            ">
+
+
+                            <div class="header-description">
+
+                                <div class="card-icon about">
+
+                                    <i class="fa-solid fa-align-left"></i>
+
+                                </div>
+
+
+                                <div>
+
+                                    <h3>
+                                        About Doctor
+                                    </h3>
+
+                                    <p>
+                                        Update the doctor's professional profile.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="editor-mode">
+
+                                <button
+                                    type="button"
+                                    [class.active]="
+                                        editorMode === 'visual'
+                                    "
+                                    (click)="setEditorMode('visual')">
+
+                                    <i class="fa-regular fa-eye"></i>
+
+                                    Visual
+
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    [class.active]="
+                                        editorMode === 'source'
+                                    "
+                                    (click)="setEditorMode('source')">
+
+                                    <i class="fa-solid fa-code"></i>
+
+                                    HTML
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                form-card-body
+                                editor-body
+                            ">
+
+
+                            <ckeditor
+                                *ngIf="editorMode === 'visual'"
+                                [editor]="Editor"
+                                [config]="editorConfig"
+                                [(ngModel)]="doctor.content"
+                                name="content"
+                                (ready)="onEditorReady($event)">
+                            </ckeditor>
+
+
+                            <textarea
+                                *ngIf="editorMode === 'source'"
+                                name="source_content"
+                                class="source-editor"
+                                [(ngModel)]="doctor.content"
+                                spellcheck="false">
+                            </textarea>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         AREAS OF INTEREST
+                    ======================================= -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon interest">
+
+                                <i class="fa-solid fa-heart-pulse"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Areas of Interest & Services
+                                </h3>
+
+                                <p>
+                                    Manage clinical interests and services.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+
+                            <div class="add-item-row">
+
+                                <input
+                                    type="text"
+                                    class="form-control-custom"
+                                    [(ngModel)]="interestInput"
+                                    [ngModelOptions]="{
+                                        standalone: true
+                                    }"
+                                    (keydown)="interestKeydown($event)"
+                                    placeholder="e.g. Chronic Disease Management">
+
+
+                                <button
+                                    type="button"
+                                    class="add-item-btn"
+                                    (click)="addInterest()">
+
+                                    <i class="fa-solid fa-plus"></i>
+
+                                    Add
+
+                                </button>
+
+                            </div>
+
+
+                            <div
+                                class="interest-list"
+                                *ngIf="interests.length">
+
+
+                                <div
+                                    class="interest-item"
+                                    *ngFor="
+                                        let interest of interests;
+                                        let i = index
+                                    ">
+
+
+                                    <div class="interest-number">
+                                        {{ i + 1 }}
+                                    </div>
+
+
+                                    <span>
+                                        {{ interest }}
+                                    </span>
+
+
+                                    <button
+                                        type="button"
+                                        title="Move Up"
+                                        [disabled]="i === 0"
+                                        (click)="moveInterestUp(i)">
+
+                                        <i class="fa-solid fa-chevron-up"></i>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        title="Move Down"
+                                        [disabled]="
+                                            i === interests.length - 1
+                                        "
+                                        (click)="moveInterestDown(i)">
+
+                                        <i class="fa-solid fa-chevron-down"></i>
+
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        title="Remove"
+                                        (click)="removeInterest(i)">
+
+                                        <i class="fa-solid fa-xmark"></i>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div
+                                class="empty-inline"
+                                *ngIf="!interests.length">
+
+                                <i class="fa-solid fa-circle-info"></i>
+
+                                No areas of interest added.
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         LANGUAGES
+                    ======================================= -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon language">
+
+                                <i class="fa-solid fa-language"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Languages Known
+                                </h3>
+
+                                <p>
+                                    Manage languages spoken by the doctor.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-card-body">
+
+                            <div class="language-input-box">
+
+
+                                <div
+                                    class="language-tags"
+                                    *ngIf="languages.length">
+
+
+                                    <span
+                                        class="language-tag"
+                                        *ngFor="
+                                            let language of languages;
+                                            let i = index
+                                        ">
+
+                                        <i class="fa-solid fa-language"></i>
+
+                                        {{ language }}
+
+
+                                        <button
+                                            type="button"
+                                            (click)="removeLanguage(i)">
+
+                                            <i class="fa-solid fa-xmark"></i>
+
+                                        </button>
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="add-language-row">
+
+                                    <input
+                                        type="text"
+                                        [(ngModel)]="languageInput"
+                                        [ngModelOptions]="{
+                                            standalone: true
+                                        }"
+                                        (keydown)="languageKeydown($event)"
+                                        placeholder="Type a language...">
+
+
+                                    <button
+                                        type="button"
+                                        (click)="addLanguage()">
+
+                                        <i class="fa-solid fa-plus"></i>
+
+                                        Add
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ======================================
+                         AVAILABILITY
+                    ======================================= -->
+
+                    <div class="form-card">
+
+                        <div class="form-card-header">
+
+                            <div class="card-icon availability">
+
+                                <i class="fa-regular fa-clock"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Doctor Availability
+                                </h3>
+
+                                <p>
+                                    Update regular weekly consulting hours.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="availability-toolbar">
+
+                            <div>
+
+                                <i class="fa-regular fa-calendar-check"></i>
+
+                                <span>
+
+                                    Available
+
+                                    <strong>
+                                        {{ availableDayCount }}
+                                    </strong>
+
+                                    day{{ availableDayCount === 1 ? '' : 's' }}
+                                    per week
+
+                                </span>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                (click)="copyMondayToWeekdays()">
+
+                                <i class="fa-regular fa-copy"></i>
+
+                                Copy Monday to Weekdays
+
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                form-card-body
+                                availability-body
+                            ">
+
+
+                            <div class="availability-heading">
+
+                                <span>Day</span>
+
+                                <span>Available</span>
+
+                                <span>Start Time</span>
+
+                                <span>End Time</span>
+
+                            </div>
+
+
+                            <div
+                                class="availability-row"
+                                [class.unavailable]="
+                                    !item.is_available
+                                "
+                                *ngFor="let item of availability">
+
+
+                                <div class="day-name">
+
+                                    <span class="day-icon">
+                                        {{ item.short }}
+                                    </span>
+
+
+                                    <div>
+
+                                        <strong>
+                                            {{ item.day }}
+                                        </strong>
+
+                                        <small>
+
+                                            {{
+                                                item.is_available
+                                                    ? 'Available'
+                                                    : 'Unavailable'
+                                            }}
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="availability-status">
+
+                                    <label class="availability-switch">
+
+                                        <input
+                                            type="checkbox"
+                                            [(ngModel)]="item.is_available"
+                                            [ngModelOptions]="{
+                                                standalone: true
+                                            }"
+                                            (change)="toggleAvailability(item)">
+
+                                        <span class="switch-slider"></span>
+
+                                    </label>
+
+                                </div>
+
+
+                                <div class="time-field">
+
+                                    <label>
+                                        Start
+                                    </label>
+
+                                    <input
+                                        type="time"
+                                        class="time-input"
+                                        [(ngModel)]="item.start_time"
+                                        [ngModelOptions]="{
+                                            standalone: true
+                                        }"
+                                        [disabled]="!item.is_available">
+
+                                </div>
+
+
+                                <div class="time-field">
+
+                                    <label>
+                                        End
+                                    </label>
+
+                                    <input
+                                        type="time"
+                                        class="time-input"
+                                        [(ngModel)]="item.end_time"
+                                        [ngModelOptions]="{
+                                            standalone: true
+                                        }"
+                                        [disabled]="!item.is_available">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==========================================
+                     RIGHT
+                =========================================== -->
+
+                <div class="col-xl-4">
+
+
+                    <div class="publish-card">
+
+
+                        <div class="publish-header">
+
+                            <div>
+
+                                <h3>
+                                    Update Doctor
+                                </h3>
+
+                                <p>
+                                    Review and save your changes.
+                                </p>
+
+                            </div>
+
+
+                            <i class="fa-solid fa-user-doctor"></i>
+
+                        </div>
+
+
+                        <div class="publish-body">
+
+
+                            <!-- STATUS -->
+
+                            <div class="publish-section">
+
+                                <label class="publish-label">
+                                    Status
+                                </label>
+
+
+                                <label class="status-option">
+
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        [value]="1"
+                                        [(ngModel)]="doctor.status">
+
+                                    <span class="radio-mark"></span>
+
+
+                                    <div>
+
+                                        <strong>
+                                            Active
+                                        </strong>
+
+                                        <small>
+                                            Doctor is visible on the website.
+                                        </small>
+
+                                    </div>
+
+                                </label>
+
+
+                                <label class="status-option">
+
+                                    <input
+                                        type="radio"
+                                        name="status"
+                                        [value]="0"
+                                        [(ngModel)]="doctor.status">
+
+                                    <span class="radio-mark"></span>
+
+
+                                    <div>
+
+                                        <strong>
+                                            Inactive
+                                        </strong>
+
+                                        <small>
+                                            Doctor is hidden from the website.
+                                        </small>
+
+                                    </div>
+
+                                </label>
+
+                            </div>
+
+
+                            <!-- ORDER -->
+
+                            <div class="publish-section">
+
+                                <label class="publish-label">
+                                    Display Order
+                                </label>
+
+
+                                <input
+                                    type="number"
+                                    name="sort_order"
+                                    class="form-control-custom"
+                                    [(ngModel)]="doctor.sort_order"
+                                    min="0">
+
+
+                                <div class="field-help">
+
+                                    <i class="fa-solid fa-circle-info"></i>
+
+                                    Lower numbers appear first.
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- SUMMARY -->
+
+                            <div class="publish-summary">
+
+
+                                <div class="publish-info-row">
+
+                                    <span>
+                                        Category
+                                    </span>
+
+                                    <strong>
+
+                                        <i class="fa-solid fa-user-group"></i>
+
+                                        {{ selectedCategoryName }}
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="publish-info-row">
+
+                                    <span>
+                                        Languages
+                                    </span>
+
+                                    <strong>
+
+                                        <i class="fa-solid fa-language"></i>
+
+                                        {{ languages.length }}
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="publish-info-row">
+
+                                    <span>
+                                        Services
+                                    </span>
+
+                                    <strong>
+
+                                        <i class="fa-solid fa-heart-pulse"></i>
+
+                                        {{ interests.length }}
+
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="publish-info-row">
+
+                                    <span>
+                                        Available Days
+                                    </span>
+
+                                    <strong>
+
+                                        <i class="fa-regular fa-calendar-check"></i>
+
+                                        {{ availableDayCount }} / 7
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- SAVE -->
+
+                            <button
+                                type="submit"
+                                class="save-doctor-btn"
+                                [disabled]="
+                                    isSaving ||
+                                    isUploadingImage
+                                ">
+
+
+                                <ng-container
+                                    *ngIf="!isSaving">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                    Update Doctor
+
+                                </ng-container>
+
+
+                                <ng-container
+                                    *ngIf="isSaving">
+
+                                    <span
+                                        class="
+                                            spinner-border
+                                            spinner-border-sm
+                                        ">
+                                    </span>
+
+                                    Updating Doctor...
+
+                                </ng-container>
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="cancel-btn"
+                                [disabled]="isSaving"
+                                (click)="cancel()">
+
+                                <i class="fa-solid fa-xmark"></i>
+
+                                Cancel
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </ng-container>
+
+</div>
+
+
+<!-- =========================================================
+     IMAGE CROPPER MODAL
+========================================================== -->
+
+<div
+    class="crop-modal-backdrop"
+    *ngIf="showCropModal"
+    (click)="closeCropModal()">
+
+
+    <div
+        class="crop-modal"
+        (click)="$event.stopPropagation()">
+
+
+        <!-- HEADER -->
+
+        <div class="crop-modal-header">
+
+            <div>
+
+                <div class="crop-header-icon">
+
+                    <i class="fa-solid fa-crop-simple"></i>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Crop Doctor Image
+                    </h3>
+
+                    <p>
+                        Adjust the image before uploading.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                [disabled]="isCroppingImage"
+                (click)="closeCropModal()">
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- BODY -->
+
+        <div class="crop-modal-body">
+
+
+            <div class="crop-instruction">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                <span>
+                    Position the doctor's face inside the frame.
+                    The final image uses a 3:4 portrait ratio.
+                </span>
+
+            </div>
+
+
+            <div class="cropper-container">
+
+                <image-cropper
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="3 / 4"
+                    [resizeToWidth]="450"
+                    [resizeToHeight]="600"
+                    [onlyScaleDown]="true"
+                    format="jpeg"
+                    output="blob"
+                    (imageCropped)="imageCropped($event)"
+                    (imageLoaded)="imageLoaded($event)"
+                    (cropperReady)="cropperReady()"
+                    (loadImageFailed)="loadImageFailed()">
+                </image-cropper>
+
+            </div>
+
+
+            <div class="crop-size-info">
+
+                <i class="fa-regular fa-image"></i>
+
+                Final image:
+
+                <strong>
+                    450 × 600 px
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="crop-modal-footer">
+
+
+            <button
+                type="button"
+                class="crop-cancel-btn"
+                [disabled]="isCroppingImage"
+                (click)="closeCropModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                type="button"
+                class="crop-save-btn"
+                [disabled]="
+                    !croppedBlob ||
+                    isCroppingImage
+                "
+                (click)="uploadCroppedImage()">
+
+
+                <ng-container
+                    *ngIf="!isCroppingImage">
+
+                    <i class="fa-solid fa-crop-simple"></i>
+
+                    Crop & Upload
+
+                </ng-container>
+
+
+                <ng-container
+                    *ngIf="isCroppingImage">
+
+                    <span
+                        class="
+                            spinner-border
+                            spinner-border-sm
+                        ">
+                    </span>
+
+                    Uploading...
+
+                </ng-container>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

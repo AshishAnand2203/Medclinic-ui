@@ -1,0 +1,24 @@
+<div class="admin-layout">
+
+    <app-sidebar
+        [collapsed]="sidebarCollapsed"
+        [mobileOpen]="mobileSidebarOpen"
+        (closeMobile)="closeMobileSidebar()">
+    </app-sidebar>
+
+    <div
+        class="admin-main"
+        [class.sidebar-collapsed]="sidebarCollapsed">
+
+        <app-header
+            (toggleSidebar)="toggleSidebar()"
+            (toggleMobileSidebar)="toggleMobileSidebar()">
+        </app-header>
+
+        <main class="admin-content">
+            <router-outlet></router-outlet>
+        </main>
+
+    </div>
+
+</div>

@@ -1,1207 +1,774 @@
 <div class="slider-form-page">
 
-    <!-- =======================================================
-         PAGE HEADING
-    ======================================================== -->
+  <!-- =======================================================
+  PAGE HEADING
+  ======================================================== -->
 
-    <div class="page-heading">
+  <div class="page-heading">
 
-        <div>
+    <div>
 
-            <div class="breadcrumb-text">
+      <div class="breadcrumb-text">
 
-                <span>Content Management</span>
+        <span>Content Management</span>
 
-                <i class="fa-solid fa-chevron-right"></i>
+        <i class="fa-solid fa-chevron-right"></i>
 
-                <span>Sliders</span>
+        <span>Sliders</span>
 
-                <i class="fa-solid fa-chevron-right"></i>
+        <i class="fa-solid fa-chevron-right"></i>
 
-                <strong>Edit Slider</strong>
+        <strong>Edit Slider</strong>
 
-            </div>
-
-
-            <h1>
-                Edit Slider
-            </h1>
+      </div>
 
 
-            <p>
-                Update slider content, image, button and publishing settings.
-            </p>
-
-        </div>
+      <h1>
+        Edit Slider
+      </h1>
 
 
-        <button
-            type="button"
-            class="back-btn"
-            (click)="cancel()">
-
-            <i class="fa-solid fa-arrow-left"></i>
-
-            Back to Sliders
-
-        </button>
+      <p>
+        Update slider content, image, button and publishing settings.
+      </p>
 
     </div>
 
 
-    <!-- =======================================================
-         SUCCESS MESSAGE
-    ======================================================== -->
+    <button
+      type="button"
+      class="back-btn"
+      (click)="cancel()">
 
+      <i class="fa-solid fa-arrow-left"></i>
+
+      Back to Sliders
+
+    </button>
+
+  </div>
+
+
+  <!-- =======================================================
+  SUCCESS MESSAGE
+  ======================================================== -->
+
+  @if (successMessage) {
     <div
-        class="custom-alert success-alert"
-        *ngIf="successMessage">
-
-        <div class="alert-icon">
-
-            <i class="fa-solid fa-circle-check"></i>
-
-        </div>
-
-
-        <div class="alert-content">
-
-            <strong>
-                Success
-            </strong>
-
-            <span>
-                {{ successMessage }}
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <!-- =======================================================
-         ERROR MESSAGE
-    ======================================================== -->
-
-    <div
-        class="custom-alert error-alert"
-        *ngIf="errorMessage">
-
-        <div class="alert-icon">
-
-            <i class="fa-solid fa-circle-exclamation"></i>
-
-        </div>
-
-
-        <div class="alert-content">
-
-            <strong>
-                Error
-            </strong>
-
-            <span>
-                {{ errorMessage }}
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <!-- =======================================================
-         LOADING
-    ======================================================== -->
-
-    <div
-        class="loading-card"
-        *ngIf="isLoading">
-
-        <div class="loading-spinner"></div>
-
+      class="custom-alert success-alert"
+      >
+      <div class="alert-icon">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div class="alert-content">
+        <strong>
+          Success
+        </strong>
         <span>
-            Loading slider...
+          {{ successMessage }}
         </span>
-
+      </div>
     </div>
+  }
 
 
-    <!-- =======================================================
-         FORM
-    ======================================================== -->
+  <!-- =======================================================
+  ERROR MESSAGE
+  ======================================================== -->
 
+  @if (errorMessage) {
+    <div
+      class="custom-alert error-alert"
+      >
+      <div class="alert-icon">
+        <i class="fa-solid fa-circle-exclamation"></i>
+      </div>
+      <div class="alert-content">
+        <strong>
+          Error
+        </strong>
+        <span>
+          {{ errorMessage }}
+        </span>
+      </div>
+    </div>
+  }
+
+
+  <!-- =======================================================
+  LOADING
+  ======================================================== -->
+
+  @if (isLoading) {
+    <div
+      class="loading-card"
+      >
+      <div class="loading-spinner"></div>
+      <span>
+        Loading slider...
+      </span>
+    </div>
+  }
+
+
+  <!-- =======================================================
+  FORM
+  ======================================================== -->
+
+  @if (!isLoading) {
     <form
-        *ngIf="!isLoading"
-        #sliderForm="ngForm"
-        (ngSubmit)="saveSlider()"
-        novalidate>
-
-        <!-- IMPORTANT:
-             DO NOT ADD align-items-start HERE
-        -->
-
-        <div class="row g-3">
-
-
-            <!-- =================================================
-                 LEFT COLUMN
-            ================================================== -->
-
-            <div class="col-xl-8 col-lg-7">
-
-
-                <!-- =============================================
-                     SLIDER INFORMATION
-                ============================================== -->
-
-                <div class="form-card">
-
-                    <div class="form-card-header">
-
-                        <div class="card-heading-wrap">
-
-                            <div class="card-icon">
-
-                                <i class="fa-solid fa-sliders"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h3>
-                                    Slider Information
-                                </h3>
-
-                                <p>
-                                    Main heading and call-to-action information.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-card-body">
-
-                        <div class="row g-3">
-
-
-                            <!-- TITLE -->
-
-                            <div class="col-12">
-
-                                <div class="form-group-custom">
-
-                                    <label>
-
-                                        Slider Title
-
-                                        <span class="required">
-                                            *
-                                        </span>
-
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        class="form-control-custom"
-                                        name="title"
-                                        [(ngModel)]="slider.title"
-                                        #title="ngModel"
-                                        required
-                                        maxlength="255"
-                                        placeholder="Enter slider title">
-
-
-                                    <div
-                                        class="field-error"
-                                        *ngIf="
-                                            errors.title ||
-                                            (
-                                                title.invalid &&
-                                                title.touched
-                                            )
-                                        ">
-
-                                        {{
-                                            errors.title ||
-                                            'Slider title is required.'
-                                        }}
-
-                                    </div>
-
-
-                                    <div class="field-help">
-
-                                        This will be displayed as the main
-                                        slider heading.
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- BUTTON TEXT -->
-
-                            <div class="col-md-6">
-
-                                <div class="form-group-custom">
-
-                                    <label>
-                                        Button Text
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        class="form-control-custom"
-                                        name="button_text"
-                                        [(ngModel)]="slider.button_text"
-                                        maxlength="100"
-                                        placeholder="e.g. Book Appointment">
-
-
-                                    <div class="field-help">
-
-                                        Leave empty if the slider does not
-                                        require a button.
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- BUTTON LINK -->
-
-                            <div class="col-md-6">
-
-                                <div class="form-group-custom">
-
-                                    <label>
-                                        Button Link
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        class="form-control-custom"
-                                        name="button_link"
-                                        [(ngModel)]="slider.button_link"
-                                        maxlength="500"
-                                        placeholder="e.g. /appointment">
-
-
-                                    <div class="field-help">
-
-                                        Enter an internal path or complete URL.
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
+      #sliderForm="ngForm"
+      (ngSubmit)="saveSlider()"
+      novalidate>
+      <!-- IMPORTANT:
+      DO NOT ADD align-items-start HERE
+      -->
+      <div class="row g-3">
+        <!-- =================================================
+        LEFT COLUMN
+        ================================================== -->
+        <div class="col-xl-8 col-lg-7">
+          <!-- =============================================
+          SLIDER INFORMATION
+          ============================================== -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="card-heading-wrap">
+                <div class="card-icon">
+                  <i class="fa-solid fa-sliders"></i>
                 </div>
-
-
-                <!-- =============================================
-                     SUBTITLE / CONTENT
-                ============================================== -->
-
-                <div class="form-card">
-
-                    <div class="form-card-header">
-
-                        <div class="card-heading-wrap">
-
-                            <div class="card-icon">
-
-                                <i class="fa-solid fa-align-left"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h3>
-                                    Slider Content
-                                </h3>
-
-                                <p>
-                                    Add supporting text below the main heading.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="editor-mode-switch">
-
-                            <button
-                                type="button"
-                                [class.active]="editorMode === 'visual'"
-                                (click)="setEditorMode('visual')">
-
-                                <i class="fa-regular fa-eye"></i>
-
-                                Visual
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                [class.active]="editorMode === 'source'"
-                                (click)="setEditorMode('source')">
-
-                                <i class="fa-solid fa-code"></i>
-
-                                HTML
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-card-body">
-
-                        <!-- VISUAL EDITOR -->
-
-                        <div
-                            class="editor-wrapper"
-                            *ngIf="editorMode === 'visual'">
-
-                            <ckeditor
-                                [editor]="Editor"
-                                [config]="editorConfig"
-                                [(ngModel)]="slider.subtitle"
-                                name="subtitle"
-                                (ready)="onEditorReady($event)">
-                            </ckeditor>
-
-                        </div>
-
-
-                        <!-- HTML EDITOR -->
-
-                        <div
-                            class="source-editor"
-                            *ngIf="editorMode === 'source'">
-
-                            <textarea
-                                class="form-control-custom source-textarea"
-                                name="subtitle_source"
-                                [(ngModel)]="slider.subtitle"
-                                placeholder="Enter HTML content">
-                            </textarea>
-
-                        </div>
-
-
-                        <div class="field-help mt-2">
-
-                            Keep slider text short so it remains readable
-                            over the banner image.
-
-                        </div>
-
-                    </div>
-
+                <div>
+                  <h3>
+                    Slider Information
+                  </h3>
+                  <p>
+                    Main heading and call-to-action information.
+                  </p>
                 </div>
-
-
-                <!-- =============================================
-                     SLIDER IMAGE
-                ============================================== -->
-
-                <div class="form-card">
-
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
-
-    <div class="form-card-header">
-
-        <div class="card-heading-wrap">
-
-            <div class="card-icon">
-                <i class="fa-regular fa-image"></i>
+              </div>
             </div>
-
-            <div>
-
-                <h3>
+            <div class="form-card-body">
+              <div class="row g-3">
+                <!-- TITLE -->
+                <div class="col-12">
+                  <div class="form-group-custom">
+                    <label>
+                      Slider Title
+                      <span class="required">
+                        *
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control-custom"
+                      name="title"
+                      [(ngModel)]="slider.title"
+                      #title="ngModel"
+                      required
+                      maxlength="255"
+                      placeholder="Enter slider title">
+                    @if (
+                      errors.title ||
+                      (
+                      title.invalid &&
+                      title.touched
+                      )
+                      ) {
+                      <div
+                        class="field-error"
+                        >
+                        {{
+                        errors.title ||
+                        'Slider title is required.'
+                        }}
+                      </div>
+                    }
+                    <div class="field-help">
+                      This will be displayed as the main
+                      slider heading.
+                    </div>
+                  </div>
+                </div>
+                <!-- BUTTON TEXT -->
+                <div class="col-md-6">
+                  <div class="form-group-custom">
+                    <label>
+                      Button Text
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control-custom"
+                      name="button_text"
+                      [(ngModel)]="slider.button_text"
+                      maxlength="100"
+                      placeholder="e.g. Book Appointment">
+                    <div class="field-help">
+                      Leave empty if the slider does not
+                      require a button.
+                    </div>
+                  </div>
+                </div>
+                <!-- BUTTON LINK -->
+                <div class="col-md-6">
+                  <div class="form-group-custom">
+                    <label>
+                      Button Link
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control-custom"
+                      name="button_link"
+                      [(ngModel)]="slider.button_link"
+                      maxlength="500"
+                      placeholder="e.g. /appointment">
+                      <div class="field-help">
+                        Enter an internal path or complete URL.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- =============================================
+            SUBTITLE / CONTENT
+            ============================================== -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="card-heading-wrap">
+                <div class="card-icon">
+                  <i class="fa-solid fa-align-left"></i>
+                </div>
+                <div>
+                  <h3>
+                    Slider Content
+                  </h3>
+                  <p>
+                    Add supporting text below the main heading.
+                  </p>
+                </div>
+              </div>
+              <div class="editor-mode-switch">
+                <button
+                  type="button"
+                  [class.active]="editorMode === 'visual'"
+                  (click)="setEditorMode('visual')">
+                  <i class="fa-regular fa-eye"></i>
+                  Visual
+                </button>
+                <button
+                  type="button"
+                  [class.active]="editorMode === 'source'"
+                  (click)="setEditorMode('source')">
+                  <i class="fa-solid fa-code"></i>
+                  HTML
+                </button>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <!-- VISUAL EDITOR -->
+              @if (editorMode === 'visual') {
+                <div
+                  class="editor-wrapper"
+                  >
+                  <ckeditor
+                    [editor]="Editor"
+                    [config]="editorConfig"
+                    [(ngModel)]="slider.subtitle"
+                    name="subtitle"
+                    (ready)="onEditorReady($event)">
+                  </ckeditor>
+                </div>
+              }
+              <!-- HTML EDITOR -->
+              @if (editorMode === 'source') {
+                <div
+                  class="source-editor"
+                  >
+                  <textarea
+                    class="form-control-custom source-textarea"
+                    name="subtitle_source"
+                    [(ngModel)]="slider.subtitle"
+                    placeholder="Enter HTML content">
+                  </textarea>
+                </div>
+              }
+              <div class="field-help mt-2">
+                Keep slider text short so it remains readable
+                over the banner image.
+              </div>
+            </div>
+          </div>
+          <!-- =============================================
+          SLIDER IMAGE
+          ============================================== -->
+          <div class="form-card">
+            <!-- =====================================================
+            HEADER
+            ====================================================== -->
+            <div class="form-card-header">
+              <div class="card-heading-wrap">
+                <div class="card-icon">
+                  <i class="fa-regular fa-image"></i>
+                </div>
+                <div>
+                  <h3>
                     Slider Image
-                </h3>
-
-                <p>
+                  </h3>
+                  <p>
                     Upload and crop the homepage slider image.
-                </p>
-
+                  </p>
+                </div>
+              </div>
             </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         BODY
-    ====================================================== -->
-
-    <div class="form-card-body">
-
-
-        <!-- =================================================
-             CURRENT IMAGE
-        ================================================== -->
-
-        <div
-            class="slider-image-box"
-            *ngIf="slider.image_url">
-
-            <!-- Image Preview -->
-
-            <div class="slider-image-preview">
-
-                <img
-                    [src]="slider.image_url"
-                    [alt]="slider.title || 'Slider image'"
-                    class="slider-preview-photo">
-
-            </div>
-
-
-            <!-- Image Footer -->
-
-            <div class="slider-image-footer">
-
-
-                <!-- Image Status -->
-
-                <div class="slider-image-status">
-
-                    <div class="image-ready-icon">
-
+            <!-- =====================================================
+            BODY
+            ====================================================== -->
+            <div class="form-card-body">
+              <!-- =================================================
+              CURRENT IMAGE
+              ================================================== -->
+              @if (slider.image_url) {
+                <div
+                  class="slider-image-box"
+                  >
+                  <!-- Image Preview -->
+                  <div class="slider-image-preview">
+                    <img
+                      [src]="slider.image_url"
+                      [alt]="slider.title || 'Slider image'"
+                      class="slider-preview-photo">
+                  </div>
+                  <!-- Image Footer -->
+                  <div class="slider-image-footer">
+                    <!-- Image Status -->
+                    <div class="slider-image-status">
+                      <div class="image-ready-icon">
                         <i class="fa-solid fa-check"></i>
-
-                    </div>
-
-
-                    <div class="image-ready-content">
-
+                      </div>
+                      <div class="image-ready-content">
                         <div class="image-ready-title">
-                            Slider Image Ready
+                          Slider Image Ready
                         </div>
-
                         <div class="image-ready-text">
-                            Cropped to the required 1366 × 600 ratio.
+                          Cropped to the required 1366 × 600 ratio.
                         </div>
-
+                      </div>
                     </div>
-
+                    <!-- Image Actions -->
+                    <div class="slider-image-actions">
+                      <!-- Change Image -->
+                      <button
+                        type="button"
+                        class="slider-image-btn change-image-btn"
+                        (click)="openImagePicker()">
+                        <i class="fa-solid fa-pen"></i>
+                        <span>
+                          Change Image
+                        </span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
-
-
-                <!-- Image Actions -->
-
-                <div class="slider-image-actions">
-
-
-                    <!-- Change Image -->
-
-                    <button
-    type="button"
-    class="slider-image-btn change-image-btn"
-    (click)="openImagePicker()">
-
-    <i class="fa-solid fa-pen"></i>
-
-    <span>
-        Change Image
-    </span>
-
-</button>
-
-
-
-
-
-
+              }
+              <!-- =================================================
+              NO IMAGE / UPLOAD AREA
+              ================================================== -->
+              @if (!slider.image_url) {
+                <label
+                  class="slider-image-upload"
+                  for="sliderImageInput"
+                  >
+                  <div class="upload-icon">
+                    <i class="fa-solid fa-images"></i>
+                  </div>
+                  <strong>
+                    Upload Slider Image
+                  </strong>
+                  <span>
+                    Click to select JPG, PNG or WEBP
+                  </span>
+                  <small>
+                    Maximum 5 MB • Output 1366 × 600 px
+                  </small>
+                </label>
+              }
+              <!-- =================================================
+              FILE INPUT
+              ================================================== -->
+              <input
+                id="sliderImageInput"
+                type="file"
+                hidden
+                accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                (change)="onImageSelected($event)">
+              <!-- =================================================
+              UPLOADING STATE
+              ================================================== -->
+              @if (isUploadingImage) {
+                <div
+                  class="image-uploading-box"
+                  >
+                  <span class="image-upload-spinner"></span>
+                  <span>
+                    Uploading slider image...
+                  </span>
                 </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             NO IMAGE / UPLOAD AREA
-        ================================================== -->
-
-        <label
-            class="slider-image-upload"
-            for="sliderImageInput"
-            *ngIf="!slider.image_url">
-
-            <div class="upload-icon">
-
-                <i class="fa-solid fa-images"></i>
-
-            </div>
-
-
-            <strong>
-                Upload Slider Image
-            </strong>
-
-
-            <span>
-                Click to select JPG, PNG or WEBP
-            </span>
-
-
-            <small>
-                Maximum 5 MB • Output 1366 × 600 px
-            </small>
-
-        </label>
-
-
-        <!-- =================================================
-             FILE INPUT
-        ================================================== -->
-
-        <input
-            id="sliderImageInput"
-            type="file"
-            hidden
-            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-            (change)="onImageSelected($event)">
-
-
-        <!-- =================================================
-             UPLOADING STATE
-        ================================================== -->
-
-        <div
-            class="image-uploading-box"
-            *ngIf="isUploadingImage">
-
-            <span class="image-upload-spinner"></span>
-
-            <span>
-                Uploading slider image...
-            </span>
-
-        </div>
-
-
-        <!-- =================================================
-             IMAGE ERROR
-        ================================================== -->
-
-        <div
-            class="image-error"
-            *ngIf="imageError">
-
-            <i class="fa-solid fa-circle-exclamation"></i>
-
-            <span>
-                {{ imageError }}
-            </span>
-
-        </div>
-
-
-        <!-- =================================================
-             IMAGE REQUIREMENTS
-        ================================================== -->
-
-        <div class="image-requirement-box">
-
-            <div class="requirement-icon">
-
-                <i class="fa-solid fa-circle-info"></i>
-
-            </div>
-
-
-            <div>
-
-                <strong>
+              }
+              <!-- =================================================
+              IMAGE ERROR
+              ================================================== -->
+              @if (imageError) {
+                <div
+                  class="image-error"
+                  >
+                  <i class="fa-solid fa-circle-exclamation"></i>
+                  <span>
+                    {{ imageError }}
+                  </span>
+                </div>
+              }
+              <!-- =================================================
+              IMAGE REQUIREMENTS
+              ================================================== -->
+              <div class="image-requirement-box">
+                <div class="requirement-icon">
+                  <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div>
+                  <strong>
                     Slider Image Requirements
-                </strong>
-
-                <p>
+                  </strong>
+                  <p>
                     Your selected image will be cropped to exactly
                     <b>1366 × 600 pixels</b>.
                     JPG, PNG and WEBP files up to 5 MB are supported.
-                </p>
-
+                  </p>
+                </div>
+              </div>
             </div>
-
+          </div>
         </div>
-
-    </div>
-
-</div>
-
+        <!-- =================================================
+        RIGHT COLUMN
+        ================================================== -->
+        <div class="col-xl-4 col-lg-5">
+          <!-- =============================================
+          PUBLISH CARD
+          THIS CARD WILL STICK
+          ============================================== -->
+          <div class="publish-card">
+            <!-- HEADER -->
+            <div class="publish-header">
+              <div>
+                <h3>
+                  Publish
+                </h3>
+                <p>
+                  Manage visibility and display order.
+                </p>
+              </div>
+              <div class="publish-header-icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
             </div>
-
-
-            <!-- =================================================
-                 RIGHT COLUMN
-            ================================================== -->
-
-            <div class="col-xl-4 col-lg-5">
-
-
-                <!-- =============================================
-                     PUBLISH CARD
-                     THIS CARD WILL STICK
-                ============================================== -->
-
-                <div class="publish-card">
-
-
-                    <!-- HEADER -->
-
-                    <div class="publish-header">
-
-                        <div>
-
-                            <h3>
-                                Publish
-                            </h3>
-
-                            <p>
-                                Manage visibility and display order.
-                            </p>
-
-                        </div>
-
-
-                        <div class="publish-header-icon">
-
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- BODY -->
-
-                    <div class="publish-body">
-
-
-                        <!-- =====================================
-                             STATUS
-                        ====================================== -->
-
-                        <div class="publish-section">
-
+            <!-- BODY -->
+            <div class="publish-body">
+              <!-- =====================================
+              STATUS
+              ====================================== -->
+              <div class="publish-section">
                 <label class="publish-label">
+                  Status
+                </label>
+                <label class="status-option">
+                  <input
+                    type="radio"
+                    name="status"
+                    [value]="1"
+                    [(ngModel)]="slider.status">
+                  <span class="radio-mark"></span>
+                  <div>
+                    <strong>
+                      Active
+                    </strong>
+                    <small>
+                      Slider is visible on the website.
+                    </small>
+                  </div>
+                </label>
+                <label class="status-option">
+                  <input
+                    type="radio"
+                    name="status"
+                    [value]="0"
+                    [(ngModel)]="slider.status">
+                  <span class="radio-mark"></span>
+                  <div>
+                    <strong>
+                      Inactive
+                    </strong>
+                    <small>
+                      Slider is hidden from the website.
+                    </small>
+                  </div>
+                </label>
+              </div>
+              <!-- =====================================
+              SORT ORDER
+              ====================================== -->
+              <div class="publish-section">
+                <label
+                  class="publish-label"
+                  for="sortOrder">
+                  Display Order
+                </label>
+                <div class="order-input-wrap">
+                  <span class="order-icon">
+                    <i class="fa-solid fa-arrow-down-1-9"></i>
+                  </span>
+                  <input
+                    id="sortOrder"
+                    type="number"
+                    class="form-control-custom order-input"
+                    name="sort_order"
+                    [(ngModel)]="slider.sort_order"
+                    min="0">
+                </div>
+                <div class="publish-help">
+                  Lower numbers will appear first.
+                </div>
+              </div>
+              <!-- =====================================
+              SUMMARY
+              ====================================== -->
+              <div class="publish-summary">
+                <div class="summary-title">
+                  <i class="fa-solid fa-list-check"></i>
+                  Slider Summary
+                </div>
+                <div class="summary-row">
+                  <span>
+                    Title
+                  </span>
+                  <strong>
+                    {{
+                    slider.title ||
+                    'Not entered'
+                    }}
+                  </strong>
+                </div>
+                <div class="summary-row">
+                  <span>
+                    Image
+                  </span>
+                  <strong
+                    [class.text-success]="slider.image">
+                    {{
+                    slider.image
+                    ? 'Uploaded'
+                    : 'Missing'
+                    }}
+                  </strong>
+                </div>
+                <div class="summary-row">
+                  <span>
+                    Button
+                  </span>
+                  <strong>
+                    {{
+                    slider.button_text ||
+                    'Not set'
+                    }}
+                  </strong>
+                </div>
+                <div class="summary-row">
+                  <span>
+                    Order
+                  </span>
+                  <strong>
+                    {{
+                    slider.sort_order || 0
+                    }}
+                  </strong>
+                </div>
+                <div class="summary-row">
+                  <span>
                     Status
-                </label>
-
-
-                <label class="status-option">
-
-                    <input
-                        type="radio"
-                        name="status"
-                        [value]="1"
-                        [(ngModel)]="slider.status">
-
-                    <span class="radio-mark"></span>
-
-
-                    <div>
-
-                        <strong>
-                            Active
-                        </strong>
-
-                        <small>
-                            Slider is visible on the website.
-                        </small>
-
-                    </div>
-
-                </label>
-
-
-                <label class="status-option">
-
-                    <input
-                        type="radio"
-                        name="status"
-                        [value]="0"
-                        [(ngModel)]="slider.status">
-
-                    <span class="radio-mark"></span>
-
-
-                    <div>
-
-                        <strong>
-                            Inactive
-                        </strong>
-
-                        <small>
-                            Slider is hidden from the website.
-                        </small>
-
-                    </div>
-
-                </label>
-
-            </div>
-
-
-                        <!-- =====================================
-                             SORT ORDER
-                        ====================================== -->
-
-                        <div class="publish-section">
-
-                            <label
-                                class="publish-label"
-                                for="sortOrder">
-
-                                Display Order
-
-                            </label>
-
-
-                            <div class="order-input-wrap">
-
-                                <span class="order-icon">
-
-                                    <i class="fa-solid fa-arrow-down-1-9"></i>
-
-                                </span>
-
-
-                                <input
-                                    id="sortOrder"
-                                    type="number"
-                                    class="form-control-custom order-input"
-                                    name="sort_order"
-                                    [(ngModel)]="slider.sort_order"
-                                    min="0">
-
-                            </div>
-
-
-                            <div class="publish-help">
-
-                                Lower numbers will appear first.
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =====================================
-                             SUMMARY
-                        ====================================== -->
-
-                        <div class="publish-summary">
-
-                            <div class="summary-title">
-
-                                <i class="fa-solid fa-list-check"></i>
-
-                                Slider Summary
-
-                            </div>
-
-
-                            <div class="summary-row">
-
-                                <span>
-                                    Title
-                                </span>
-
-
-                                <strong>
-                                    {{
-                                        slider.title ||
-                                        'Not entered'
-                                    }}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="summary-row">
-
-                                <span>
-                                    Image
-                                </span>
-
-
-                                <strong
-                                    [class.text-success]="slider.image">
-
-                                    {{
-                                        slider.image
-                                            ? 'Uploaded'
-                                            : 'Missing'
-                                    }}
-
-                                </strong>
-
-                            </div>
-
-
-                            <div class="summary-row">
-
-                                <span>
-                                    Button
-                                </span>
-
-
-                                <strong>
-
-                                    {{
-                                        slider.button_text ||
-                                        'Not set'
-                                    }}
-
-                                </strong>
-
-                            </div>
-
-
-                            <div class="summary-row">
-
-                                <span>
-                                    Order
-                                </span>
-
-
-                                <strong>
-
-                                    {{
-                                        slider.sort_order || 0
-                                    }}
-
-                                </strong>
-
-                            </div>
-
-
-                            <div class="summary-row">
-
-                                <span>
-                                    Status
-                                </span>
-
-
-                                <strong
+                  </span>
+                  <strong
                                     [class.summary-active]="
                                         slider.status === 1
                                     "
                                     [class.summary-inactive]="
                                         slider.status === 0
                                     ">
-
-                                    {{
-                                        slider.status === 1
-                                            ? 'Active'
-                                            : 'Inactive'
-                                    }}
-
-                                </strong>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- =====================================
-                             BUTTONS
-                        ====================================== -->
-
-                        <div class="publish-actions">
-
-
-                            <!-- SAVE -->
-
-                            <button
-                                type="submit"
-                                class="save-slider-btn"
+                    {{
+                    slider.status === 1
+                    ? 'Active'
+                    : 'Inactive'
+                    }}
+                  </strong>
+                </div>
+              </div>
+              <!-- =====================================
+              BUTTONS
+              ====================================== -->
+              <div class="publish-actions">
+                <!-- SAVE -->
+                <button
+                  type="submit"
+                  class="save-slider-btn"
                                 [disabled]="
                                     isSaving ||
                                     isUploadingImage ||
                                     sliderForm.invalid
                                 ">
-
-
-                                <ng-container
-                                    *ngIf="
-                                        !isSaving &&
-                                        !isUploadingImage
-                                    ">
-
-                                    <i class="fa-solid fa-check"></i>
-
-                                    Update Slider
-
-                                </ng-container>
-
-
-                                <ng-container
-                                    *ngIf="isSaving">
-
-                                    <span class="button-spinner"></span>
-
-                                    Updating Slider...
-
-                                </ng-container>
-
-
-                                <ng-container
-                                    *ngIf="
-                                        isUploadingImage &&
-                                        !isSaving
-                                    ">
-
-                                    <span class="button-spinner"></span>
-
-                                    Uploading Image...
-
-                                </ng-container>
-
-                            </button>
-
-
-                            <!-- CANCEL -->
-
-                            <button
-                                type="button"
-                                class="cancel-slider-btn"
+                  @if (
+                    !isSaving &&
+                    !isUploadingImage
+                    ) {
+                    <i class="fa-solid fa-check"></i>
+                    Update Slider
+                  }
+                  @if (isSaving) {
+                    <span class="button-spinner"></span>
+                    Updating Slider...
+                  }
+                  @if (
+                    isUploadingImage &&
+                    !isSaving
+                    ) {
+                    <span class="button-spinner"></span>
+                    Uploading Image...
+                  }
+                </button>
+                <!-- CANCEL -->
+                <button
+                  type="button"
+                  class="cancel-slider-btn"
                                 [disabled]="
                                     isSaving ||
                                     isUploadingImage
                                 "
-                                (click)="cancel()">
-
-                                Cancel
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
+                  (click)="cancel()">
+                  Cancel
+                </button>
+              </div>
             </div>
-
+          </div>
         </div>
-
+      </div>
     </form>
+  }
 
 </div>
 
 
 <!-- ===========================================================
-     IMAGE CROPPER MODAL
+IMAGE CROPPER MODAL
 ============================================================ -->
 
-<div
+@if (showCropModal) {
+  <div
     class="crop-overlay"
-    *ngIf="showCropModal">
-
+    >
     <div class="crop-modal">
-
-
-        <!-- ===================================================
-             HEADER
-        ==================================================== -->
-
-        <div class="crop-modal-header">
-
-            <div>
-
-                <h3>
-                    Crop Slider Image
-                </h3>
-
-                <p>
-                    Adjust the image to fit the required
-                    1366 × 600 banner ratio.
-                </p>
-
-            </div>
-
-
-            <button
-                type="button"
-                class="crop-close-btn"
-                [disabled]="isCroppingImage"
-                (click)="closeCropModal()">
-
-                <i class="fa-solid fa-xmark"></i>
-
-            </button>
-
+      <!-- ===================================================
+      HEADER
+      ==================================================== -->
+      <div class="crop-modal-header">
+        <div>
+          <h3>
+            Crop Slider Image
+          </h3>
+          <p>
+            Adjust the image to fit the required
+            1366 × 600 banner ratio.
+          </p>
         </div>
-
-
-        <!-- ===================================================
-             BODY
-        ==================================================== -->
-
-        <div class="crop-modal-body">
-
-            <div class="cropper-container">
-
-                <image-cropper
-
-                    [imageChangedEvent]="imageChangedEvent"
-
-                    [maintainAspectRatio]="true"
-
-                    [aspectRatio]="1366 / 600"
-
-                    [resizeToWidth]="1366"
-
-                    [resizeToHeight]="600"
-
-                    [onlyScaleDown]="false"
-
-                    [cropperMinWidth]="683"
-
-                    [format]="'jpeg'"
-
-                    [imageQuality]="92"
-
-                    [alignImage]="'center'"
-
-                    (imageCropped)="imageCropped($event)"
-
-                    (imageLoaded)="imageLoaded($event)"
-
-                    (cropperReady)="cropperReady()"
-
-                    (loadImageFailed)="loadImageFailed()">
-
-                </image-cropper>
-
-            </div>
-
-
-            <!-- ===============================================
-                 SIZE INFORMATION
-            ================================================ -->
-
-            <div class="crop-size-info">
-
-                <div>
-
-                    <i class="fa-solid fa-crop-simple"></i>
-
-                    <span>
-                        Aspect Ratio
-                    </span>
-
-                    <strong>
-                        1366 : 600
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <i class="fa-regular fa-image"></i>
-
-                    <span>
-                        Output Size
-                    </span>
-
-                    <strong>
-                        1366 × 600 px
-                    </strong>
-
-                </div>
-
-            </div>
-
+        <button
+          type="button"
+          class="crop-close-btn"
+          [disabled]="isCroppingImage"
+          (click)="closeCropModal()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <!-- ===================================================
+      BODY
+      ==================================================== -->
+      <div class="crop-modal-body">
+        <div class="cropper-container">
+          <image-cropper
+            [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="1366 / 600"
+            [resizeToWidth]="1366"
+            [resizeToHeight]="600"
+            [onlyScaleDown]="false"
+            [cropperMinWidth]="683"
+            [format]="'jpeg'"
+            [imageQuality]="92"
+            [alignImage]="'center'"
+            (imageCropped)="imageCropped($event)"
+            (imageLoaded)="imageLoaded($event)"
+            (cropperReady)="cropperReady()"
+            (loadImageFailed)="loadImageFailed()">
+          </image-cropper>
         </div>
-
-
-        <!-- ===================================================
-             FOOTER
-        ==================================================== -->
-
-        <div class="crop-modal-footer">
-
-            <button
-                type="button"
-                class="crop-cancel-btn"
-                [disabled]="isCroppingImage"
-                (click)="closeCropModal()">
-
-                Cancel
-
-            </button>
-
-
-            <button
-                type="button"
-                class="crop-save-btn"
+        <!-- ===============================================
+        SIZE INFORMATION
+        ================================================ -->
+        <div class="crop-size-info">
+          <div>
+            <i class="fa-solid fa-crop-simple"></i>
+            <span>
+              Aspect Ratio
+            </span>
+            <strong>
+              1366 : 600
+            </strong>
+          </div>
+          <div>
+            <i class="fa-regular fa-image"></i>
+            <span>
+              Output Size
+            </span>
+            <strong>
+              1366 × 600 px
+            </strong>
+          </div>
+        </div>
+      </div>
+      <!-- ===================================================
+      FOOTER
+      ==================================================== -->
+      <div class="crop-modal-footer">
+        <button
+          type="button"
+          class="crop-cancel-btn"
+          [disabled]="isCroppingImage"
+          (click)="closeCropModal()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="crop-save-btn"
                 [disabled]="
                     !croppedBlob ||
                     isCroppingImage
                 "
-                (click)="uploadCroppedImage()">
-
-
-                <ng-container
-                    *ngIf="!isCroppingImage">
-
-                    <i class="fa-solid fa-crop-simple"></i>
-
-                    Crop & Use Image
-
-                </ng-container>
-
-
-                <ng-container
-                    *ngIf="isCroppingImage">
-
-                    <span class="button-spinner"></span>
-
-                    Uploading...
-
-                </ng-container>
-
-            </button>
-
-        </div>
-
+          (click)="uploadCroppedImage()">
+          @if (!isCroppingImage) {
+            <i class="fa-solid fa-crop-simple"></i>
+            Crop & Use Image
+          }
+          @if (isCroppingImage) {
+            <span class="button-spinner"></span>
+            Uploading...
+          }
+        </button>
+      </div>
     </div>
-
-</div>
+  </div>
+}

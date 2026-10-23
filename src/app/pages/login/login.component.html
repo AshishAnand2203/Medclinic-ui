@@ -1,362 +1,358 @@
 <div class="login-page">
 
-    <!-- ==============================================
-         LEFT BRAND SECTION
-    =============================================== -->
+  <!-- ==============================================
+  LEFT BRAND SECTION
+  =============================================== -->
 
-    <div class="login-brand">
+  <div class="login-brand">
 
-        <div class="brand-shape shape-one"></div>
-        <div class="brand-shape shape-two"></div>
+    <div class="brand-shape shape-one"></div>
+    <div class="brand-shape shape-two"></div>
 
-        <div class="brand-content">
+    <div class="brand-content">
 
-            <div class="brand-logo-box">
-                <img
-                    src="assets/images/logo.png"
-                    alt="Medclinic Family Practice"
-                    class="brand-logo"
-                >
-            </div>
+      <div class="brand-logo-box">
+        <img
+          src="assets/images/logo.png"
+          alt="Medclinic Family Practice"
+          class="brand-logo"
+          >
+      </div>
 
-            <div class="brand-text">
+      <div class="brand-text">
 
-                <span class="brand-tag">
-                    ADMINISTRATION PORTAL
-                </span>
+        <span class="brand-tag">
+          ADMINISTRATION PORTAL
+        </span>
 
-                <h1>
-                    Medclinic
-                    <span>Family Practice</span>
-                </h1>
+        <h1>
+          Medclinic
+          <span>Family Practice</span>
+        </h1>
 
-                <p>
-                    Manage your website content, services,
-                    doctors, enquiries and practice information
-                    from one secure dashboard.
-                </p>
+        <p>
+          Manage your website content, services,
+          doctors, enquiries and practice information
+          from one secure dashboard.
+        </p>
 
-            </div>
+      </div>
 
-            <div class="brand-features">
+      <div class="brand-features">
 
-                <div class="feature-item">
+        <div class="feature-item">
 
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
+          <div class="feature-icon">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
 
-                    <div>
-                        <strong>Secure Access</strong>
-                        <span>Protected administration portal</span>
-                    </div>
-
-                </div>
-
-
-                <div class="feature-item">
-
-                    <div class="feature-icon">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-
-                    <div>
-                        <strong>Easy Management</strong>
-                        <span>Manage your website from one place</span>
-                    </div>
-
-                </div>
-
-            </div>
+          <div>
+            <strong>Secure Access</strong>
+            <span>Protected administration portal</span>
+          </div>
 
         </div>
 
 
-        <div class="brand-footer">
-            © 2026 Medclinic Family Practice
+        <div class="feature-item">
+
+          <div class="feature-icon">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+
+          <div>
+            <strong>Easy Management</strong>
+            <span>Manage your website from one place</span>
+          </div>
+
         </div>
+
+      </div>
 
     </div>
 
 
-    <!-- ==============================================
-         RIGHT LOGIN SECTION
-    =============================================== -->
+    <div class="brand-footer">
+      © 2026 Medclinic Family Practice
+    </div>
 
-    <div class="login-section">
-
-        <div class="login-container">
+  </div>
 
 
-            <!-- MOBILE LOGO -->
+  <!-- ==============================================
+  RIGHT LOGIN SECTION
+  =============================================== -->
 
-            <div class="mobile-logo">
+  <div class="login-section">
 
-                <img
-                    src="assets/images/logo.png"
-                    alt="Medclinic Family Practice"
-                >
-
-            </div>
+    <div class="login-container">
 
 
-            <!-- LOGIN HEADER -->
+      <!-- MOBILE LOGO -->
 
-            <div class="login-header">
+      <div class="mobile-logo">
 
-                <div class="welcome-icon">
-                    <i class="fa-solid fa-user-lock"></i>
-                </div>
+        <img
+          src="assets/images/logo.png"
+          alt="Medclinic Family Practice"
+          >
 
-                <h2>
-                    Welcome Back
-                </h2>
-
-                <p>
-                    Sign in to your administration account
-                </p>
-
-            </div>
+      </div>
 
 
-            <!-- ERROR MESSAGE -->
+      <!-- LOGIN HEADER -->
 
+      <div class="login-header">
+
+        <div class="welcome-icon">
+          <i class="fa-solid fa-user-lock"></i>
+        </div>
+
+        <h2>
+          Welcome Back
+        </h2>
+
+        <p>
+          Sign in to your administration account
+        </p>
+
+      </div>
+
+
+      <!-- ERROR MESSAGE -->
+
+      @if (errorMessage) {
+        <div
+          class="login-alert"
+          >
+          <i class="fa-solid fa-circle-exclamation"></i>
+          <span>
+            {{ errorMessage }}
+          </span>
+        </div>
+      }
+
+
+      <!-- ==========================================
+      LOGIN FORM
+      =========================================== -->
+
+      <form
+        #loginForm="ngForm"
+        (ngSubmit)="loginForm.form.valid && login()"
+        novalidate
+        >
+
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+          <label for="email">
+            Email Address
+          </label>
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="email.invalid && email.touched"
+            >
+
+            <span class="input-icon">
+              <i class="fa-regular fa-envelope"></i>
+            </span>
+
+            <input
+              type="email"
+              id="email"
+              name="email"
+              [(ngModel)]="form.email"
+              #email="ngModel"
+              placeholder="Enter your email address"
+              autocomplete="email"
+              required
+              email
+              >
+
+          </div>
+
+
+          @if (email.invalid && email.touched) {
             <div
-                class="login-alert"
-                *ngIf="errorMessage"
-            >
-
-                <i class="fa-solid fa-circle-exclamation"></i>
-
+              class="validation-message"
+              >
+              @if (email.errors?.['required']) {
                 <span>
-                    {{ errorMessage }}
+                  Email address is required.
                 </span>
-
+              }
+              @if (email.errors?.['email']) {
+                <span>
+                  Please enter a valid email address.
+                </span>
+              }
             </div>
+          }
+
+        </div>
 
 
-            <!-- ==========================================
-                 LOGIN FORM
-            =========================================== -->
+        <!-- PASSWORD -->
 
-            <form
-                #loginForm="ngForm"
-                (ngSubmit)="loginForm.form.valid && login()"
-                novalidate
+        <div class="form-group">
+
+          <div class="label-row">
+
+            <label for="password">
+              Password
+            </label>
+
+          </div>
+
+
+          <div
+            class="input-wrapper"
+            [class.input-error]="password.invalid && password.touched"
             >
 
+            <span class="input-icon">
+              <i class="fa-solid fa-lock"></i>
+            </span>
 
-                <!-- EMAIL -->
-
-                <div class="form-group">
-
-                    <label for="email">
-                        Email Address
-                    </label>
-
-                    <div
-                        class="input-wrapper"
-                        [class.input-error]="email.invalid && email.touched"
-                    >
-
-                        <span class="input-icon">
-                            <i class="fa-regular fa-envelope"></i>
-                        </span>
-
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            [(ngModel)]="form.email"
-                            #email="ngModel"
-                            placeholder="Enter your email address"
-                            autocomplete="email"
-                            required
-                            email
-                        >
-
-                    </div>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              id="password"
+              name="password"
+              [(ngModel)]="form.password"
+              #password="ngModel"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+              minlength="6"
+              >
 
 
-                    <div
-                        class="validation-message"
-                        *ngIf="email.invalid && email.touched"
-                    >
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()"
+              tabindex="-1"
+              >
 
-                        <span *ngIf="email.errors?.['required']">
-                            Email address is required.
-                        </span>
-
-                        <span *ngIf="email.errors?.['email']">
-                            Please enter a valid email address.
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PASSWORD -->
-
-                <div class="form-group">
-
-                    <div class="label-row">
-
-                        <label for="password">
-                            Password
-                        </label>
-
-                    </div>
-
-
-                    <div
-                        class="input-wrapper"
-                        [class.input-error]="password.invalid && password.touched"
-                    >
-
-                        <span class="input-icon">
-                            <i class="fa-solid fa-lock"></i>
-                        </span>
-
-                        <input
-                            [type]="showPassword ? 'text' : 'password'"
-                            id="password"
-                            name="password"
-                            [(ngModel)]="form.password"
-                            #password="ngModel"
-                            placeholder="Enter your password"
-                            autocomplete="current-password"
-                            required
-                            minlength="6"
-                        >
-
-
-                        <button
-                            type="button"
-                            class="password-toggle"
-                            (click)="togglePassword()"
-                            tabindex="-1"
-                        >
-
-                            <i
-                                class="fa-regular"
+              <i
+                class="fa-regular"
                                 [ngClass]="
                                     showPassword
                                         ? 'fa-eye-slash'
                                         : 'fa-eye'
                                 "
-                            ></i>
+              ></i>
 
-                        </button>
+            </button>
 
-                    </div>
-
-
-                    <div
-                        class="validation-message"
-                        *ngIf="password.invalid && password.touched"
-                    >
-
-                        <span *ngIf="password.errors?.['required']">
-                            Password is required.
-                        </span>
-
-                        <span *ngIf="password.errors?.['minlength']">
-                            Password must contain at least 6 characters.
-                        </span>
-
-                    </div>
-
-                </div>
+          </div>
 
 
-                <!-- OPTIONS -->
-
-                <div class="login-options">
-
-                    <label class="remember-box">
-
-                        <input
-                            type="checkbox"
-                            name="remember"
-                            [(ngModel)]="form.remember"
-                        >
-
-                        <span class="checkmark"></span>
-
-                        <span class="remember-text">
-                            Remember me
-                        </span>
-
-                    </label>
-
-
-                    <a
-                        href="javascript:void(0)"
-                        class="forgot-password"
-                    >
-                        Forgot Password?
-                    </a>
-
-                </div>
-
-
-                <!-- LOGIN BUTTON -->
-
-                <button
-                    type="submit"
-                    class="login-btn"
-                    [disabled]="isLoading"
-                >
-
-                    <ng-container *ngIf="!isLoading">
-
-                        <span>
-                            Sign In
-                        </span>
-
-                        <i class="fa-solid fa-arrow-right"></i>
-
-                    </ng-container>
-
-
-                    <ng-container *ngIf="isLoading">
-
-                        <span class="spinner"></span>
-
-                        <span>
-                            Signing In...
-                        </span>
-
-                    </ng-container>
-
-                </button>
-
-            </form>
-
-
-            <!-- SECURITY -->
-
-            <div class="security-message">
-
-                <i class="fa-solid fa-shield-halved"></i>
-
+          @if (password.invalid && password.touched) {
+            <div
+              class="validation-message"
+              >
+              @if (password.errors?.['required']) {
                 <span>
-                    Secure administration access
+                  Password is required.
                 </span>
-
+              }
+              @if (password.errors?.['minlength']) {
+                <span>
+                  Password must contain at least 6 characters.
+                </span>
+              }
             </div>
-
-
-            <div class="login-copyright">
-
-                © 2026 Medclinic Family Practice.
-                All rights reserved.
-
-            </div>
+          }
 
         </div>
 
+
+        <!-- OPTIONS -->
+
+        <div class="login-options">
+
+          <label class="remember-box">
+
+            <input
+              type="checkbox"
+              name="remember"
+              [(ngModel)]="form.remember"
+              >
+
+            <span class="checkmark"></span>
+
+            <span class="remember-text">
+              Remember me
+            </span>
+
+          </label>
+
+
+          <a
+            href="javascript:void(0)"
+            class="forgot-password"
+            >
+            Forgot Password?
+          </a>
+
+        </div>
+
+
+        <!-- LOGIN BUTTON -->
+
+        <button
+          type="submit"
+          class="login-btn"
+          [disabled]="isLoading"
+          >
+
+          @if (!isLoading) {
+            <span>
+              Sign In
+            </span>
+            <i class="fa-solid fa-arrow-right"></i>
+          }
+
+
+          @if (isLoading) {
+            <span class="spinner"></span>
+            <span>
+              Signing In...
+            </span>
+          }
+
+        </button>
+
+      </form>
+
+
+      <!-- SECURITY -->
+
+      <div class="security-message">
+
+        <i class="fa-solid fa-shield-halved"></i>
+
+        <span>
+          Secure administration access
+        </span>
+
+      </div>
+
+
+      <div class="login-copyright">
+
+        © 2026 Medclinic Family Practice.
+        All rights reserved.
+
+      </div>
+
     </div>
+
+  </div>
 
 </div>

@@ -1,1235 +1,782 @@
 <!-- =========================================================
-     PAGE HEADER
+PAGE HEADER
 ========================================================= -->
 
 <div class="page-header">
 
-    <div>
+  <div>
 
-        <div class="breadcrumb-text">
+    <div class="breadcrumb-text">
 
-            Administration
+      Administration
 
-            <span>/</span>
+      <span>/</span>
 
-            <strong>
-                Settings
-            </strong>
-
-        </div>
-
-        <h1>
-            Website Settings
-        </h1>
-
-        <p>
-            Manage your website information, contact details and configuration.
-        </p>
+      <strong>
+        Settings
+      </strong>
 
     </div>
 
+    <h1>
+      Website Settings
+    </h1>
 
-    <button
-        type="button"
-        class="save-top-btn"
-        [disabled]="isSaving || isLoading"
-        (click)="saveSettings()">
+    <p>
+      Manage your website information, contact details and configuration.
+    </p>
 
-        <ng-container *ngIf="!isSaving">
+  </div>
 
-            <i class="fa-solid fa-check"></i>
 
-            Save Changes
+  <button
+    type="button"
+    class="save-top-btn"
+    [disabled]="isSaving || isLoading"
+    (click)="saveSettings()">
 
-        </ng-container>
+    @if (!isSaving) {
+      <i class="fa-solid fa-check"></i>
+      Save Changes
+    }
 
-        <ng-container *ngIf="isSaving">
+    @if (isSaving) {
+      <span class="button-spinner"></span>
+      Saving...
+    }
 
-            <span class="button-spinner"></span>
-
-            Saving...
-
-        </ng-container>
-
-    </button>
+  </button>
 
 </div>
 
 
 <!-- =========================================================
-     SUCCESS MESSAGE
+SUCCESS MESSAGE
 ========================================================= -->
 
-<div
+@if (successMessage) {
+  <div
     class="message-box success-message"
-    *ngIf="successMessage">
-
+    >
     <i class="fa-solid fa-circle-check"></i>
-
     <span>
-        {{ successMessage }}
+      {{ successMessage }}
     </span>
-
-</div>
+  </div>
+}
 
 
 <!-- =========================================================
-     ERROR MESSAGE
+ERROR MESSAGE
 ========================================================= -->
 
-<div
+@if (errorMessage) {
+  <div
     class="message-box error-message"
-    *ngIf="errorMessage">
-
+    >
     <i class="fa-solid fa-circle-exclamation"></i>
-
     <span>
-        {{ errorMessage }}
+      {{ errorMessage }}
     </span>
-
-</div>
+  </div>
+}
 
 
 <!-- =========================================================
-     LOADING
+LOADING
 ========================================================= -->
 
-<div
+@if (isLoading) {
+  <div
     class="loading-card"
-    *ngIf="isLoading">
-
+    >
     <span class="page-spinner"></span>
-
     <span>
-        Loading website settings...
+      Loading website settings...
     </span>
-
-</div>
+  </div>
+}
 
 
 <!-- =========================================================
-     SETTINGS LAYOUT
+SETTINGS LAYOUT
 ========================================================= -->
 
-<div
+@if (!isLoading) {
+  <div
     class="settings-layout"
-    *ngIf="!isLoading">
-
-
+    >
     <!-- =====================================================
-         LEFT SETTINGS NAVIGATION
+    LEFT SETTINGS NAVIGATION
     ====================================================== -->
-
     <aside class="settings-nav-card">
-
-        <div class="settings-nav-heading">
-
-            <span>
-                SETTINGS
-            </span>
-
-        </div>
-
-
-        <!-- GENERAL -->
-
-        <button
-            type="button"
-            class="settings-nav-item"
-            [class.active]="activeTab === 'general'"
-            (click)="setTab('general')">
-
-            <span class="nav-icon">
-
-                <i class="fa-solid fa-sliders"></i>
-
-            </span>
-
-            <span class="nav-content">
-
-                <strong>
-                    General
-                </strong>
-
-                <small>
-                    Website information
-                </small>
-
-            </span>
-
-            <i class="fa-solid fa-chevron-right nav-arrow"></i>
-
-        </button>
-
-
-        <!-- CONTACT -->
-
-        <button
-            type="button"
-            class="settings-nav-item"
-            [class.active]="activeTab === 'contact'"
-            (click)="setTab('contact')">
-
-            <span class="nav-icon">
-
-                <i class="fa-regular fa-address-book"></i>
-
-            </span>
-
-            <span class="nav-content">
-
-                <strong>
-                    Contact
-                </strong>
-
-                <small>
-                    Contact & business
-                </small>
-
-            </span>
-
-            <i class="fa-solid fa-chevron-right nav-arrow"></i>
-
-        </button>
-
-
-        <!-- SOCIAL -->
-
-        <button
-            type="button"
-            class="settings-nav-item"
-            [class.active]="activeTab === 'social'"
-            (click)="setTab('social')">
-
-            <span class="nav-icon">
-
-                <i class="fa-solid fa-share-nodes"></i>
-
-            </span>
-
-            <span class="nav-content">
-
-                <strong>
-                    Social Media
-                </strong>
-
-                <small>
-                    Social profiles
-                </small>
-
-            </span>
-
-            <i class="fa-solid fa-chevron-right nav-arrow"></i>
-
-        </button>
-
-
-        <!-- SEO -->
-
-        <button
-            type="button"
-            class="settings-nav-item"
-            [class.active]="activeTab === 'seo'"
-            (click)="setTab('seo')">
-
-            <span class="nav-icon">
-
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-            </span>
-
-            <span class="nav-content">
-
-                <strong>
-                    SEO
-                </strong>
-
-                <small>
-                    Search defaults
-                </small>
-
-            </span>
-
-            <i class="fa-solid fa-chevron-right nav-arrow"></i>
-
-        </button>
-
-
-        <!-- ADVANCED -->
-
-        <button
-            type="button"
-            class="settings-nav-item"
-            [class.active]="activeTab === 'advanced'"
-            (click)="setTab('advanced')">
-
-            <span class="nav-icon">
-
-                <i class="fa-solid fa-gear"></i>
-
-            </span>
-
-            <span class="nav-content">
-
-                <strong>
-                    Advanced
-                </strong>
-
-                <small>
-                    Website configuration
-                </small>
-
-            </span>
-
-            <i class="fa-solid fa-chevron-right nav-arrow"></i>
-
-        </button>
-
+      <div class="settings-nav-heading">
+        <span>
+          SETTINGS
+        </span>
+      </div>
+      <!-- GENERAL -->
+      <button
+        type="button"
+        class="settings-nav-item"
+        [class.active]="activeTab === 'general'"
+        (click)="setTab('general')">
+        <span class="nav-icon">
+          <i class="fa-solid fa-sliders"></i>
+        </span>
+        <span class="nav-content">
+          <strong>
+            General
+          </strong>
+          <small>
+            Website information
+          </small>
+        </span>
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+      </button>
+      <!-- CONTACT -->
+      <button
+        type="button"
+        class="settings-nav-item"
+        [class.active]="activeTab === 'contact'"
+        (click)="setTab('contact')">
+        <span class="nav-icon">
+          <i class="fa-regular fa-address-book"></i>
+        </span>
+        <span class="nav-content">
+          <strong>
+            Contact
+          </strong>
+          <small>
+            Contact & business
+          </small>
+        </span>
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+      </button>
+      <!-- SOCIAL -->
+      <button
+        type="button"
+        class="settings-nav-item"
+        [class.active]="activeTab === 'social'"
+        (click)="setTab('social')">
+        <span class="nav-icon">
+          <i class="fa-solid fa-share-nodes"></i>
+        </span>
+        <span class="nav-content">
+          <strong>
+            Social Media
+          </strong>
+          <small>
+            Social profiles
+          </small>
+        </span>
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+      </button>
+      <!-- SEO -->
+      <button
+        type="button"
+        class="settings-nav-item"
+        [class.active]="activeTab === 'seo'"
+        (click)="setTab('seo')">
+        <span class="nav-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+        <span class="nav-content">
+          <strong>
+            SEO
+          </strong>
+          <small>
+            Search defaults
+          </small>
+        </span>
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+      </button>
+      <!-- ADVANCED -->
+      <button
+        type="button"
+        class="settings-nav-item"
+        [class.active]="activeTab === 'advanced'"
+        (click)="setTab('advanced')">
+        <span class="nav-icon">
+          <i class="fa-solid fa-gear"></i>
+        </span>
+        <span class="nav-content">
+          <strong>
+            Advanced
+          </strong>
+          <small>
+            Website configuration
+          </small>
+        </span>
+        <i class="fa-solid fa-chevron-right nav-arrow"></i>
+      </button>
     </aside>
-
-
     <!-- =====================================================
-         RIGHT CONTENT
+    RIGHT CONTENT
     ====================================================== -->
-
     <main class="settings-content">
-
-
+      <!-- =================================================
+      GENERAL SETTINGS
+      ================================================== -->
+      @if (activeTab === 'general') {
+        <!-- =============================================
+        GENERAL INFORMATION
+        ============================================== -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="header-icon">
+              <i class="fa-solid fa-sliders"></i>
+            </div>
+            <div>
+              <h3>
+                General Settings
+              </h3>
+              <p>
+                Configure your website name and general information.
+              </p>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            <!-- SITE NAME -->
+            <div class="form-group">
+              <label>
+                Site Name
+                <span class="required">
+                  *
+                </span>
+              </label>
+              <input
+                type="text"
+                class="form-control-custom"
+                [(ngModel)]="formData.site_name"
+                maxlength="255"
+                placeholder="Medclinic Family Practice">
+              <div class="field-help">
+                The primary name displayed across the website.
+              </div>
+            </div>
+            <!-- SITE TAGLINE -->
+            <div class="form-group form-space">
+              <label>
+                Site Tagline
+              </label>
+              <input
+                type="text"
+                class="form-control-custom"
+                [(ngModel)]="formData.site_tagline"
+                maxlength="255"
+                placeholder="Your Health, Our Priority">
+              <div class="field-help">
+                A short description or slogan for your practice.
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- =============================================
+        WEBSITE INFORMATION
+        ============================================== -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="header-icon">
+              <i class="fa-regular fa-file-lines"></i>
+            </div>
+            <div>
+              <h3>
+                Website Information
+              </h3>
+              <p>
+                Configure general information displayed across the website.
+              </p>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            <div class="form-group">
+              <label>
+                Footer Text
+              </label>
+              <textarea
+                class="form-control-custom"
+                [(ngModel)]="formData.footer_text"
+                rows="4"
+                placeholder="Copyright or footer information...">
+              </textarea>
+              <div class="field-help">
+                This content can be displayed in the public website footer.
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+      <!-- =================================================
+      CONTACT SETTINGS
+      ================================================== -->
+      @if (activeTab === 'contact') {
+        <!-- =============================================
+        CONTACT INFORMATION
+        ============================================== -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="header-icon">
+              <i class="fa-regular fa-address-book"></i>
+            </div>
+            <div>
+              <h3>
+                Contact Information
+              </h3>
+              <p>
+                Manage the primary contact details displayed on your website.
+              </p>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            <div class="row g-3">
+              <!-- PHONE -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>
+                    Phone Number
+                  </label>
+                  <div class="input-icon-wrap">
+                    <i class="fa-solid fa-phone"></i>
+                    <input
+                      type="text"
+                      class="form-control-custom"
+                      [(ngModel)]="formData.contact_phone"
+                      placeholder="(03) 0000 0000">
+                  </div>
+                </div>
+              </div>
+              <!-- EMAIL -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>
+                    Email Address
+                  </label>
+                  <div class="input-icon-wrap">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input
+                      type="email"
+                      class="form-control-custom"
+                      [(ngModel)]="formData.contact_email"
+                      placeholder="reception@example.com.au">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- ADDRESS -->
+            <div class="form-group form-space">
+              <label>
+                Practice Address
+              </label>
+              <textarea
+                class="form-control-custom"
+                [(ngModel)]="formData.address"
+                rows="4"
+                placeholder="Enter full practice address">
+              </textarea>
+              <div class="field-help">
+                Enter the complete address displayed on the website.
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- =============================================
+        BUSINESS INFORMATION
+        ============================================== -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="header-icon">
+              <i class="fa-regular fa-building"></i>
+            </div>
+            <div>
+              <h3>
+                Business Information
+              </h3>
+              <p>
+                Configure business and opening-hour information.
+              </p>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            <!-- ABN -->
+            <div class="form-group">
+              <label>
+                ABN
+              </label>
+              <input
+                type="text"
+                class="form-control-custom"
+                [(ngModel)]="formData.abn"
+                placeholder="00 000 000 000">
+            </div>
+            <!-- OPENING HOURS -->
+            <div class="form-group form-space">
+              <label>
+                Opening Hours
+              </label>
+              <textarea
+                class="form-control-custom opening-hours"
+                [(ngModel)]="formData.opening_hours"
+                rows="6"
+                placeholder="Monday - Friday: 8:00 AM - 6:00 PM&#10;Saturday: 9:00 AM - 1:00 PM&#10;Sunday: Closed">
+              </textarea>
+              <div class="field-help">
+                Enter each day's opening hours on a separate line.
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- =============================================
+        GOOGLE MAP
+        ============================================== -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="header-icon">
+              <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div>
+              <h3>
+                Location
+              </h3>
+              <p>
+                Configure your Google Maps embed URL.
+              </p>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            <div class="form-group">
+              <label>
+                Google Maps Embed URL
+              </label>
+              <input
+                type="text"
+                class="form-control-custom"
+                [(ngModel)]="formData.google_maps_embed_url"
+                placeholder="https://www.google.com/maps/embed?...">
+                <div class="field-help">
+                  Enter only the URL from the Google Maps iframe src attribute.
+                </div>
+              </div>
+            </div>
+          </div>
+        }
         <!-- =================================================
-             GENERAL SETTINGS
+        SOCIAL MEDIA SETTINGS
         ================================================== -->
-
-        <ng-container *ngIf="activeTab === 'general'">
-
-
-            <!-- =============================================
-                 GENERAL INFORMATION
-            ============================================== -->
-
-            <div class="settings-card">
-
-                <div class="settings-card-header">
-
-                    <div class="header-icon">
-
-                        <i class="fa-solid fa-sliders"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            General Settings
-                        </h3>
-
-                        <p>
-                            Configure your website name and general information.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="settings-card-body">
-
-
-                    <!-- SITE NAME -->
-
-                    <div class="form-group">
-
-                        <label>
-
-                            Site Name
-
-                            <span class="required">
-                                *
-                            </span>
-
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.site_name"
-                            maxlength="255"
-                            placeholder="Medclinic Family Practice">
-
-                        <div class="field-help">
-                            The primary name displayed across the website.
-                        </div>
-
-                    </div>
-
-
-                    <!-- SITE TAGLINE -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Site Tagline
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.site_tagline"
-                            maxlength="255"
-                            placeholder="Your Health, Our Priority">
-
-                        <div class="field-help">
-                            A short description or slogan for your practice.
-                        </div>
-
-                    </div>
-
-                </div>
-
+      @if (activeTab === 'social') {
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="header-icon">
+              <i class="fa-solid fa-share-nodes"></i>
             </div>
-
-
-            <!-- =============================================
-                 WEBSITE INFORMATION
-            ============================================== -->
-
-            <div class="settings-card">
-
-                <div class="settings-card-header">
-
-                    <div class="header-icon">
-
-                        <i class="fa-regular fa-file-lines"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Website Information
-                        </h3>
-
-                        <p>
-                            Configure general information displayed across the website.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="settings-card-body">
-
-                    <div class="form-group">
-
-                        <label>
-                            Footer Text
-                        </label>
-
-                        <textarea
-                            class="form-control-custom"
-                            [(ngModel)]="formData.footer_text"
-                            rows="4"
-                            placeholder="Copyright or footer information...">
-                        </textarea>
-
-                        <div class="field-help">
-                            This content can be displayed in the public website footer.
-                        </div>
-
-                    </div>
-
-                </div>
-
+            <div>
+              <h3>
+                Social Media
+              </h3>
+              <p>
+                Add links to your practice's social media profiles.
+              </p>
             </div>
-
-        </ng-container>
-
-
-        <!-- =================================================
-             CONTACT SETTINGS
-        ================================================== -->
-
-        <ng-container *ngIf="activeTab === 'contact'">
-
-
-            <!-- =============================================
-                 CONTACT INFORMATION
-            ============================================== -->
-
-            <div class="settings-card">
-
+          </div>
+          <div class="settings-card-body">
+            <!-- FACEBOOK -->
+            <div class="social-field">
+              <div class="social-icon facebook">
+                <i class="fa-brands fa-facebook-f"></i>
+              </div>
+              <div class="social-input">
+                <label>
+                  Facebook
+                </label>
+                <input
+                  type="url"
+                  class="form-control-custom"
+                  [(ngModel)]="formData.facebook_url"
+                  placeholder="https://facebook.com/...">
+                </div>
+              </div>
+              <!-- INSTAGRAM -->
+              <div class="social-field">
+                <div class="social-icon instagram">
+                  <i class="fa-brands fa-instagram"></i>
+                </div>
+                <div class="social-input">
+                  <label>
+                    Instagram
+                  </label>
+                  <input
+                    type="url"
+                    class="form-control-custom"
+                    [(ngModel)]="formData.instagram_url"
+                    placeholder="https://instagram.com/...">
+                  </div>
+                </div>
+                <!-- LINKEDIN -->
+                <div class="social-field">
+                  <div class="social-icon linkedin">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                  </div>
+                  <div class="social-input">
+                    <label>
+                      LinkedIn
+                    </label>
+                    <input
+                      type="url"
+                      class="form-control-custom"
+                      [(ngModel)]="formData.linkedin_url"
+                      placeholder="https://linkedin.com/...">
+                    </div>
+                  </div>
+                  <!-- YOUTUBE -->
+                  <div class="social-field">
+                    <div class="social-icon youtube">
+                      <i class="fa-brands fa-youtube"></i>
+                    </div>
+                    <div class="social-input">
+                      <label>
+                        YouTube
+                      </label>
+                      <input
+                        type="url"
+                        class="form-control-custom"
+                        [(ngModel)]="formData.youtube_url"
+                        placeholder="https://youtube.com/...">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              <!-- =================================================
+              SEO SETTINGS
+              ================================================== -->
+            @if (activeTab === 'seo') {
+              <!-- =============================================
+              DEFAULT SEO
+              ============================================== -->
+              <div class="settings-card">
                 <div class="settings-card-header">
-
-                    <div class="header-icon">
-
-                        <i class="fa-regular fa-address-book"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Contact Information
-                        </h3>
-
-                        <p>
-                            Manage the primary contact details displayed on your website.
-                        </p>
-
-                    </div>
-
+                  <div class="header-icon">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                  </div>
+                  <div>
+                    <h3>
+                      Default SEO Settings
+                    </h3>
+                    <p>
+                      Used when a page does not have its own SEO information.
+                    </p>
+                  </div>
                 </div>
-
-
                 <div class="settings-card-body">
-
-                    <div class="row g-3">
-
-
-                        <!-- PHONE -->
-
-                        <div class="col-md-6">
-
-                            <div class="form-group">
-
-                                <label>
-                                    Phone Number
-                                </label>
-
-                                <div class="input-icon-wrap">
-
-                                    <i class="fa-solid fa-phone"></i>
-
-                                    <input
-                                        type="text"
-                                        class="form-control-custom"
-                                        [(ngModel)]="formData.contact_phone"
-                                        placeholder="(03) 0000 0000">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- EMAIL -->
-
-                        <div class="col-md-6">
-
-                            <div class="form-group">
-
-                                <label>
-                                    Email Address
-                                </label>
-
-                                <div class="input-icon-wrap">
-
-                                    <i class="fa-regular fa-envelope"></i>
-
-                                    <input
-                                        type="email"
-                                        class="form-control-custom"
-                                        [(ngModel)]="formData.contact_email"
-                                        placeholder="reception@example.com.au">
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
+                  <!-- META TITLE -->
+                  <div class="form-group">
+                    <label>
+                      Default Meta Title
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control-custom"
+                      [(ngModel)]="formData.default_meta_title"
+                      maxlength="255"
+                      placeholder="Medclinic Family Practice">
+                    <div class="field-counter">
+                      <span>
+                        Recommended around 50–60 characters.
+                      </span>
+                      <span>
+                        {{
+                        formData.default_meta_title?.length || 0
+                        }}
+                        characters
+                      </span>
                     </div>
-
-
-                    <!-- ADDRESS -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Practice Address
-                        </label>
-
-                        <textarea
-                            class="form-control-custom"
-                            [(ngModel)]="formData.address"
-                            rows="4"
-                            placeholder="Enter full practice address">
-                        </textarea>
-
-                        <div class="field-help">
-                            Enter the complete address displayed on the website.
-                        </div>
-
+                  </div>
+                  <!-- META DESCRIPTION -->
+                  <div class="form-group form-space">
+                    <label>
+                      Default Meta Description
+                    </label>
+                    <textarea
+                      class="form-control-custom"
+                      [(ngModel)]="formData.default_meta_description"
+                      rows="5"
+                      placeholder="Enter the default search engine description...">
+                    </textarea>
+                    <div class="field-counter">
+                      <span>
+                        Recommended around 150–160 characters.
+                      </span>
+                      <span>
+                        {{
+                        formData.default_meta_description?.length || 0
+                        }}
+                        characters
+                      </span>
                     </div>
-
+                  </div>
+                  <!-- META KEYWORDS -->
+                  <div class="form-group form-space">
+                    <label>
+                      Default Meta Keywords
+                    </label>
+                    <input
+                      type="text"
+                      class="form-control-custom"
+                      [(ngModel)]="formData.default_meta_keywords"
+                      placeholder="medical clinic, family doctor, GP">
+                    <div class="field-help">
+                      Separate keywords with commas.
+                    </div>
+                  </div>
                 </div>
-
-            </div>
-
-
-            <!-- =============================================
-                 BUSINESS INFORMATION
-            ============================================== -->
-
-            <div class="settings-card">
-
+              </div>
+              <!-- =============================================
+              GOOGLE SEARCH PREVIEW
+              ============================================== -->
+              <div class="settings-card">
                 <div class="settings-card-header">
-
-                    <div class="header-icon">
-
-                        <i class="fa-regular fa-building"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Business Information
-                        </h3>
-
-                        <p>
-                            Configure business and opening-hour information.
-                        </p>
-
-                    </div>
-
+                  <div class="header-icon">
+                    <i class="fa-brands fa-google"></i>
+                  </div>
+                  <div>
+                    <h3>
+                      Search Preview
+                    </h3>
+                    <p>
+                      Preview how your default metadata may appear in search.
+                    </p>
+                  </div>
                 </div>
-
-
                 <div class="settings-card-body">
-
-
-                    <!-- ABN -->
-
-                    <div class="form-group">
-
-                        <label>
-                            ABN
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.abn"
-                            placeholder="00 000 000 000">
-
+                  <div class="google-preview">
+                    <!-- WEBSITE -->
+                    <div class="google-site">
+                      <div class="google-site-icon">
+                        <i class="fa-solid fa-globe"></i>
+                      </div>
+                      <div>
+                        <strong>
+                          {{
+                          formData.site_name ||
+                          'Medclinic Family Practice'
+                          }}
+                        </strong>
+                        <span>
+                          medclinicfp.com.au
+                        </span>
+                      </div>
                     </div>
-
-
-                    <!-- OPENING HOURS -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Opening Hours
-                        </label>
-
-                        <textarea
-                            class="form-control-custom opening-hours"
-                            [(ngModel)]="formData.opening_hours"
-                            rows="6"
-                            placeholder="Monday - Friday: 8:00 AM - 6:00 PM&#10;Saturday: 9:00 AM - 1:00 PM&#10;Sunday: Closed">
-                        </textarea>
-
-                        <div class="field-help">
-                            Enter each day's opening hours on a separate line.
-                        </div>
-
+                    <!-- TITLE -->
+                    <div class="google-title">
+                      {{
+                      formData.default_meta_title ||
+                      formData.site_name ||
+                      'Medclinic Family Practice'
+                      }}
                     </div>
-
+                    <!-- DESCRIPTION -->
+                    <div class="google-description">
+                      {{
+                      formData.default_meta_description ||
+                      'Add a default meta description to preview how your website may appear in search results.'
+                      }}
+                    </div>
+                  </div>
                 </div>
-
-            </div>
-
-
-            <!-- =============================================
-                 GOOGLE MAP
-            ============================================== -->
-
-            <div class="settings-card">
-
+              </div>
+            }
+            <!-- =================================================
+            ADVANCED SETTINGS
+            ================================================== -->
+            @if (activeTab === 'advanced') {
+              <!-- =============================================
+              MAINTENANCE MODE
+              ============================================== -->
+              <div class="settings-card danger-settings-card">
                 <div class="settings-card-header">
-
-                    <div class="header-icon">
-
-                        <i class="fa-solid fa-location-dot"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Location
-                        </h3>
-
-                        <p>
-                            Configure your Google Maps embed URL.
-                        </p>
-
-                    </div>
-
+                  <div class="header-icon warning-icon">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                  </div>
+                  <div>
+                    <h3>
+                      Maintenance Mode
+                    </h3>
+                    <p>
+                      Temporarily disable access to the public website.
+                    </p>
+                  </div>
                 </div>
-
-
                 <div class="settings-card-body">
-
-                    <div class="form-group">
-
-                        <label>
-                            Google Maps Embed URL
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.google_maps_embed_url"
-                            placeholder="https://www.google.com/maps/embed?...">
-
-                        <div class="field-help">
-                            Enter only the URL from the Google Maps iframe src attribute.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </ng-container>
-
-
-        <!-- =================================================
-             SOCIAL MEDIA SETTINGS
-        ================================================== -->
-
-        <ng-container *ngIf="activeTab === 'social'">
-
-            <div class="settings-card">
-
-                <div class="settings-card-header">
-
-                    <div class="header-icon">
-
-                        <i class="fa-solid fa-share-nodes"></i>
-
-                    </div>
-
+                  <div class="toggle-setting">
                     <div>
-
-                        <h3>
-                            Social Media
-                        </h3>
-
-                        <p>
-                            Add links to your practice's social media profiles.
-                        </p>
-
+                      <h4>
+                        Enable Maintenance Mode
+                      </h4>
+                      <p>
+                        When enabled, your frontend can display a maintenance
+                        page instead of normal website content.
+                      </p>
                     </div>
-
-                </div>
-
-
-                <div class="settings-card-body">
-
-
-                    <!-- FACEBOOK -->
-
-                    <div class="social-field">
-
-                        <div class="social-icon facebook">
-
-                            <i class="fa-brands fa-facebook-f"></i>
-
-                        </div>
-
-                        <div class="social-input">
-
-                            <label>
-                                Facebook
-                            </label>
-
-                            <input
-                                type="url"
-                                class="form-control-custom"
-                                [(ngModel)]="formData.facebook_url"
-                                placeholder="https://facebook.com/...">
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- INSTAGRAM -->
-
-                    <div class="social-field">
-
-                        <div class="social-icon instagram">
-
-                            <i class="fa-brands fa-instagram"></i>
-
-                        </div>
-
-                        <div class="social-input">
-
-                            <label>
-                                Instagram
-                            </label>
-
-                            <input
-                                type="url"
-                                class="form-control-custom"
-                                [(ngModel)]="formData.instagram_url"
-                                placeholder="https://instagram.com/...">
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- LINKEDIN -->
-
-                    <div class="social-field">
-
-                        <div class="social-icon linkedin">
-
-                            <i class="fa-brands fa-linkedin-in"></i>
-
-                        </div>
-
-                        <div class="social-input">
-
-                            <label>
-                                LinkedIn
-                            </label>
-
-                            <input
-                                type="url"
-                                class="form-control-custom"
-                                [(ngModel)]="formData.linkedin_url"
-                                placeholder="https://linkedin.com/...">
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- YOUTUBE -->
-
-                    <div class="social-field">
-
-                        <div class="social-icon youtube">
-
-                            <i class="fa-brands fa-youtube"></i>
-
-                        </div>
-
-                        <div class="social-input">
-
-                            <label>
-                                YouTube
-                            </label>
-
-                            <input
-                                type="url"
-                                class="form-control-custom"
-                                [(ngModel)]="formData.youtube_url"
-                                placeholder="https://youtube.com/...">
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </ng-container>
-
-
-        <!-- =================================================
-             SEO SETTINGS
-        ================================================== -->
-
-        <ng-container *ngIf="activeTab === 'seo'">
-
-
-            <!-- =============================================
-                 DEFAULT SEO
-            ============================================== -->
-
-            <div class="settings-card">
-
-                <div class="settings-card-header">
-
-                    <div class="header-icon">
-
-                        <i class="fa-solid fa-magnifying-glass"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Default SEO Settings
-                        </h3>
-
-                        <p>
-                            Used when a page does not have its own SEO information.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="settings-card-body">
-
-
-                    <!-- META TITLE -->
-
-                    <div class="form-group">
-
-                        <label>
-                            Default Meta Title
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.default_meta_title"
-                            maxlength="255"
-                            placeholder="Medclinic Family Practice">
-
-                        <div class="field-counter">
-
-                            <span>
-                                Recommended around 50–60 characters.
-                            </span>
-
-                            <span>
-
-                                {{
-                                    formData.default_meta_title?.length || 0
-                                }}
-
-                                characters
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- META DESCRIPTION -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Default Meta Description
-                        </label>
-
-                        <textarea
-                            class="form-control-custom"
-                            [(ngModel)]="formData.default_meta_description"
-                            rows="5"
-                            placeholder="Enter the default search engine description...">
-                        </textarea>
-
-                        <div class="field-counter">
-
-                            <span>
-                                Recommended around 150–160 characters.
-                            </span>
-
-                            <span>
-
-                                {{
-                                    formData.default_meta_description?.length || 0
-                                }}
-
-                                characters
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- META KEYWORDS -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Default Meta Keywords
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.default_meta_keywords"
-                            placeholder="medical clinic, family doctor, GP">
-
-                        <div class="field-help">
-                            Separate keywords with commas.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =============================================
-                 GOOGLE SEARCH PREVIEW
-            ============================================== -->
-
-            <div class="settings-card">
-
-                <div class="settings-card-header">
-
-                    <div class="header-icon">
-
-                        <i class="fa-brands fa-google"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Search Preview
-                        </h3>
-
-                        <p>
-                            Preview how your default metadata may appear in search.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="settings-card-body">
-
-                    <div class="google-preview">
-
-
-                        <!-- WEBSITE -->
-
-                        <div class="google-site">
-
-                            <div class="google-site-icon">
-
-                                <i class="fa-solid fa-globe"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <strong>
-
-                                    {{
-                                        formData.site_name ||
-                                        'Medclinic Family Practice'
-                                    }}
-
-                                </strong>
-
-                                <span>
-                                    medclinicfp.com.au
-                                </span>
-
-                            </div>
-
-                        </div>
-
-
-                        <!-- TITLE -->
-
-                        <div class="google-title">
-
-                            {{
-                                formData.default_meta_title ||
-                                formData.site_name ||
-                                'Medclinic Family Practice'
-                            }}
-
-                        </div>
-
-
-                        <!-- DESCRIPTION -->
-
-                        <div class="google-description">
-
-                            {{
-                                formData.default_meta_description ||
-                                'Add a default meta description to preview how your website may appear in search results.'
-                            }}
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </ng-container>
-
-
-        <!-- =================================================
-             ADVANCED SETTINGS
-        ================================================== -->
-
-        <ng-container *ngIf="activeTab === 'advanced'">
-
-
-            <!-- =============================================
-                 MAINTENANCE MODE
-            ============================================== -->
-
-            <div class="settings-card danger-settings-card">
-
-                <div class="settings-card-header">
-
-                    <div class="header-icon warning-icon">
-
-                        <i class="fa-solid fa-screwdriver-wrench"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h3>
-                            Maintenance Mode
-                        </h3>
-
-                        <p>
-                            Temporarily disable access to the public website.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <div class="settings-card-body">
-
-                    <div class="toggle-setting">
-
-                        <div>
-
-                            <h4>
-                                Enable Maintenance Mode
-                            </h4>
-
-                            <p>
-                                When enabled, your frontend can display a maintenance
-                                page instead of normal website content.
-                            </p>
-
-                        </div>
-
-
-                        <label class="switch">
-
-                            <input
-                                type="checkbox"
-                                [checked]="formData.maintenance_mode == 1"
+                    <label class="switch">
+                      <input
+                        type="checkbox"
+                        [checked]="formData.maintenance_mode == 1"
                                 (change)="
                                     formData.maintenance_mode =
                                         formData.maintenance_mode == 1
                                             ? 0
                                             : 1
                                 ">
-
-                            <span class="switch-slider"></span>
-
-                        </label>
-
-                    </div>
-
-
-                    <!-- WARNING -->
-
+                      <span class="switch-slider"></span>
+                    </label>
+                  </div>
+                  <!-- WARNING -->
+                  @if (formData.maintenance_mode == 1) {
                     <div
-                        class="maintenance-warning"
-                        *ngIf="formData.maintenance_mode == 1">
-
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-
-                        <div>
-
-                            <strong>
-                                Maintenance mode will be enabled
-                            </strong>
-
-                            <span>
-                                The public frontend must check this setting before
-                                restricting website access.
-                            </span>
-
-                        </div>
-
+                      class="maintenance-warning"
+                      >
+                      <i class="fa-solid fa-triangle-exclamation"></i>
+                      <div>
+                        <strong>
+                          Maintenance mode will be enabled
+                        </strong>
+                        <span>
+                          The public frontend must check this setting before
+                          restricting website access.
+                        </span>
+                      </div>
                     </div>
-
+                  }
                 </div>
-
-            </div>
-
-        </ng-container>
-
-
-        <!-- =================================================
-             SAVE BAR
-        ================================================== -->
-
-        <div class="settings-save-bar">
-
-            <div>
-
+              </div>
+            }
+            <!-- =================================================
+            SAVE BAR
+            ================================================== -->
+            <div class="settings-save-bar">
+              <div>
                 <strong>
-                    Save Settings
+                  Save Settings
                 </strong>
-
                 <span>
-                    Apply your changes to the website configuration.
+                  Apply your changes to the website configuration.
                 </span>
-
-            </div>
-
-
-            <button
+              </div>
+              <button
                 type="button"
                 class="save-settings-btn"
                 [disabled]="isSaving"
                 (click)="saveSettings()">
-
-                <ng-container *ngIf="!isSaving">
-
-                    <i class="fa-solid fa-check"></i>
-
-                    Save Changes
-
-                </ng-container>
-
-
-                <ng-container *ngIf="isSaving">
-
-                    <span class="button-spinner"></span>
-
-                    Saving...
-
-                </ng-container>
-
-            </button>
-
+                @if (!isSaving) {
+                  <i class="fa-solid fa-check"></i>
+                  Save Changes
+                }
+                @if (isSaving) {
+                  <span class="button-spinner"></span>
+                  Saving...
+                }
+              </button>
+            </div>
+          </main>
         </div>
-
-    </main>
-
-</div>
+      }

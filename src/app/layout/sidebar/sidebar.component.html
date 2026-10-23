@@ -1,75 +1,73 @@
 <div
-    class="sidebar-overlay"
-    [class.show]="mobileOpen"
-    (click)="close()">
+  class="sidebar-overlay"
+  [class.show]="mobileOpen"
+  (click)="close()">
 </div>
 
 
 <aside
-    class="admin-sidebar"
-    [class.collapsed]="collapsed"
-    [class.mobile-open]="mobileOpen">
+  class="admin-sidebar"
+  [class.collapsed]="collapsed"
+  [class.mobile-open]="mobileOpen">
 
 
-    <!-- LOGO -->
+  <!-- LOGO -->
 
-    <div class="sidebar-logo">
+  <div class="sidebar-logo">
 
-        <img
-            src="assets/images/logo.png"
-            alt="Medclinic Family Practice">
+    <img
+      src="assets/images/logo.png"
+      alt="Medclinic Family Practice">
 
+  </div>
+
+
+  <!-- MENU -->
+
+  <div class="sidebar-menu">
+
+    <div class="menu-label">
+      MANAGEMENT
     </div>
 
 
-    <!-- MENU -->
-
-    <div class="sidebar-menu">
-
-        <div class="menu-label">
-            MANAGEMENT
-        </div>
-
-
-        <a
-            *ngFor="let item of menuItems"
-            [routerLink]="item.route"
-            routerLinkActive="active"
+    @for (item of menuItems; track item) {
+      <a
+        [routerLink]="item.route"
+        routerLinkActive="active"
             [routerLinkActiveOptions]="{
                 exact: item.route === '/dashboard'
             }"
-            (click)="close()"
-            class="menu-item">
+        (click)="close()"
+        class="menu-item">
+        <span class="menu-icon">
+          <i [class]="item.icon"></i>
+        </span>
+        <span class="menu-text">
+          {{ item.title }}
+        </span>
+      </a>
+    }
 
-            <span class="menu-icon">
-                <i [class]="item.icon"></i>
-            </span>
+  </div>
 
-            <span class="menu-text">
-                {{ item.title }}
-            </span>
 
-        </a>
+  <!-- BOTTOM -->
+
+  <div class="sidebar-bottom">
+
+    <div class="help-icon">
+      <i class="fa-solid fa-shield-halved"></i>
+    </div>
+
+    <div class="help-text">
+
+      <strong>Admin Portal</strong>
+
+      <span>Secure access</span>
 
     </div>
 
-
-    <!-- BOTTOM -->
-
-    <div class="sidebar-bottom">
-
-        <div class="help-icon">
-            <i class="fa-solid fa-shield-halved"></i>
-        </div>
-
-        <div class="help-text">
-
-            <strong>Admin Portal</strong>
-
-            <span>Secure access</span>
-
-        </div>
-
-    </div>
+  </div>
 
 </aside>

@@ -1,505 +1,361 @@
 <div class="page-form-wrapper">
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+  <!-- =====================================================
+  HEADER
+  ====================================================== -->
 
-    <div class="page-form-header">
+  <div class="page-form-header">
 
-        <div>
+    <div>
 
-            <div class="breadcrumb-text">
-
-                <span>
-                    Content Management
-                </span>
-
-                <i class="fa-solid fa-chevron-right"></i>
-
-                <a routerLink="/page/list">
-                    Pages
-                </a>
-
-                <i class="fa-solid fa-chevron-right"></i>
-
-                <strong>
-                    Edit Page
-                </strong>
-
-            </div>
-
-
-            <h1>
-                Edit Page
-            </h1>
-
-
-            <p *ngIf="!isLoading">
-                Update {{ page.title || 'page' }} content and settings.
-            </p>
-
-        </div>
-
-
-        <a
-            routerLink="/page/list"
-            class="back-btn">
-
-            <i class="fa-solid fa-arrow-left"></i>
-
-            Back to Pages
-
-        </a>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         LOADING
-    ====================================================== -->
-
-    <div
-        class="page-loading"
-        *ngIf="isLoading">
-
-        <div class="spinner-border"></div>
-
-        <strong>
-            Loading page...
-        </strong>
+      <div class="breadcrumb-text">
 
         <span>
-            Please wait while we retrieve the page content.
+          Content Management
         </span>
+
+        <i class="fa-solid fa-chevron-right"></i>
+
+        <a routerLink="/page/list">
+          Pages
+        </a>
+
+        <i class="fa-solid fa-chevron-right"></i>
+
+        <strong>
+          Edit Page
+        </strong>
+
+      </div>
+
+
+      <h1>
+        Edit Page
+      </h1>
+
+
+      @if (!isLoading) {
+        <p>
+          Update {{ page.title || 'page' }} content and settings.
+        </p>
+      }
 
     </div>
 
 
+    <a
+      routerLink="/page/list"
+      class="back-btn">
 
-    <!-- =====================================================
-         CONTENT
-    ====================================================== -->
+      <i class="fa-solid fa-arrow-left"></i>
 
-    <ng-container *ngIf="!isLoading">
+      Back to Pages
 
+    </a>
 
-        <!-- =================================================
-             SUCCESS
-        ================================================== -->
-
-        <div
-            class="alert-box success"
-            *ngIf="successMessage">
-
-            <i class="fa-solid fa-circle-check"></i>
+  </div>
 
 
-            <div>
 
-                <strong>
-                    Page Updated
-                </strong>
+  <!-- =====================================================
+  LOADING
+  ====================================================== -->
 
-                <span>
-                    {{ successMessage }}
-                </span>
+  @if (isLoading) {
+    <div
+      class="page-loading"
+      >
+      <div class="spinner-border"></div>
+      <strong>
+        Loading page...
+      </strong>
+      <span>
+        Please wait while we retrieve the page content.
+      </span>
+    </div>
+  }
 
-            </div>
 
+
+  <!-- =====================================================
+  CONTENT
+  ====================================================== -->
+
+  @if (!isLoading) {
+    <!-- =================================================
+    SUCCESS
+    ================================================== -->
+    @if (successMessage) {
+      <div
+        class="alert-box success"
+        >
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+          <strong>
+            Page Updated
+          </strong>
+          <span>
+            {{ successMessage }}
+          </span>
         </div>
-
-
-
-        <!-- =================================================
-             ERROR
-        ================================================== -->
-
-        <div
-            class="alert-box error"
-            *ngIf="errorMessage">
-
-            <i class="fa-solid fa-circle-exclamation"></i>
-
-
-            <div>
-
-                <strong>
-                    Unable to update page
-                </strong>
-
-                <span>
-                    {{ errorMessage }}
-                </span>
-
-            </div>
-
+      </div>
+    }
+    <!-- =================================================
+    ERROR
+    ================================================== -->
+    @if (errorMessage) {
+      <div
+        class="alert-box error"
+        >
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <div>
+          <strong>
+            Unable to update page
+          </strong>
+          <span>
+            {{ errorMessage }}
+          </span>
         </div>
-
-
-
-        <!-- =================================================
-             FORM
-        ================================================== -->
-
-        <form
-            #pageForm="ngForm"
-            (ngSubmit)="updatePage(pageForm)"
-            novalidate>
-
-
-            <div class="row g-4">
-
-
-                <!-- =========================================
-                     LEFT
-                ========================================== -->
-
-                <div class="col-xl-8">
-
-
-                    <!-- =====================================
-                         PAGE INFORMATION
-                    ====================================== -->
-
-                    <div class="form-card">
-
-                        <div class="form-card-header">
-
-                            <div class="card-icon">
-
-                                <i class="fa-regular fa-file-lines"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h3>
-                                    Page Information
-                                </h3>
-
-                                <p>
-                                    Update the page title, URL and summary.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-card-body">
-
-
-                            <!-- TITLE -->
-
-                            <div class="form-group">
-
-                                <label>
-
-                                    Page Title
-
-                                    <span class="required">
-                                        *
-                                    </span>
-
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    name="title"
-                                    class="form-control-custom"
-                                    [(ngModel)]="page.title"
-                                    #title="ngModel"
-                                    (ngModelChange)="onTitleChange()"
-                                    required
-                                    maxlength="255"
-                                    placeholder="e.g. About Us">
-
-
-                                <div
-                                    class="field-error"
-                                    *ngIf="
-                                        (
-                                            title.invalid &&
-                                            title.touched
-                                        ) ||
-                                        errors.title
-                                    ">
-
-                                    {{
-                                        errors.title ||
-                                        'Page title is required.'
-                                    }}
-
-                                </div>
-
-                            </div>
-
-
-
-                            <!-- SLUG -->
-
-                            <div class="form-group">
-
-                                <label>
-
-                                    Page URL
-
-                                    <span class="required">
-                                        *
-                                    </span>
-
-                                </label>
-
-
-                                <div class="slug-input">
-
-                                    <span class="slug-prefix">
-                                        /
-                                    </span>
-
-
-                                    <input
-                                        type="text"
-                                        name="slug"
-                                        [(ngModel)]="page.slug"
-                                        #slug="ngModel"
-                                        (input)="onSlugInput()"
-                                        required
-                                        maxlength="255"
-                                        placeholder="about-us">
-
-                                </div>
-
-
-                                <div class="field-help">
-
-                                    Public page URL:
-
-                                    <strong>
-                                        /{{ page.slug || 'page-url' }}
-                                    </strong>
-
-                                </div>
-
-
-                                <div
-                                    class="field-error"
-                                    *ngIf="
-                                        (
-                                            slug.invalid &&
-                                            slug.touched
-                                        ) ||
-                                        errors.slug
-                                    ">
-
-                                    {{
-                                        errors.slug ||
-                                        'Page URL is required.'
-                                    }}
-
-                                </div>
-
-                            </div>
-
-
-
-                            <!-- SHORT DESCRIPTION -->
-
-                            <div class="form-group mb-0">
-
-                                <div class="label-row">
-
-                                    <label>
-                                        Short Description
-                                    </label>
-
-
-                                    <span class="optional-text">
-                                        Optional
-                                    </span>
-
-                                </div>
-
-
-                                <textarea
-                                    name="short_description"
+      </div>
+    }
+    <!-- =================================================
+    FORM
+    ================================================== -->
+    <form
+      #pageForm="ngForm"
+      (ngSubmit)="updatePage(pageForm)"
+      novalidate>
+      <div class="row g-4">
+        <!-- =========================================
+        LEFT
+        ========================================== -->
+        <div class="col-xl-8">
+          <!-- =====================================
+          PAGE INFORMATION
+          ====================================== -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="card-icon">
+                <i class="fa-regular fa-file-lines"></i>
+              </div>
+              <div>
+                <h3>
+                  Page Information
+                </h3>
+                <p>
+                  Update the page title, URL and summary.
+                </p>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <!-- TITLE -->
+              <div class="form-group">
+                <label>
+                  Page Title
+                  <span class="required">
+                    *
+                  </span>
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  class="form-control-custom"
+                  [(ngModel)]="page.title"
+                  #title="ngModel"
+                  (ngModelChange)="onTitleChange()"
+                  required
+                  maxlength="255"
+                  placeholder="e.g. About Us">
+                @if (
+                  (
+                  title.invalid &&
+                  title.touched
+                  ) ||
+                  errors.title
+                  ) {
+                  <div
+                    class="field-error"
+                    >
+                    {{
+                    errors.title ||
+                    'Page title is required.'
+                    }}
+                  </div>
+                }
+              </div>
+              <!-- SLUG -->
+              <div class="form-group">
+                <label>
+                  Page URL
+                  <span class="required">
+                    *
+                  </span>
+                </label>
+                <div class="slug-input">
+                  <span class="slug-prefix">
+                    /
+                  </span>
+                  <input
+                    type="text"
+                    name="slug"
+                    [(ngModel)]="page.slug"
+                    #slug="ngModel"
+                    (input)="onSlugInput()"
+                    required
+                    maxlength="255"
+                    placeholder="about-us">
+                </div>
+                <div class="field-help">
+                  Public page URL:
+                  <strong>
+                    /{{ page.slug || 'page-url' }}
+                  </strong>
+                </div>
+                @if (
+                  (
+                  slug.invalid &&
+                  slug.touched
+                  ) ||
+                  errors.slug
+                  ) {
+                  <div
+                    class="field-error"
+                    >
+                    {{
+                    errors.slug ||
+                    'Page URL is required.'
+                    }}
+                  </div>
+                }
+              </div>
+              <!-- SHORT DESCRIPTION -->
+              <div class="form-group mb-0">
+                <div class="label-row">
+                  <label>
+                    Short Description
+                  </label>
+                  <span class="optional-text">
+                    Optional
+                  </span>
+                </div>
+                <textarea
+                  name="short_description"
                                     class="
                                         form-control-custom
                                         textarea-small
                                     "
-                                    [(ngModel)]="page.short_description"
-                                    rows="4"
-                                    placeholder="Enter a short introduction or summary...">
-                                </textarea>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <!-- =====================================
-                         PAGE CONTENT
-                    ====================================== -->
-
-                    <div class="form-card">
-
-                        <div class="form-card-header">
-
-                            <div class="card-icon green">
-
-                                <i class="fa-solid fa-align-left"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h3>
-                                    Page Content
-                                </h3>
-
-                                <p>
-                                    Update the main content displayed on this page.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-card-body">
-
-                            <div class="form-group mb-0">
-
-
-                                <!-- =========================
-                                     HEADER
-                                ========================== -->
-
-                                <div class="editor-heading">
-
-                                    <label>
-                                        Content
-                                    </label>
-
-
-                                    <div class="editor-mode-switch">
-
-
-                                        <button
-                                            type="button"
+                  [(ngModel)]="page.short_description"
+                  rows="4"
+                  placeholder="Enter a short introduction or summary...">
+                </textarea>
+              </div>
+            </div>
+          </div>
+          <!-- =====================================
+          PAGE CONTENT
+          ====================================== -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="card-icon green">
+                <i class="fa-solid fa-align-left"></i>
+              </div>
+              <div>
+                <h3>
+                  Page Content
+                </h3>
+                <p>
+                  Update the main content displayed on this page.
+                </p>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="form-group mb-0">
+                <!-- =========================
+                HEADER
+                ========================== -->
+                <div class="editor-heading">
+                  <label>
+                    Content
+                  </label>
+                  <div class="editor-mode-switch">
+                    <button
+                      type="button"
                                             [class.active]="
                                                 editorMode === 'visual'
                                             "
                                             (click)="
                                                 setEditorMode('visual')
                                             ">
-
-                                            <i
+                      <i
                                                 class="
                                                     fa-regular
                                                     fa-pen-to-square
                                                 ">
-                                            </i>
-
-                                            Visual
-
-                                        </button>
-
-
-                                        <button
-                                            type="button"
+                      </i>
+                      Visual
+                    </button>
+                    <button
+                      type="button"
                                             [class.active]="
                                                 editorMode === 'source'
                                             "
                                             (click)="
                                                 setEditorMode('source')
                                             ">
-
-                                            <i class="fa-solid fa-code"></i>
-
-                                            HTML
-
-                                        </button>
-
-
-                                    </div>
-
-                                </div>
-
-
-
-                                <!-- =========================
-                                     CKEDITOR
-                                ========================== -->
-
-                                <div
-                                    class="editor-wrapper"
+                      <i class="fa-solid fa-code"></i>
+                      HTML
+                    </button>
+                  </div>
+                </div>
+                <!-- =========================
+                CKEDITOR
+                ========================== -->
+                <div
+                  class="editor-wrapper"
                                     [hidden]="
                                         editorMode !== 'visual'
                                     ">
-
-                                    <ckeditor
-                                        [editor]="Editor"
-                                        [config]="editorConfig"
-                                        [(ngModel)]="page.content"
-                                        name="content"
+                  <ckeditor
+                    [editor]="Editor"
+                    [config]="editorConfig"
+                    [(ngModel)]="page.content"
+                    name="content"
                                         (ready)="
                                             onEditorReady($event)
                                         ">
-                                    </ckeditor>
-
-                                </div>
-
-
-
-                                <!-- =========================
-                                     HTML SOURCE
-                                ========================== -->
-
-                                <div
-                                    class="html-editor-wrapper"
-                                    *ngIf="
-                                        editorMode === 'source'
-                                    ">
-
-
-                                    <div class="html-editor-toolbar">
-
-                                        <div>
-
-                                            <i class="fa-solid fa-code"></i>
-
-                                            HTML Source
-
-                                        </div>
-
-
-                                        <span>
-                                            Edit page markup
-                                        </span>
-
-                                    </div>
-
-
-                                    <textarea
-                                        name="content_source"
-                                        [(ngModel)]="page.content"
-                                        class="html-source-editor"
-                                        spellcheck="false"
+                  </ckeditor>
+                </div>
+                <!-- =========================
+                HTML SOURCE
+                ========================== -->
+                @if (
+                  editorMode === 'source'
+                  ) {
+                  <div
+                    class="html-editor-wrapper"
+                    >
+                    <div class="html-editor-toolbar">
+                      <div>
+                        <i class="fa-solid fa-code"></i>
+                        HTML Source
+                      </div>
+                      <span>
+                        Edit page markup
+                      </span>
+                    </div>
+                    <textarea
+                      name="content_source"
+                      [(ngModel)]="page.content"
+                      class="html-source-editor"
+                      spellcheck="false"
                                         placeholder="<h2>Page heading</h2>
 
 <p>Enter your HTML content...</p>">
                                     </textarea>
 
                                 </div>
+}
 
 
 
@@ -603,614 +459,355 @@
                                         [class.warning]="
                                             metaTitleLength > 60
                                         ">
-
-                                        {{ metaTitleLength }}/60
-
-                                    </span>
-
-                                </div>
-
-
-                                <input
-                                    type="text"
-                                    name="meta_title"
-                                    class="form-control-custom"
-                                    [(ngModel)]="page.meta_title"
+                    {{ metaTitleLength }}/60
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  name="meta_title"
+                  class="form-control-custom"
+                  [(ngModel)]="page.meta_title"
                                     (input)="
                                         metaTitleManuallyEdited = true
                                     "
-                                    maxlength="255"
-                                    placeholder="SEO title for this page">
-
-                            </div>
-
-
-
-                            <!-- META DESCRIPTION -->
-
-                            <div class="form-group">
-
-                                <div class="label-row">
-
-                                    <label>
-                                        Meta Description
-                                    </label>
-
-
-                                    <span
-                                        class="character-count"
+                  maxlength="255"
+                  placeholder="SEO title for this page">
+              </div>
+              <!-- META DESCRIPTION -->
+              <div class="form-group">
+                <div class="label-row">
+                  <label>
+                    Meta Description
+                  </label>
+                  <span
+                    class="character-count"
                                         [class.warning]="
                                             metaDescriptionLength > 160
                                         ">
-
-                                        {{ metaDescriptionLength }}/160
-
-                                    </span>
-
-                                </div>
-
-
-                                <textarea
-                                    name="meta_description"
-                                    class="form-control-custom"
-                                    [(ngModel)]="page.meta_description"
-                                    rows="4"
-                                    placeholder="Write a concise description for search engines...">
-                                </textarea>
-
-                            </div>
-
-
-
-                            <!-- META KEYWORDS -->
-
-                            <div class="form-group">
-
-                                <label>
-                                    Meta Keywords
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    name="meta_keywords"
-                                    class="form-control-custom"
-                                    [(ngModel)]="page.meta_keywords"
-                                    placeholder="medical clinic, family doctor, healthcare">
-
-
-                                <div class="field-help">
-                                    Separate keywords with commas.
-                                </div>
-
-                            </div>
-
-
-
-                            <!-- CANONICAL -->
-
-                            <div class="form-group mb-0">
-
-                                <label>
-                                    Canonical URL
-                                </label>
-
-
-                                <div class="input-with-icon">
-
-                                    <i class="fa-solid fa-link"></i>
-
-
-                                    <input
-                                        type="url"
-                                        name="canonical_url"
-                                        class="form-control-custom"
-                                        [(ngModel)]="page.canonical_url"
-                                        placeholder="https://medclinicfp.com.au/about-us/">
-
-                                </div>
-
-
-                                <div class="field-help">
-                                    Leave empty unless a custom canonical URL is required.
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="form-card">
-
-                    <div class="form-card-header">
-
-                        <div class="card-icon seo">
-
-                            <i class="fa-solid fa-magnifying-glass"></i>
-
-                        </div>
-
-
-                        <div>
-
-                            <h3>
-                                SEO Settings
-                            </h3>
-
-                            <p>
-                                Control how this page may appear in search engines.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="form-card-body">
-
-
-                        <!-- META TITLE -->
-
-                        <div class="form-group">
-
-                            <div class="label-row">
-
-                                <label>
-                                    Meta Title
-                                </label>
-
-
-                                <span
-                                    class="character-count"
+                    {{ metaDescriptionLength }}/160
+                  </span>
+                </div>
+                <textarea
+                  name="meta_description"
+                  class="form-control-custom"
+                  [(ngModel)]="page.meta_description"
+                  rows="4"
+                  placeholder="Write a concise description for search engines...">
+                </textarea>
+              </div>
+              <!-- META KEYWORDS -->
+              <div class="form-group">
+                <label>
+                  Meta Keywords
+                </label>
+                <input
+                  type="text"
+                  name="meta_keywords"
+                  class="form-control-custom"
+                  [(ngModel)]="page.meta_keywords"
+                  placeholder="medical clinic, family doctor, healthcare">
+                <div class="field-help">
+                  Separate keywords with commas.
+                </div>
+              </div>
+              <!-- CANONICAL -->
+              <div class="form-group mb-0">
+                <label>
+                  Canonical URL
+                </label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-link"></i>
+                  <input
+                    type="url"
+                    name="canonical_url"
+                    class="form-control-custom"
+                    [(ngModel)]="page.canonical_url"
+                    placeholder="https://medclinicfp.com.au/about-us/">
+                  </div>
+                  <div class="field-help">
+                    Leave empty unless a custom canonical URL is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-card">
+              <div class="form-card-header">
+                <div class="card-icon seo">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div>
+                  <h3>
+                    SEO Settings
+                  </h3>
+                  <p>
+                    Control how this page may appear in search engines.
+                  </p>
+                </div>
+              </div>
+              <div class="form-card-body">
+                <!-- META TITLE -->
+                <div class="form-group">
+                  <div class="label-row">
+                    <label>
+                      Meta Title
+                    </label>
+                    <span
+                      class="character-count"
                                     [class.warning]="
                                         metaTitleLength > 60
                                     ">
-
-                                    {{ metaTitleLength }}/60
-
-                                </span>
-
-                            </div>
-
-
-                            <input
-                                type="text"
-                                name="meta_title"
-                                class="form-control-custom"
-                                [(ngModel)]="page.meta_title"
-                                maxlength="255"
-                                placeholder="SEO title for this page">
-
-                        </div>
-
-
-
-                        <!-- META DESCRIPTION -->
-
-                        <div class="form-group">
-
-                            <div class="label-row">
-
-                                <label>
-                                    Meta Description
-                                </label>
-
-
-                                <span
-                                    class="character-count"
+                    {{ metaTitleLength }}/60
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  name="meta_title"
+                  class="form-control-custom"
+                  [(ngModel)]="page.meta_title"
+                  maxlength="255"
+                  placeholder="SEO title for this page">
+              </div>
+              <!-- META DESCRIPTION -->
+              <div class="form-group">
+                <div class="label-row">
+                  <label>
+                    Meta Description
+                  </label>
+                  <span
+                    class="character-count"
                                     [class.warning]="
                                         metaDescriptionLength > 160
                                     ">
-
-                                    {{ metaDescriptionLength }}/160
-
-                                </span>
-
-                            </div>
-
-
-                            <textarea
-                                name="meta_description"
-                                class="form-control-custom"
-                                [(ngModel)]="page.meta_description"
-                                rows="4"
-                                placeholder="Write a concise description for search engines...">
-                            </textarea>
-
-                        </div>
-
-
-
-                        <!-- META KEYWORDS -->
-
-                        <div class="form-group">
-
-                            <label>
-                                Meta Keywords
-                            </label>
-
-
-                            <input
-                                type="text"
-                                name="meta_keywords"
-                                class="form-control-custom"
-                                [(ngModel)]="page.meta_keywords"
-                                placeholder="medical clinic, family doctor, healthcare">
-
-
-                            <div class="field-help">
-
-                                Separate keywords with commas.
-
-                            </div>
-
-                        </div>
-
-
-
-                        <!-- CANONICAL -->
-
-                        <div class="form-group mb-0">
-
-                            <label>
-                                Canonical URL
-                            </label>
-
-
-                            <div class="input-with-icon">
-
-                                <i class="fa-solid fa-link"></i>
-
-
-                                <input
-                                    type="url"
-                                    name="canonical_url"
-                                    class="form-control-custom"
-                                    [(ngModel)]="page.canonical_url"
-                                    placeholder="https://medclinicfp.com.au/about-us/">
-
-                            </div>
-
-
-                            <div class="field-help">
-
-                                Leave empty unless you need to specify a canonical URL.
-
-                            </div>
-
-                        </div>
-
-
-
-                    </div>
-
+                    {{ metaDescriptionLength }}/160
+                  </span>
                 </div>
-
-                <!-- =============================================
-                     SEO PREVIEW
-                ============================================== -->
-
-                <div class="form-card">
-
-                        <div class="form-card-header">
-
-                            <div class="card-icon search-preview-icon">
-
-                                <i class="fa-brands fa-google"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h3>
-                                    Search Preview
-                                </h3>
-
-                                <p>
-                                    Preview how this service may appear
-                                    in Google search results.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-card-body">
-
-
-                            <div class="search-preview-box">
-
-
-                                <!-- =================================
-                                     SITE
-                                ================================== -->
-
-                                <div class="search-preview-site">
-
-                                    <div class="search-site-icon">
-
-                                        <i class="fa-solid fa-stethoscope"></i>
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <strong>
-                                            {{ appConfig.projectName}}
-                                        </strong>
-
-                                        <span>
-                                            {{ appConfig.domain }}
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-
-                                <!-- =================================
-                                     URL
-                                ================================== -->
-
-                                <div class="google-url">
-
-                                    https://www.{{ appConfig.domain }}
-
-                                    <span *ngIf="page.slug">
-                                        › {{ page.slug }}
-                                    </span>
-
-                                </div>
-
-
-                                <!-- =================================
-                                     TITLE
-                                ================================== -->
-
-                                <div class="google-title">
-
-                                    {{
-                                        page.meta_title ||
-                                        page.title ||
-                                        'Page Title'
-                                    }}
-
-                                </div>
-
-
-                                <!-- =================================
-                                     DESCRIPTION
-                                ================================== -->
-
-                                <div class="google-description">
-
-                                    {{
-                                        page.meta_description ||
-                                        page.short_description ||
-                                        'Add a meta description to preview how this service may appear in Google search results.'
-                                    }}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
+                <textarea
+                  name="meta_description"
+                  class="form-control-custom"
+                  [(ngModel)]="page.meta_description"
+                  rows="4"
+                  placeholder="Write a concise description for search engines...">
+                </textarea>
+              </div>
+              <!-- META KEYWORDS -->
+              <div class="form-group">
+                <label>
+                  Meta Keywords
+                </label>
+                <input
+                  type="text"
+                  name="meta_keywords"
+                  class="form-control-custom"
+                  [(ngModel)]="page.meta_keywords"
+                  placeholder="medical clinic, family doctor, healthcare">
+                <div class="field-help">
+                  Separate keywords with commas.
                 </div>
-
-
-
-                <!-- =========================================
-                     RIGHT
-                ========================================== -->
-
-                <div class="col-xl-4">
-
-
-                    <!-- =====================================
-                         PUBLISH
-                    ====================================== -->
-
-                    <div class="form-card sticky-card">
-
-                        <div class="form-card-header">
-
-                            <div class="card-icon publish">
-
-                                <i class="fa-solid fa-globe"></i>
-
-                            </div>
-
-
-                            <div>
-
-                                <h3>
-                                    Publish
-                                </h3>
-
-                                <p>
-                                    Update page visibility.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-card-body">
-
-
-                            <div class="publish-section">
-
-                                <label>
-                                    Page Status
-                                </label>
-
-
-                                <div class="status-options">
-
-
-                                    <!-- ACTIVE -->
-
-                                    <label
-                                        class="status-option"
+              </div>
+              <!-- CANONICAL -->
+              <div class="form-group mb-0">
+                <label>
+                  Canonical URL
+                </label>
+                <div class="input-with-icon">
+                  <i class="fa-solid fa-link"></i>
+                  <input
+                    type="url"
+                    name="canonical_url"
+                    class="form-control-custom"
+                    [(ngModel)]="page.canonical_url"
+                    placeholder="https://medclinicfp.com.au/about-us/">
+                  </div>
+                  <div class="field-help">
+                    Leave empty unless you need to specify a canonical URL.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- =============================================
+            SEO PREVIEW
+            ============================================== -->
+          <div class="form-card">
+            <div class="form-card-header">
+              <div class="card-icon search-preview-icon">
+                <i class="fa-brands fa-google"></i>
+              </div>
+              <div>
+                <h3>
+                  Search Preview
+                </h3>
+                <p>
+                  Preview how this service may appear
+                  in Google search results.
+                </p>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="search-preview-box">
+                <!-- =================================
+                SITE
+                ================================== -->
+                <div class="search-preview-site">
+                  <div class="search-site-icon">
+                    <i class="fa-solid fa-stethoscope"></i>
+                  </div>
+                  <div>
+                    <strong>
+                      {{ appConfig.projectName}}
+                    </strong>
+                    <span>
+                      {{ appConfig.domain }}
+                    </span>
+                  </div>
+                </div>
+                <!-- =================================
+                URL
+                ================================== -->
+                <div class="google-url">
+                  https://www.{{ appConfig.domain }}
+                  @if (page.slug) {
+                    <span>
+                      › {{ page.slug }}
+                    </span>
+                  }
+                </div>
+                <!-- =================================
+                TITLE
+                ================================== -->
+                <div class="google-title">
+                  {{
+                  page.meta_title ||
+                  page.title ||
+                  'Page Title'
+                  }}
+                </div>
+                <!-- =================================
+                DESCRIPTION
+                ================================== -->
+                <div class="google-description">
+                  {{
+                  page.meta_description ||
+                  page.short_description ||
+                  'Add a meta description to preview how this service may appear in Google search results.'
+                  }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- =========================================
+        RIGHT
+        ========================================== -->
+        <div class="col-xl-4">
+          <!-- =====================================
+          PUBLISH
+          ====================================== -->
+          <div class="form-card sticky-card">
+            <div class="form-card-header">
+              <div class="card-icon publish">
+                <i class="fa-solid fa-globe"></i>
+              </div>
+              <div>
+                <h3>
+                  Publish
+                </h3>
+                <p>
+                  Update page visibility.
+                </p>
+              </div>
+            </div>
+            <div class="form-card-body">
+              <div class="publish-section">
+                <label>
+                  Page Status
+                </label>
+                <div class="status-options">
+                  <!-- ACTIVE -->
+                  <label
+                    class="status-option"
                                         [class.selected]="
                                             page.status == 1
                                         ">
-
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            [(ngModel)]="page.status"
-                                            [value]="1">
-
-
-                                        <span class="radio-dot"></span>
-
-
-                                        <div>
-
-                                            <strong>
-                                                Active
-                                            </strong>
-
-                                            <span>
-                                                Visible on the website
-                                            </span>
-
-                                        </div>
-
-                                    </label>
-
-
-
-                                    <!-- INACTIVE -->
-
-                                    <label
-                                        class="status-option"
+                    <input
+                      type="radio"
+                      name="status"
+                      [(ngModel)]="page.status"
+                      [value]="1">
+                    <span class="radio-dot"></span>
+                    <div>
+                      <strong>
+                        Active
+                      </strong>
+                      <span>
+                        Visible on the website
+                      </span>
+                    </div>
+                  </label>
+                  <!-- INACTIVE -->
+                  <label
+                    class="status-option"
                                         [class.selected]="
                                             page.status == 0
                                         ">
-
-                                        <input
-                                            type="radio"
-                                            name="status"
-                                            [(ngModel)]="page.status"
-                                            [value]="0">
-
-
-                                        <span class="radio-dot"></span>
-
-
-                                        <div>
-
-                                            <strong>
-                                                Inactive
-                                            </strong>
-
-                                            <span>
-                                                Hidden from the website
-                                            </span>
-
-                                        </div>
-
-                                    </label>
-
-
-                                </div>
-
-                            </div>
-
-
-
-                            <!-- URL -->
-
-                            <div class="page-url-preview">
-
-                                <span>
-                                    Page URL
-                                </span>
-
-
-                                <strong>
-                                    /{{ page.slug || 'page-url' }}
-                                </strong>
-
-                            </div>
-
-
-
-                            <!-- BUTTONS -->
-
-                            <div class="publish-actions">
-
-
-                                <button
-                                    type="submit"
-                                    class="save-btn"
-                                    [disabled]="isSaving">
-
-
-                                    <ng-container
-                                        *ngIf="!isSaving">
-
-                                        <i class="fa-solid fa-check"></i>
-
-                                        Update Page
-
-                                    </ng-container>
-
-
-                                    <ng-container
-                                        *ngIf="isSaving">
-
-                                        <span
+                    <input
+                      type="radio"
+                      name="status"
+                      [(ngModel)]="page.status"
+                      [value]="0">
+                    <span class="radio-dot"></span>
+                    <div>
+                      <strong>
+                        Inactive
+                      </strong>
+                      <span>
+                        Hidden from the website
+                      </span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <!-- URL -->
+              <div class="page-url-preview">
+                <span>
+                  Page URL
+                </span>
+                <strong>
+                  /{{ page.slug || 'page-url' }}
+                </strong>
+              </div>
+              <!-- BUTTONS -->
+              <div class="publish-actions">
+                <button
+                  type="submit"
+                  class="save-btn"
+                  [disabled]="isSaving">
+                  @if (!isSaving) {
+                    <i class="fa-solid fa-check"></i>
+                    Update Page
+                  }
+                  @if (isSaving) {
+                    <span
                                             class="
                                                 spinner-border
                                                 spinner-border-sm
                                             ">
-                                        </span>
-
-                                        Updating...
-
-                                    </ng-container>
-
-
-                                </button>
-
-
-                                <button
-                                    type="button"
-                                    class="cancel-btn"
-                                    [disabled]="isSaving"
-                                    (click)="cancel()">
-
-                                    Cancel
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-
-
-                </div>
-
+                    </span>
+                    Updating...
+                  }
+                </button>
+                <button
+                  type="button"
+                  class="cancel-btn"
+                  [disabled]="isSaving"
+                  (click)="cancel()">
+                  Cancel
+                </button>
+              </div>
             </div>
-
-        </form>
-
-    </ng-container>
+          </div>
+        </div>
+      </div>
+    </form>
+  }
 
 </div>

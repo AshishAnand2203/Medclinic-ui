@@ -1,744 +1,582 @@
 <!-- =========================================================
-     PAGE HEADER
+PAGE HEADER
 ========================================================= -->
 
 <div class="page-header">
 
-    <div>
+  <div>
 
-        <div class="breadcrumb-text">
+    <div class="breadcrumb-text">
 
-            Content Management
+      Content Management
 
-            <span>/</span>
+      <span>/</span>
 
-            <strong>
-                Blogs
-            </strong>
-
-        </div>
-
-
-        <h1>
-            Blog Management
-        </h1>
-
-
-        <p>
-            Create and manage blog articles displayed on the website.
-        </p>
+      <strong>
+        Blogs
+      </strong>
 
     </div>
 
 
-    <button
-        type="button"
-        class="add-page-btn"
-        (click)="addBlog()">
+    <h1>
+      Blog Management
+    </h1>
 
-        <i class="fa-solid fa-plus"></i>
 
-        Add New Blog
+    <p>
+      Create and manage blog articles displayed on the website.
+    </p>
 
-    </button>
+  </div>
+
+
+  <button
+    type="button"
+    class="add-page-btn"
+    (click)="addBlog()">
+
+    <i class="fa-solid fa-plus"></i>
+
+    Add New Blog
+
+  </button>
 
 </div>
 
 
 <!-- =========================================================
-     MESSAGES
+MESSAGES
 ========================================================= -->
 
-<div
+@if (successMessage) {
+  <div
     class="message-box success-message"
-    *ngIf="successMessage">
-
+    >
     <i class="fa-solid fa-circle-check"></i>
-
     {{ successMessage }}
+  </div>
+}
 
-</div>
 
-
-<div
+@if (errorMessage) {
+  <div
     class="message-box error-message"
-    *ngIf="errorMessage">
-
+    >
     <i class="fa-solid fa-circle-exclamation"></i>
-
     {{ errorMessage }}
-
-</div>
+  </div>
+}
 
 
 <!-- =========================================================
-     FILTER
+FILTER
 ========================================================= -->
 
 <div class="filter-card">
 
-    <div class="filter-left">
+  <div class="filter-left">
 
 
-        <!-- SEARCH -->
+    <!-- SEARCH -->
 
-        <div class="search-box">
+    <div class="search-box">
 
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-
-            <input
-                type="text"
-                [(ngModel)]="searchText"
-                (keyup.enter)="applyFilters()"
-                placeholder="Search blogs...">
-
-        </div>
+      <i class="fa-solid fa-magnifying-glass"></i>
 
 
-        <!-- STATUS -->
-
-        <select
-            class="status-select"
-            [(ngModel)]="statusFilter">
-
-            <option value="">
-                All Status
-            </option>
-
-            <option value="1">
-                Active
-            </option>
-
-            <option value="0">
-                Inactive
-            </option>
-
-        </select>
-
-
-        <!-- SEARCH -->
-
-        <button
-            type="button"
-            class="search-btn"
-            (click)="applyFilters()">
-
-            Search
-
-        </button>
-
-
-        <!-- RESET -->
-
-        <button
-            type="button"
-            class="reset-btn"
-            *ngIf="
-                searchText ||
-                statusFilter
-            "
-            title="Reset Filters"
-            (click)="resetFilters()">
-
-            <i class="fa-solid fa-rotate-left"></i>
-
-        </button>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (keyup.enter)="applyFilters()"
+        placeholder="Search blogs...">
 
     </div>
 
 
-    <!-- SHOW ENTRIES -->
+    <!-- STATUS -->
 
-    <div class="filter-right">
+    <select
+      class="status-select"
+      [(ngModel)]="statusFilter">
 
-        <span>
-            Show
-        </span>
+      <option value="">
+        All Status
+      </option>
 
+      <option value="1">
+        Active
+      </option>
 
-        <select
-            [(ngModel)]="pageSize"
-            (change)="changePageSize()">
+      <option value="0">
+        Inactive
+      </option>
 
-            <option [ngValue]="10">
-                10
-            </option>
-
-            <option [ngValue]="25">
-                25
-            </option>
-
-            <option [ngValue]="50">
-                50
-            </option>
-
-            <option [ngValue]="100">
-                100
-            </option>
-
-        </select>
+    </select>
 
 
-        <span>
-            entries
-        </span>
+    <!-- SEARCH -->
 
-    </div>
+    <button
+      type="button"
+      class="search-btn"
+      (click)="applyFilters()">
+
+      Search
+
+    </button>
+
+
+    <!-- RESET -->
+
+    @if (
+      searchText ||
+      statusFilter
+      ) {
+      <button
+        type="button"
+        class="reset-btn"
+        title="Reset Filters"
+        (click)="resetFilters()">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+    }
+
+  </div>
+
+
+  <!-- SHOW ENTRIES -->
+
+  <div class="filter-right">
+
+    <span>
+      Show
+    </span>
+
+
+    <select
+      [(ngModel)]="pageSize"
+      (change)="changePageSize()">
+
+      <option [ngValue]="10">
+        10
+      </option>
+
+      <option [ngValue]="25">
+        25
+      </option>
+
+      <option [ngValue]="50">
+        50
+      </option>
+
+      <option [ngValue]="100">
+        100
+      </option>
+
+    </select>
+
+
+    <span>
+      entries
+    </span>
+
+  </div>
 
 </div>
 
 
 <!-- =========================================================
-     TABLE
+TABLE
 ========================================================= -->
 
 <div class="table-card">
 
 
-    <div class="table-responsive">
-
-        <table class="blog-table">
-
-            <thead>
-
-                <tr>
-
-                    <th class="sl-column">
-                        SL
-                    </th>
-
-                    <th>
-                        Blog
-                    </th>
-
-                    <th>
-                        Author
-                    </th>
-
-                    <th>
-                        Published
-                    </th>
-
-                    <th class="order-column">
-                        Order
-                    </th>
-
-                    <th>
-                        Status
-                    </th>
-
-                    <th class="action-column">
-                        Actions
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <!-- =============================================
-                 DATA
-            ============================================== -->
-
-            <tbody *ngIf="!isLoading && paginatedBlogs.length">
-
-
-                <tr
-                    *ngFor="
-                        let blog of paginatedBlogs;
-                        let i = index
-                    ">
-
-
-                    <!-- SL -->
-
-                    <td class="sl-cell">
-
-                        {{
-                            (
-                                currentPage - 1
-                            ) *
-                            pageSize +
-                            i +
-                            1
-                        }}
-
-                    </td>
-
-
-                    <!-- BLOG -->
-
-                    <td>
-
-                        <div class="blog-info">
-
-
-                            <!-- IMAGE -->
-
-                            <div class="blog-image">
-
-
-                                <img
-                                    *ngIf="blog.featured_image_url"
-                                    [src]="blog.featured_image_url"
-                                    [alt]="blog.title">
-
-
-                                <div
-                                    class="blog-image-placeholder"
-                                    *ngIf="!blog.featured_image_url">
-
-                                    <i class="fa-regular fa-image"></i>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- DETAILS -->
-
-                            <div class="blog-details">
-
-                                <strong>
-                                    {{ blog.title }}
-                                </strong>
-
-
-                                <span class="blog-slug">
-
-                                    /{{ blog.slug }}
-
-                                </span>
-
-
-                                <p
-                                    *ngIf="blog.short_description">
-
-                                    {{ blog.short_description }}
-
-                                </p>
-
-                            </div>
-
-                        </div>
-
-                    </td>
-
-
-                    <!-- AUTHOR -->
-
-                    <td>
-
-                        <div
-                            class="author-info"
-                            *ngIf="blog.author">
-
-                            <div class="author-icon">
-
-                                <i class="fa-regular fa-user"></i>
-
-                            </div>
-
-                            <span>
-                                {{ blog.author }}
-                            </span>
-
-                        </div>
-
-
-                        <span
-                            class="not-set"
-                            *ngIf="!blog.author">
-
-                            —
-
-                        </span>
-
-                    </td>
-
-
-                    <!-- PUBLISHED -->
-
-                    <td>
-
-                        <div
-                            class="published-date"
-                            [class.not-published]="!blog.published_date">
-
-                            <i
-                                class="fa-regular"
+  <div class="table-responsive">
+
+    <table class="blog-table">
+
+      <thead>
+
+        <tr>
+
+          <th class="sl-column">
+            SL
+          </th>
+
+          <th>
+            Blog
+          </th>
+
+          <th>
+            Author
+          </th>
+
+          <th>
+            Published
+          </th>
+
+          <th class="order-column">
+            Order
+          </th>
+
+          <th>
+            Status
+          </th>
+
+          <th class="action-column">
+            Actions
+          </th>
+
+        </tr>
+
+      </thead>
+
+
+      <!-- =============================================
+      DATA
+      ============================================== -->
+
+      @if (!isLoading && paginatedBlogs.length) {
+        <tbody>
+          @for (
+            blog of paginatedBlogs; track
+            blog; let i = $index) {
+            <tr
+              >
+              <!-- SL -->
+              <td class="sl-cell">
+                {{
+                (
+                currentPage - 1
+                ) *
+                pageSize +
+                i +
+                1
+                }}
+              </td>
+              <!-- BLOG -->
+              <td>
+                <div class="blog-info">
+                  <!-- IMAGE -->
+                  <div class="blog-image">
+                    @if (blog.featured_image_url) {
+                      <img
+                        [src]="blog.featured_image_url"
+                        [alt]="blog.title">
+                    }
+                    @if (!blog.featured_image_url) {
+                      <div
+                        class="blog-image-placeholder"
+                        >
+                        <i class="fa-regular fa-image"></i>
+                      </div>
+                    }
+                  </div>
+                  <!-- DETAILS -->
+                  <div class="blog-details">
+                    <strong>
+                      {{ blog.title }}
+                    </strong>
+                    <span class="blog-slug">
+                      /{{ blog.slug }}
+                    </span>
+                    @if (blog.short_description) {
+                      <p
+                        >
+                        {{ blog.short_description }}
+                      </p>
+                    }
+                  </div>
+                </div>
+              </td>
+              <!-- AUTHOR -->
+              <td>
+                @if (blog.author) {
+                  <div
+                    class="author-info"
+                    >
+                    <div class="author-icon">
+                      <i class="fa-regular fa-user"></i>
+                    </div>
+                    <span>
+                      {{ blog.author }}
+                    </span>
+                  </div>
+                }
+                @if (!blog.author) {
+                  <span
+                    class="not-set"
+                    >
+                    —
+                  </span>
+                }
+              </td>
+              <!-- PUBLISHED -->
+              <td>
+                <div
+                  class="published-date"
+                  [class.not-published]="!blog.published_date">
+                  <i
+                    class="fa-regular"
                                 [ngClass]="
                                     blog.published_date
                                         ? 'fa-calendar'
                                         : 'fa-clock'
                                 ">
-                            </i>
+                  </i>
+                  {{ formatDate(blog.published_date) }}
+                </div>
+              </td>
+              <!-- ORDER -->
+              <td>
+                <span class="order-badge">
+                  {{ blog.sort_order }}
+                </span>
+              </td>
+              <!-- STATUS -->
+              <td>
+                <button
+                  type="button"
+                  class="status-badge"
+                  [class.active]="blog.status === 1"
+                  [class.inactive]="blog.status !== 1"
+                  [disabled]="updatingStatusId === blog.id"
+                  (click)="changeStatus(blog)">
+                  @if (
+                    updatingStatusId !==
+                    blog.id
+                    ) {
+                    <span
+                      class="status-dot"
+                      >
+                    </span>
+                  }
+                  @if (
+                    updatingStatusId ===
+                    blog.id
+                    ) {
+                    <span
+                      class="status-spinner"
+                      >
+                    </span>
+                  }
+                  {{
+                  updatingStatusId === blog.id
+                  ? 'Updating'
+                  : (
+                  blog.status === 1
+                  ? 'Active'
+                  : 'Inactive'
+                  )
+                  }}
+                </button>
+              </td>
+              <!-- ACTIONS -->
+              <td>
+                <div class="action-buttons">
+                  <button
+                    type="button"
+                    class="action-btn edit-btn"
+                    title="Edit Blog"
+                    (click)="editBlog(blog)">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="action-btn delete-btn"
+                    title="Delete Blog"
+                    (click)="confirmDelete(blog)">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      }
 
-                            {{ formatDate(blog.published_date) }}
-
-                        </div>
-
-                    </td>
-
-
-                    <!-- ORDER -->
-
-                    <td>
-
-                        <span class="order-badge">
-
-                            {{ blog.sort_order }}
-
-                        </span>
-
-                    </td>
-
-
-                    <!-- STATUS -->
-
-                    <td>
-
-                        <button
-                            type="button"
-                            class="status-badge"
-                            [class.active]="blog.status === 1"
-                            [class.inactive]="blog.status !== 1"
-                            [disabled]="updatingStatusId === blog.id"
-                            (click)="changeStatus(blog)">
-
-
-                            <span
-                                class="status-dot"
-                                *ngIf="
-                                    updatingStatusId !==
-                                    blog.id
-                                ">
-                            </span>
-
-
-                            <span
-                                class="status-spinner"
-                                *ngIf="
-                                    updatingStatusId ===
-                                    blog.id
-                                ">
-                            </span>
-
-
-                            {{
-                                updatingStatusId === blog.id
-                                    ? 'Updating'
-                                    : (
-                                        blog.status === 1
-                                            ? 'Active'
-                                            : 'Inactive'
-                                    )
-                            }}
-
-                        </button>
-
-                    </td>
-
-
-                    <!-- ACTIONS -->
-
-                    <td>
-
-                        <div class="action-buttons">
-
-
-                            <button
-                                type="button"
-                                class="action-btn edit-btn"
-                                title="Edit Blog"
-                                (click)="editBlog(blog)">
-
-                                <i class="fa-regular fa-pen-to-square"></i>
-
-                            </button>
+    </table>
 
 
-                            <button
-                                type="button"
-                                class="action-btn delete-btn"
-                                title="Delete Blog"
-                                (click)="confirmDelete(blog)">
+    <!-- =================================================
+    LOADING
+    ================================================== -->
 
-                                <i class="fa-regular fa-trash-can"></i>
-
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
+    @if (isLoading) {
+      <div
+        class="table-loading"
+        >
+        <span class="loading-spinner"></span>
+        <strong>
+          Loading blogs...
+        </strong>
+        <p>
+          Please wait while we retrieve your blog articles.
+        </p>
+      </div>
+    }
 
 
-        <!-- =================================================
-             LOADING
-        ================================================== -->
+    <!-- =================================================
+    EMPTY
+    ================================================== -->
 
-        <div
-            class="table-loading"
-            *ngIf="isLoading">
-
-            <span class="loading-spinner"></span>
-
-            <strong>
-                Loading blogs...
-            </strong>
-
-            <p>
-                Please wait while we retrieve your blog articles.
-            </p>
-
+    @if (
+      !isLoading &&
+      paginatedBlogs.length === 0
+      ) {
+      <div
+        class="empty-state"
+        >
+        <div class="empty-icon">
+          <i class="fa-regular fa-newspaper"></i>
         </div>
+        <h3>
+          No Blogs Found
+        </h3>
+        @if (searchText || statusFilter) {
+          <p>
+            No blogs match your current search or filters.
+          </p>
+        }
+        @if (!searchText && !statusFilter) {
+          <p>
+            You haven't created any blog articles yet.
+          </p>
+        }
+        @if (!searchText && !statusFilter) {
+          <button
+            type="button"
+            class="empty-add-btn"
+            (click)="addBlog()">
+            <i class="fa-solid fa-plus"></i>
+            Add Your First Blog
+          </button>
+        }
+        @if (searchText || statusFilter) {
+          <button
+            type="button"
+            class="empty-reset-btn"
+            (click)="resetFilters()">
+            Clear Filters
+          </button>
+        }
+      </div>
+    }
+
+  </div>
 
 
-        <!-- =================================================
-             EMPTY
-        ================================================== -->
+  <!-- =====================================================
+  TABLE FOOTER
+  ====================================================== -->
 
-        <div
-            class="empty-state"
-            *ngIf="
-                !isLoading &&
-                paginatedBlogs.length === 0
-            ">
-
-            <div class="empty-icon">
-
-                <i class="fa-regular fa-newspaper"></i>
-
-            </div>
-
-
-            <h3>
-                No Blogs Found
-            </h3>
-
-
-            <p *ngIf="searchText || statusFilter">
-
-                No blogs match your current search or filters.
-
-            </p>
-
-
-            <p *ngIf="!searchText && !statusFilter">
-
-                You haven't created any blog articles yet.
-
-            </p>
-
-
-            <button
-                type="button"
-                class="empty-add-btn"
-                *ngIf="!searchText && !statusFilter"
-                (click)="addBlog()">
-
-                <i class="fa-solid fa-plus"></i>
-
-                Add Your First Blog
-
-            </button>
-
-
-            <button
-                type="button"
-                class="empty-reset-btn"
-                *ngIf="searchText || statusFilter"
-                (click)="resetFilters()">
-
-                Clear Filters
-
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <!-- =====================================================
-         TABLE FOOTER
-    ====================================================== -->
-
+  @if (
+    !isLoading &&
+    filteredBlogs.length > 0
+    ) {
     <div
-        class="table-footer"
-        *ngIf="
-            !isLoading &&
-            filteredBlogs.length > 0
-        ">
-
-
-        <div class="result-info">
-
-            Showing
-
-            <strong>
-                {{ resultStart }}
-            </strong>
-
-            to
-
-            <strong>
-                {{ resultEnd }}
-            </strong>
-
-            of
-
-            <strong>
-                {{ filteredBlogs.length }}
-            </strong>
-
-            entries
-
-        </div>
-
-
-        <!-- PAGINATION -->
-
-        <div class="pagination">
-
-
-            <button
-                type="button"
-                class="pagination-btn nav-btn"
-                [disabled]="currentPage === 1"
-                (click)="previousPage()">
-
-                <i class="fa-solid fa-chevron-left"></i>
-
-            </button>
-
-
-            <button
-                *ngFor="let page of getPageNumbers()"
-                type="button"
-                class="pagination-btn"
-                [class.active]="currentPage === page"
-                (click)="goToPage(page)">
-
-                {{ page }}
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn nav-btn"
-                [disabled]="currentPage === totalPages"
-                (click)="nextPage()">
-
-                <i class="fa-solid fa-chevron-right"></i>
-
-            </button>
-
-        </div>
-
+      class="table-footer"
+      >
+      <div class="result-info">
+        Showing
+        <strong>
+          {{ resultStart }}
+        </strong>
+        to
+        <strong>
+          {{ resultEnd }}
+        </strong>
+        of
+        <strong>
+          {{ filteredBlogs.length }}
+        </strong>
+        entries
+      </div>
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <button
+          type="button"
+          class="pagination-btn nav-btn"
+          [disabled]="currentPage === 1"
+          (click)="previousPage()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        @for (page of getPageNumbers(); track page) {
+          <button
+            type="button"
+            class="pagination-btn"
+            [class.active]="currentPage === page"
+            (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+        <button
+          type="button"
+          class="pagination-btn nav-btn"
+          [disabled]="currentPage === totalPages"
+          (click)="nextPage()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
     </div>
+  }
 
 </div>
 
 
 <!-- =========================================================
-     DELETE MODAL
+DELETE MODAL
 ========================================================= -->
 
-<div
+@if (showDeleteModal) {
+  <div
     class="delete-modal-backdrop"
-    *ngIf="showDeleteModal"
     (click)="closeDeleteModal()">
-
-
     <div
-        class="delete-modal"
-        (click)="$event.stopPropagation()">
-
-
-        <div class="delete-icon">
-
+      class="delete-modal"
+      (click)="$event.stopPropagation()">
+      <div class="delete-icon">
+        <i class="fa-regular fa-trash-can"></i>
+      </div>
+      <h3>
+        Delete Blog?
+      </h3>
+      <p>
+        Are you sure you want to delete
+        <strong>
+          "{{ selectedBlog?.title }}"
+        </strong>?
+      </p>
+      <div class="delete-warning">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        This action cannot be undone.
+      </div>
+      <div class="delete-modal-actions">
+        <button
+          type="button"
+          class="modal-cancel-btn"
+          [disabled]="deletingId !== null"
+          (click)="closeDeleteModal()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="modal-delete-btn"
+          [disabled]="deletingId !== null"
+          (click)="deleteBlog()">
+          @if (deletingId === null) {
             <i class="fa-regular fa-trash-can"></i>
-
-        </div>
-
-
-        <h3>
-            Delete Blog?
-        </h3>
-
-
-        <p>
-
-            Are you sure you want to delete
-
-            <strong>
-                "{{ selectedBlog?.title }}"
-            </strong>?
-
-        </p>
-
-
-        <div class="delete-warning">
-
-            <i class="fa-solid fa-triangle-exclamation"></i>
-
-            This action cannot be undone.
-
-        </div>
-
-
-        <div class="delete-modal-actions">
-
-
-            <button
-                type="button"
-                class="modal-cancel-btn"
-                [disabled]="deletingId !== null"
-                (click)="closeDeleteModal()">
-
-                Cancel
-
-            </button>
-
-
-            <button
-                type="button"
-                class="modal-delete-btn"
-                [disabled]="deletingId !== null"
-                (click)="deleteBlog()">
-
-
-                <ng-container
-                    *ngIf="deletingId === null">
-
-                    <i class="fa-regular fa-trash-can"></i>
-
-                    Delete Blog
-
-                </ng-container>
-
-
-                <ng-container
-                    *ngIf="deletingId !== null">
-
-                    <span class="delete-spinner"></span>
-
-                    Deleting...
-
-                </ng-container>
-
-            </button>
-
-        </div>
-
+            Delete Blog
+          }
+          @if (deletingId !== null) {
+            <span class="delete-spinner"></span>
+            Deleting...
+          }
+        </button>
+      </div>
     </div>
-
-</div>
+  </div>
+}

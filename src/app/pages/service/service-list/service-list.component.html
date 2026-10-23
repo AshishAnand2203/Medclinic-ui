@@ -1,726 +1,565 @@
 <div class="service-page">
 
 
-    <!-- =====================================================
-         PAGE HEADER
-    ====================================================== -->
+  <!-- =====================================================
+  PAGE HEADER
+  ====================================================== -->
 
-    <div class="page-heading">
+  <div class="page-heading">
 
-        <div>
+    <div>
 
-            <div class="breadcrumb-text">
-
-                <span>
-                    Content Management
-                </span>
-
-                <i class="fa-solid fa-chevron-right"></i>
-
-                <strong>
-                    Services
-                </strong>
-
-            </div>
-
-
-            <h1>
-                Services
-            </h1>
-
-
-            <p>
-                Manage medical services and sub-services.
-            </p>
-
-        </div>
-
-
-        <a
-            routerLink="/service/add"
-            class="add-service-btn">
-
-            <i class="fa-solid fa-plus"></i>
-
-            Add New Service
-
-        </a>
-
-    </div>
-
-
-
-    <!-- =====================================================
-         MESSAGES
-    ====================================================== -->
-
-    <div
-        class="alert-message success"
-        *ngIf="successMessage">
-
-        <i class="fa-solid fa-circle-check"></i>
+      <div class="breadcrumb-text">
 
         <span>
-            {{ successMessage }}
+          Content Management
         </span>
+
+        <i class="fa-solid fa-chevron-right"></i>
+
+        <strong>
+          Services
+        </strong>
+
+      </div>
+
+
+      <h1>
+        Services
+      </h1>
+
+
+      <p>
+        Manage medical services and sub-services.
+      </p>
 
     </div>
 
 
-    <div
-        class="alert-message error"
-        *ngIf="errorMessage">
+    <a
+      routerLink="/service/add"
+      class="add-service-btn">
 
-        <i class="fa-solid fa-circle-exclamation"></i>
+      <i class="fa-solid fa-plus"></i>
+
+      Add New Service
+
+    </a>
+
+  </div>
+
+
+
+  <!-- =====================================================
+  MESSAGES
+  ====================================================== -->
+
+  @if (successMessage) {
+    <div
+      class="alert-message success"
+      >
+      <i class="fa-solid fa-circle-check"></i>
+      <span>
+        {{ successMessage }}
+      </span>
+    </div>
+  }
+
+
+  @if (errorMessage) {
+    <div
+      class="alert-message error"
+      >
+      <i class="fa-solid fa-circle-exclamation"></i>
+      <span>
+        {{ errorMessage }}
+      </span>
+    </div>
+  }
+
+
+
+  <!-- =====================================================
+  FILTER CARD
+  ====================================================== -->
+
+  <div class="filter-card">
+
+    <div class="search-box">
+
+      <i class="fa-solid fa-magnifying-glass"></i>
+
+      <input
+        type="text"
+        [(ngModel)]="search"
+        (keyup.enter)="onSearch()"
+        placeholder="Search services...">
+
+    </div>
+
+
+    <div class="filter-select">
+
+      <select
+        [(ngModel)]="status"
+        (change)="onFilterChange()">
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="1">
+          Active
+        </option>
+
+        <option value="0">
+          Inactive
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <div class="filter-select">
+
+      <select
+        [(ngModel)]="parent"
+        (change)="onFilterChange()">
+
+        <option value="">
+          All Services
+        </option>
+
+        <option value="main">
+          Main Services
+        </option>
+
+        @for (item of parentServices; track item) {
+          <option
+            [value]="item.id">
+            Under: {{ item.title }}
+          </option>
+        }
+
+      </select>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="search-btn"
+      (click)="onSearch()">
+
+      <i class="fa-solid fa-magnifying-glass"></i>
+
+      Search
+
+    </button>
+
+
+    <button
+      type="button"
+      class="reset-btn"
+      (click)="resetFilters()">
+
+      <i class="fa-solid fa-rotate-left"></i>
+
+    </button>
+
+  </div>
+
+
+
+  <!-- =====================================================
+  TABLE CARD
+  ====================================================== -->
+
+  <div class="table-card">
+
+
+    <!-- =================================================
+    TABLE HEADER
+    ================================================== -->
+
+    <div class="table-card-header">
+
+      <div>
+
+        <strong>
+          Service Directory
+        </strong>
 
         <span>
-            {{ errorMessage }}
+          {{ total }} service{{ total === 1 ? '' : 's' }}
         </span>
 
-    </div>
+      </div>
 
 
+      <div class="per-page">
 
-    <!-- =====================================================
-         FILTER CARD
-    ====================================================== -->
-
-    <div class="filter-card">
-
-        <div class="search-box">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            <input
-                type="text"
-                [(ngModel)]="search"
-                (keyup.enter)="onSearch()"
-                placeholder="Search services...">
-
-        </div>
+        <span>
+          Show
+        </span>
 
 
-        <div class="filter-select">
+        <select
+          [(ngModel)]="limit"
+          (change)="onLimitChange()">
 
-            <select
-                [(ngModel)]="status"
-                (change)="onFilterChange()">
+          <option [ngValue]="10">
+            10
+          </option>
 
-                <option value="">
-                    All Status
-                </option>
+          <option [ngValue]="20">
+            20
+          </option>
 
-                <option value="1">
-                    Active
-                </option>
+          <option [ngValue]="50">
+            50
+          </option>
 
-                <option value="0">
-                    Inactive
-                </option>
+          <option [ngValue]="100">
+            100
+          </option>
 
-            </select>
+        </select>
 
-        </div>
-
-
-        <div class="filter-select">
-
-            <select
-                [(ngModel)]="parent"
-                (change)="onFilterChange()">
-
-                <option value="">
-                    All Services
-                </option>
-
-                <option value="main">
-                    Main Services
-                </option>
-
-                <option
-                    *ngFor="let item of parentServices"
-                    [value]="item.id">
-
-                    Under: {{ item.title }}
-
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <button
-            type="button"
-            class="search-btn"
-            (click)="onSearch()">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            Search
-
-        </button>
-
-
-        <button
-            type="button"
-            class="reset-btn"
-            (click)="resetFilters()">
-
-            <i class="fa-solid fa-rotate-left"></i>
-
-        </button>
+      </div>
 
     </div>
 
 
 
-    <!-- =====================================================
-         TABLE CARD
-    ====================================================== -->
-
-    <div class="table-card">
-
-
-        <!-- =================================================
-             TABLE HEADER
-        ================================================== -->
-
-        <div class="table-card-header">
-
-            <div>
-
-                <strong>
-                    Service Directory
-                </strong>
-
-                <span>
-                    {{ total }} service{{ total === 1 ? '' : 's' }}
-                </span>
-
-            </div>
-
-
-            <div class="per-page">
-
-                <span>
-                    Show
-                </span>
-
-
-                <select
-                    [(ngModel)]="limit"
-                    (change)="onLimitChange()">
-
-                    <option [ngValue]="10">
-                        10
-                    </option>
-
-                    <option [ngValue]="20">
-                        20
-                    </option>
-
-                    <option [ngValue]="50">
-                        50
-                    </option>
-
-                    <option [ngValue]="100">
-                        100
-                    </option>
-
-                </select>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- =================================================
-             LOADING
-        ================================================== -->
-
-        <div
-            class="loading-area"
-            *ngIf="isLoading">
-
-            <div class="spinner-border"></div>
-
-            <span>
-                Loading services...
-            </span>
-
-        </div>
-
-
-
-        <!-- =================================================
-             TABLE
-        ================================================== -->
-
-        <div
-            class="table-responsive"
-            *ngIf="!isLoading && services.length > 0">
-
-            <table class="service-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th class="number-column">
-                            #
-                        </th>
-
-                        <th>
-                            Service
-                        </th>
-
-                        <th>
-                            Type
-                        </th>
-
-                        <th>
-                            URL Slug
-                        </th>
-
-                        <th class="text-center">
-                            Status
-                        </th>
-
-                        <th class="text-center">
-                            Order
-                        </th>
-
-                        <th class="text-end">
-                            Actions
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    <tr
-                        *ngFor="
-                            let service of services;
-                            let i = index
-                        "
-                        [class.sub-service-row]="service.parent_id">
-
-
-                        <!-- NUMBER -->
-
-                        <td class="row-number">
-
-                            {{ getRowNumber(i) }}
-
-                        </td>
-
-
-
-                        <!-- SERVICE -->
-
-                        <td>
-
-                            <div
-                                class="service-info"
-                                [class.is-sub]="service.parent_id">
-
-
-                                <!-- SUB INDICATOR -->
-
-                                <div
-                                    class="sub-indicator"
-                                    *ngIf="service.parent_id">
-
-                                    <i class="fa-solid fa-turn-up"></i>
-
-                                </div>
-
-
-                                <!-- IMAGE -->
-
-                                <div class="service-image">
-
-                                    <img
-                                        *ngIf="service.image"
-                                        [src]="service.image"
-                                        [alt]="service.title">
-
-
-                                    <div
-                                        class="service-image-placeholder"
-                                        *ngIf="!service.image">
-
-                                        <i class="fa-solid fa-stethoscope"></i>
-
-                                    </div>
-
-                                </div>
-
-
-                                <!-- DETAILS -->
-
-                                <div class="service-details">
-
-                                    <strong>
-                                        {{ service.title }}
-                                    </strong>
-
-
-                                    <span
-                                        *ngIf="service.parent_title">
-
-                                        Under
-                                        {{ service.parent_title }}
-
-                                    </span>
-
-
-                                    <span
-                                        *ngIf="
-                                            !service.parent_title &&
-                                            service.short_description
-                                        ">
-
-                                        {{
-                                            service.short_description
-                                                | slice:0:70
-                                        }}
-
-                                        <ng-container
-                                            *ngIf="
-                                                service
-                                                    .short_description
-                                                    ?.length > 70
-                                            ">
-                                            ...
-                                        </ng-container>
-
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-
-                        <!-- TYPE -->
-
-                        <td>
-
-                            <span
-                                class="type-badge main"
-                                *ngIf="!service.parent_id">
-
-                                <i class="fa-solid fa-layer-group"></i>
-
-                                Main Service
-
-                            </span>
-
-
-                            <span
-                                class="type-badge sub"
-                                *ngIf="service.parent_id">
-
-                                <i class="fa-solid fa-code-branch"></i>
-
-                                Sub Service
-
-                            </span>
-
-                        </td>
-
-
-
-                        <!-- SLUG -->
-
-                        <td>
-
-                            <div class="slug-text">
-
-                                <i class="fa-solid fa-link"></i>
-
-                                {{ service.slug }}
-
-                            </div>
-
-                        </td>
-
-
-
-                        <!-- STATUS -->
-
-                        <td class="text-center">
-
-                            <button
-                                type="button"
-                                class="status-badge"
+    <!-- =================================================
+    LOADING
+    ================================================== -->
+
+    @if (isLoading) {
+      <div
+        class="loading-area"
+        >
+        <div class="spinner-border"></div>
+        <span>
+          Loading services...
+        </span>
+      </div>
+    }
+
+
+
+    <!-- =================================================
+    TABLE
+    ================================================== -->
+
+    @if (!isLoading && services.length > 0) {
+      <div
+        class="table-responsive"
+        >
+        <table class="service-table">
+          <thead>
+            <tr>
+              <th class="number-column">
+                #
+              </th>
+              <th>
+                Service
+              </th>
+              <th>
+                Type
+              </th>
+              <th>
+                URL Slug
+              </th>
+              <th class="text-center">
+                Status
+              </th>
+              <th class="text-center">
+                Order
+              </th>
+              <th class="text-end">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (
+              service of services; track
+              service; let i = $index) {
+              <tr
+                [class.sub-service-row]="service.parent_id">
+                <!-- NUMBER -->
+                <td class="row-number">
+                  {{ getRowNumber(i) }}
+                </td>
+                <!-- SERVICE -->
+                <td>
+                  <div
+                    class="service-info"
+                    [class.is-sub]="service.parent_id">
+                    <!-- SUB INDICATOR -->
+                    @if (service.parent_id) {
+                      <div
+                        class="sub-indicator"
+                        >
+                        <i class="fa-solid fa-turn-up"></i>
+                      </div>
+                    }
+                    <!-- IMAGE -->
+                    <div class="service-image">
+                      @if (service.image) {
+                        <img
+                          [src]="service.image"
+                          [alt]="service.title">
+                      }
+                      @if (!service.image) {
+                        <div
+                          class="service-image-placeholder"
+                          >
+                          <i class="fa-solid fa-stethoscope"></i>
+                        </div>
+                      }
+                    </div>
+                    <!-- DETAILS -->
+                    <div class="service-details">
+                      <strong>
+                        {{ service.title }}
+                      </strong>
+                      @if (service.parent_title) {
+                        <span
+                          >
+                          Under
+                          {{ service.parent_title }}
+                        </span>
+                      }
+                      @if (
+                        !service.parent_title &&
+                        service.short_description
+                        ) {
+                        <span
+                          >
+                          {{
+                          service.short_description
+                          | slice:0:70
+                          }}
+                          @if (
+                            service
+                            .short_description
+                            ?.length > 70
+                            ) {
+                            ...
+                          }
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </td>
+                <!-- TYPE -->
+                <td>
+                  @if (!service.parent_id) {
+                    <span
+                      class="type-badge main"
+                      >
+                      <i class="fa-solid fa-layer-group"></i>
+                      Main Service
+                    </span>
+                  }
+                  @if (service.parent_id) {
+                    <span
+                      class="type-badge sub"
+                      >
+                      <i class="fa-solid fa-code-branch"></i>
+                      Sub Service
+                    </span>
+                  }
+                </td>
+                <!-- SLUG -->
+                <td>
+                  <div class="slug-text">
+                    <i class="fa-solid fa-link"></i>
+                    {{ service.slug }}
+                  </div>
+                </td>
+                <!-- STATUS -->
+                <td class="text-center">
+                  <button
+                    type="button"
+                    class="status-badge"
                                 [class.active]="
                                     service.status == 1
                                 "
                                 [class.inactive]="
                                     service.status == 0
                                 "
-                                (click)="changeStatus(service)">
-
-                                <span></span>
-
-                                {{
-                                    service.status == 1
-                                        ? 'Active'
-                                        : 'Inactive'
-                                }}
-
-                            </button>
-
-                        </td>
-
-
-
-                        <!-- ORDER -->
-
-                        <td class="text-center">
-
-                            <span class="sort-order">
-
-                                {{ service.sort_order }}
-
-                            </span>
-
-                        </td>
-
-
-
-                        <!-- ACTIONS -->
-
-                        <td>
-
-                            <div class="action-buttons">
-
-                                <button
-                                    type="button"
-                                    class="action-btn edit"
-                                    title="Edit Service"
-                                    (click)="editService(service)">
-
-                                    <i class="fa-solid fa-pen"></i>
-
-                                </button>
+                    (click)="changeStatus(service)">
+                    <span></span>
+                    {{
+                    service.status == 1
+                    ? 'Active'
+                    : 'Inactive'
+                    }}
+                  </button>
+                </td>
+                <!-- ORDER -->
+                <td class="text-center">
+                  <span class="sort-order">
+                    {{ service.sort_order }}
+                  </span>
+                </td>
+                <!-- ACTIONS -->
+                <td>
+                  <div class="action-buttons">
+                    <button
+                      type="button"
+                      class="action-btn edit"
+                      title="Edit Service"
+                      (click)="editService(service)">
+                      <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="action-btn delete"
+                      title="Delete Service"
+                      (click)="confirmDelete(service)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
 
 
-                                <button
-                                    type="button"
-                                    class="action-btn delete"
-                                    title="Delete Service"
-                                    (click)="confirmDelete(service)">
 
-                                    <i class="fa-solid fa-trash"></i>
+    <!-- =================================================
+    EMPTY
+    ================================================== -->
 
-                                </button>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-                </tbody>
-
-            </table>
-
+    @if (!isLoading && services.length === 0) {
+      <div
+        class="empty-state"
+        >
+        <div class="empty-icon">
+          <i class="fa-solid fa-stethoscope"></i>
         </div>
+        <h3>
+          No Services Found
+        </h3>
+        <p>
+          No services match your current search or filters.
+        </p>
+        <a
+          routerLink="/service/add"
+          class="empty-add-btn">
+          <i class="fa-solid fa-plus"></i>
+          Add Your First Service
+        </a>
+      </div>
+    }
 
 
 
-        <!-- =================================================
-             EMPTY
-        ================================================== -->
+    <!-- =================================================
+    PAGINATION
+    ================================================== -->
 
-        <div
-            class="empty-state"
-            *ngIf="!isLoading && services.length === 0">
-
-            <div class="empty-icon">
-
-                <i class="fa-solid fa-stethoscope"></i>
-
-            </div>
-
-
-            <h3>
-                No Services Found
-            </h3>
-
-
-            <p>
-                No services match your current search or filters.
-            </p>
-
-
-            <a
-                routerLink="/service/add"
-                class="empty-add-btn">
-
-                <i class="fa-solid fa-plus"></i>
-
-                Add Your First Service
-
-            </a>
-
+    @if (!isLoading && totalPages > 1) {
+      <div
+        class="pagination-wrapper"
+        >
+        <div class="pagination-info">
+          Page
+          <strong>
+            {{ page }}
+          </strong>
+          of
+          <strong>
+            {{ totalPages }}
+          </strong>
         </div>
-
-
-
-        <!-- =================================================
-             PAGINATION
-        ================================================== -->
-
-        <div
-            class="pagination-wrapper"
-            *ngIf="!isLoading && totalPages > 1">
-
-
-            <div class="pagination-info">
-
-                Page
-
-                <strong>
-                    {{ page }}
-                </strong>
-
-                of
-
-                <strong>
-                    {{ totalPages }}
-                </strong>
-
-            </div>
-
-
-            <div class="pagination-buttons">
-
-
-                <button
-                    type="button"
-                    [disabled]="page === 1"
-                    (click)="previousPage()">
-
-                    <i class="fa-solid fa-chevron-left"></i>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    *ngFor="let item of pageNumbers"
-                    [class.active]="item === page"
-                    (click)="goToPage(item)">
-
-                    {{ item }}
-
-                </button>
-
-
-                <button
-                    type="button"
-                    [disabled]="page === totalPages"
-                    (click)="nextPage()">
-
-                    <i class="fa-solid fa-chevron-right"></i>
-
-                </button>
-
-            </div>
-
+        <div class="pagination-buttons">
+          <button
+            type="button"
+            [disabled]="page === 1"
+            (click)="previousPage()">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          @for (item of pageNumbers; track item) {
+            <button
+              type="button"
+              [class.active]="item === page"
+              (click)="goToPage(item)">
+              {{ item }}
+            </button>
+          }
+          <button
+            type="button"
+            [disabled]="page === totalPages"
+            (click)="nextPage()">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
+      </div>
+    }
 
-    </div>
+  </div>
 
 </div>
 
 
 
 <!-- =========================================================
-     DELETE MODAL
+DELETE MODAL
 ========================================================== -->
 
-<div
+@if (deleteServiceData) {
+  <div
     class="delete-overlay"
-    *ngIf="deleteServiceData">
-
-
+    >
     <div class="delete-modal">
-
-
-        <div class="delete-icon">
-
-            <i class="fa-solid fa-trash-can"></i>
-
-        </div>
-
-
-        <h3>
-            Delete Service?
-        </h3>
-
-
-        <p>
-
-            Are you sure you want to delete
-
-            <strong>
-                "{{ deleteServiceData.title }}"
-            </strong>?
-
-        </p>
-
-
+      <div class="delete-icon">
+        <i class="fa-solid fa-trash-can"></i>
+      </div>
+      <h3>
+        Delete Service?
+      </h3>
+      <p>
+        Are you sure you want to delete
+        <strong>
+          "{{ deleteServiceData.title }}"
+        </strong>?
+      </p>
+      @if (!deleteServiceData.parent_id) {
         <div
-            class="delete-warning"
-            *ngIf="!deleteServiceData.parent_id">
-
-            <i class="fa-solid fa-triangle-exclamation"></i>
-
-            <span>
-                Deleting a main service will also delete its
-                sub-services.
-            </span>
-
+          class="delete-warning"
+          >
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>
+            Deleting a main service will also delete its
+            sub-services.
+          </span>
         </div>
-
-
-        <div class="delete-actions">
-
-            <button
-                type="button"
-                class="cancel-delete-btn"
-                (click)="cancelDelete()">
-
-                Cancel
-
-            </button>
-
-
-            <button
-                type="button"
-                class="confirm-delete-btn"
-                (click)="deleteService()">
-
-                <i class="fa-solid fa-trash"></i>
-
-                Delete Service
-
-            </button>
-
-        </div>
-
+      }
+      <div class="delete-actions">
+        <button
+          type="button"
+          class="cancel-delete-btn"
+          (click)="cancelDelete()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="confirm-delete-btn"
+          (click)="deleteService()">
+          <i class="fa-solid fa-trash"></i>
+          Delete Service
+        </button>
+      </div>
     </div>
-
-</div>
+  </div>
+}

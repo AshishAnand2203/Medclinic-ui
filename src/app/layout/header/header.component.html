@@ -1,141 +1,144 @@
 <header class="admin-header">
 
-    <div class="header-left">
+  <div class="header-left">
 
-        <button
-            type="button"
-            class="header-menu desktop-menu"
-            (click)="desktopToggle()">
+    <button
+      type="button"
+      class="header-menu desktop-menu"
+      (click)="desktopToggle()">
 
-            <i class="fa-solid fa-bars-staggered"></i>
+      <i class="fa-solid fa-bars-staggered"></i>
 
-        </button>
-
-
-        <button
-            type="button"
-            class="header-menu mobile-menu"
-            (click)="mobileToggle()">
-
-            <i class="fa-solid fa-bars"></i>
-
-        </button>
+    </button>
 
 
-        <div class="header-title">
+    <button
+      type="button"
+      class="header-menu mobile-menu"
+      (click)="mobileToggle()">
 
-            <strong>Administration</strong>
+      <i class="fa-solid fa-bars"></i>
 
-            <span>Medclinic Family Practice</span>
+    </button>
 
-        </div>
+
+    <div class="header-title">
+
+      <strong>Administration</strong>
+
+      <span>Medclinic Family Practice</span>
 
     </div>
 
-
-    <div class="header-right">
-
-        <button
-            type="button"
-            class="notification-btn">
-
-            <i class="fa-regular fa-bell"></i>
-
-            <span class="notification-dot"></span>
-
-        </button>
+  </div>
 
 
-        <div class="dropdown">
+  <div class="header-right">
 
-            <button
-                class="user-button"
-                type="button"
-                data-bs-toggle="dropdown">
+    <button
+      type="button"
+      class="notification-btn">
 
-                <div class="user-avatar">
+      <i class="fa-regular fa-bell"></i>
 
-                    <span *ngIf="!user?.image">
-                        {{ user?.name?.charAt(0) || 'A' }}
-                    </span>
+      <span class="notification-dot"></span>
 
-                    <img
-                        *ngIf="user?.image"
-                        [src]="user.image"
-                        alt="Admin">
-
-                </div>
+    </button>
 
 
-                <div class="user-info">
+    <div class="dropdown">
 
-                    <strong>
-                        {{ user?.name || 'Administrator' }}
-                    </strong>
+      <button
+        class="user-button"
+        type="button"
+        data-bs-toggle="dropdown">
 
-                    <span>
-                        {{ user?.role || 'Admin' }}
-                    </span>
+        <div class="user-avatar">
 
-                </div>
+          @if (!user?.image) {
+            <span>
+              {{ user?.name?.charAt(0) || 'A' }}
+            </span>
+          }
 
-
-                <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
-
-            </button>
-
-
-            <ul class="dropdown-menu dropdown-menu-end">
-
-                <li>
-
-                    <a class="dropdown-item" href="javascript:void(0)">
-
-                        <i class="fa-regular fa-user"></i>
-
-                        My Profile
-
-                    </a>
-
-                </li>
-
-                <li>
-
-                    <a
-                        class="dropdown-item"
-                        routerLink="/setting">
-
-                        <i class="fa-solid fa-gear"></i>
-
-                        Settings
-
-                    </a>
-
-                </li>
-
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-
-                <li>
-
-                    <button
-                        type="button"
-                        class="dropdown-item logout-item"
-                        (click)="logout()">
-
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
-
-                        Logout
-
-                    </button>
-
-                </li>
-
-            </ul>
+          @if (user?.image) {
+            <img
+              [src]="user.image"
+              alt="Admin">
+          }
 
         </div>
 
+
+        <div class="user-info">
+
+          <strong>
+            {{ user?.name || 'Administrator' }}
+          </strong>
+
+          <span>
+            {{ user?.role || 'Admin' }}
+          </span>
+
+        </div>
+
+
+        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+
+      </button>
+
+
+      <ul class="dropdown-menu dropdown-menu-end">
+
+        <li>
+
+          <a class="dropdown-item" href="javascript:void(0)">
+
+            <i class="fa-regular fa-user"></i>
+
+            My Profile
+
+          </a>
+
+        </li>
+
+        <li>
+
+          <a
+            class="dropdown-item"
+            routerLink="/setting">
+
+            <i class="fa-solid fa-gear"></i>
+
+            Settings
+
+          </a>
+
+        </li>
+
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+
+        <li>
+
+          <button
+            type="button"
+            class="dropdown-item logout-item"
+            (click)="logout()">
+
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+            Logout
+
+          </button>
+
+        </li>
+
+      </ul>
+
     </div>
+
+  </div>
 
 </header>

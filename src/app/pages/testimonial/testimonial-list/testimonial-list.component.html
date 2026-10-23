@@ -1,690 +1,536 @@
 <!-- =========================================================
-     PAGE HEADER
+PAGE HEADER
 ========================================================= -->
 
 <div class="page-header">
 
-    <div class="page-header-left">
+  <div class="page-header-left">
 
-        <div class="breadcrumb-text">
-            Content Management
-            <span>/</span>
-            <strong>Testimonials</strong>
-        </div>
-
-        <h1>
-            Testimonial Management
-        </h1>
-
-        <p>
-            Manage patient testimonials displayed on the website.
-        </p>
-
+    <div class="breadcrumb-text">
+      Content Management
+      <span>/</span>
+      <strong>Testimonials</strong>
     </div>
 
+    <h1>
+      Testimonial Management
+    </h1>
 
-    <div class="page-header-right">
+    <p>
+      Manage patient testimonials displayed on the website.
+    </p>
 
-        <button
-            type="button"
-            class="add-page-btn"
-            (click)="addTestimonial()">
+  </div>
 
-            <i class="fa-solid fa-plus"></i>
 
-            <span>
-                Add New Testimonial
-            </span>
+  <div class="page-header-right">
 
-        </button>
+    <button
+      type="button"
+      class="add-page-btn"
+      (click)="addTestimonial()">
 
-    </div>
+      <i class="fa-solid fa-plus"></i>
+
+      <span>
+        Add New Testimonial
+      </span>
+
+    </button>
+
+  </div>
 
 </div>
 
 
 <!-- =========================================================
-     MESSAGES
+MESSAGES
 ========================================================= -->
 
-<div
+@if (successMessage) {
+  <div
     class="message-box success-message"
-    *ngIf="successMessage">
-
+    >
     <i class="fa-solid fa-circle-check"></i>
-
     <span>
-        {{ successMessage }}
+      {{ successMessage }}
     </span>
+  </div>
+}
 
-</div>
 
-
-<div
+@if (errorMessage) {
+  <div
     class="message-box error-message"
-    *ngIf="errorMessage">
-
+    >
     <i class="fa-solid fa-circle-exclamation"></i>
-
     <span>
-        {{ errorMessage }}
+      {{ errorMessage }}
     </span>
-
-</div>
+  </div>
+}
 
 
 <!-- =========================================================
-     FILTER
+FILTER
 ========================================================= -->
 
 <div class="filter-card">
 
-    <div class="filter-left">
+  <div class="filter-left">
 
-        <!-- Search -->
+    <!-- Search -->
 
-        <div class="search-box">
+    <div class="search-box">
 
-            <i class="fa-solid fa-magnifying-glass"></i>
+      <i class="fa-solid fa-magnifying-glass"></i>
 
-            <input
-                type="text"
-                [(ngModel)]="searchText"
-                (keyup.enter)="applyFilters()"
-                placeholder="Search testimonials...">
-
-        </div>
-
-
-        <!-- Status -->
-
-        <select
-            class="status-select"
-            [(ngModel)]="statusFilter">
-
-            <option value="">
-                All Status
-            </option>
-
-            <option value="1">
-                Active
-            </option>
-
-            <option value="0">
-                Inactive
-            </option>
-
-        </select>
-
-
-        <!-- Search -->
-
-        <button
-            type="button"
-            class="search-btn"
-            (click)="applyFilters()">
-
-            <i class="fa-solid fa-magnifying-glass"></i>
-
-            Search
-
-        </button>
-
-
-        <!-- Reset -->
-
-        <button
-            type="button"
-            class="reset-btn"
-            *ngIf="searchText || statusFilter"
-            (click)="resetFilters()">
-
-            <i class="fa-solid fa-rotate-left"></i>
-
-        </button>
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        (keyup.enter)="applyFilters()"
+        placeholder="Search testimonials...">
 
     </div>
 
 
-    <!-- Show Entries -->
+    <!-- Status -->
 
-    <div class="filter-right">
+    <select
+      class="status-select"
+      [(ngModel)]="statusFilter">
 
-        <span>
-            Show
-        </span>
+      <option value="">
+        All Status
+      </option>
 
-        <select
-            [(ngModel)]="pageSize"
-            (change)="changePageSize()">
+      <option value="1">
+        Active
+      </option>
 
-            <option [ngValue]="10">
-                10
-            </option>
+      <option value="0">
+        Inactive
+      </option>
 
-            <option [ngValue]="25">
-                25
-            </option>
+    </select>
 
-            <option [ngValue]="50">
-                50
-            </option>
 
-            <option [ngValue]="100">
-                100
-            </option>
+    <!-- Search -->
 
-        </select>
+    <button
+      type="button"
+      class="search-btn"
+      (click)="applyFilters()">
 
-        <span>
-            entries
-        </span>
+      <i class="fa-solid fa-magnifying-glass"></i>
 
-    </div>
+      Search
+
+    </button>
+
+
+    <!-- Reset -->
+
+    @if (searchText || statusFilter) {
+      <button
+        type="button"
+        class="reset-btn"
+        (click)="resetFilters()">
+        <i class="fa-solid fa-rotate-left"></i>
+      </button>
+    }
+
+  </div>
+
+
+  <!-- Show Entries -->
+
+  <div class="filter-right">
+
+    <span>
+      Show
+    </span>
+
+    <select
+      [(ngModel)]="pageSize"
+      (change)="changePageSize()">
+
+      <option [ngValue]="10">
+        10
+      </option>
+
+      <option [ngValue]="25">
+        25
+      </option>
+
+      <option [ngValue]="50">
+        50
+      </option>
+
+      <option [ngValue]="100">
+        100
+      </option>
+
+    </select>
+
+    <span>
+      entries
+    </span>
+
+  </div>
 
 </div>
 
 
 <!-- =========================================================
-     TABLE
+TABLE
 ========================================================= -->
 
 <div class="table-card">
 
-    <!-- Loading -->
+  <!-- Loading -->
 
+  @if (isLoading) {
     <div
-        class="table-loading"
-        *ngIf="isLoading">
-
-        <div class="loading-spinner"></div>
-
-        <span>
-            Loading testimonials...
-        </span>
-
+      class="table-loading"
+      >
+      <div class="loading-spinner"></div>
+      <span>
+        Loading testimonials...
+      </span>
     </div>
+  }
 
 
-    <!-- Table -->
+  <!-- Table -->
 
+  @if (!isLoading && paginatedTestimonials.length) {
     <div
-        class="table-responsive"
-        *ngIf="!isLoading && paginatedTestimonials.length">
-
-        <table class="testimonial-table">
-
-            <thead>
-
-                <tr>
-
-                    <th class="sl-col">
-                        SL
-                    </th>
-
-                    <th>
+      class="table-responsive"
+      >
+      <table class="testimonial-table">
+        <thead>
+          <tr>
+            <th class="sl-col">
+              SL
+            </th>
+            <th>
+              Patient
+            </th>
+            <th>
+              Testimonial
+            </th>
+            <th class="rating-col">
+              Rating
+            </th>
+            <th class="order-col">
+              Order
+            </th>
+            <th class="status-col">
+              Status
+            </th>
+            <th class="action-col">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            testimonial of paginatedTestimonials; track
+            testimonial; let i = $index) {
+            <tr
+              >
+              <!-- SL -->
+              <td class="sl-cell">
+                {{
+                ((currentPage - 1) * pageSize)
+                + i
+                + 1
+                }}
+              </td>
+              <!-- Patient -->
+              <td>
+                <div class="patient-wrap">
+                  <!-- Image -->
+                  <div class="patient-image">
+                    @if (testimonial.image_url) {
+                      <img
+                        [src]="testimonial.image_url"
+                        [alt]="testimonial.name">
+                    }
+                    @if (!testimonial.image_url) {
+                      <div
+                        class="patient-placeholder"
+                        >
+                        <i class="fa-regular fa-user"></i>
+                      </div>
+                    }
+                  </div>
+                  <!-- Info -->
+                  <div class="patient-info">
+                    <strong>
+                      {{ testimonial.name }}
+                    </strong>
+                    @if (testimonial.designation) {
+                      <span
+                        >
+                        {{ testimonial.designation }}
+                      </span>
+                    }
+                    @if (!testimonial.designation) {
+                      <span
+                        >
                         Patient
-                    </th>
-
-                    <th>
-                        Testimonial
-                    </th>
-
-                    <th class="rating-col">
-                        Rating
-                    </th>
-
-                    <th class="order-col">
-                        Order
-                    </th>
-
-                    <th class="status-col">
-                        Status
-                    </th>
-
-                    <th class="action-col">
-                        Actions
-                    </th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                <tr
-                    *ngFor="
-                        let testimonial of paginatedTestimonials;
-                        let i = index
-                    ">
-
-
-                    <!-- SL -->
-
-                    <td class="sl-cell">
-
-                        {{
-                            ((currentPage - 1) * pageSize)
-                            + i
-                            + 1
-                        }}
-
-                    </td>
-
-
-                    <!-- Patient -->
-
-                    <td>
-
-                        <div class="patient-wrap">
-
-
-                            <!-- Image -->
-
-                            <div class="patient-image">
-
-                                <img
-                                    *ngIf="testimonial.image_url"
-                                    [src]="testimonial.image_url"
-                                    [alt]="testimonial.name">
-
-
-                                <div
-                                    class="patient-placeholder"
-                                    *ngIf="!testimonial.image_url">
-
-                                    <i class="fa-regular fa-user"></i>
-
-                                </div>
-
-                            </div>
-
-
-                            <!-- Info -->
-
-                            <div class="patient-info">
-
-                                <strong>
-                                    {{ testimonial.name }}
-                                </strong>
-
-                                <span
-                                    *ngIf="testimonial.designation">
-
-                                    {{ testimonial.designation }}
-
-                                </span>
-
-                                <span
-                                    *ngIf="!testimonial.designation">
-
-                                    Patient
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </td>
-
-
-                    <!-- Testimonial -->
-
-                    <td>
-
-                        <div
-                            class="testimonial-text"
-                            [title]="testimonial.testimonial">
-
-                            {{ testimonial.testimonial }}
-
-                        </div>
-
-                    </td>
-
-
-                    <!-- Rating -->
-
-                    <td>
-
-                        <div class="rating-wrap">
-
-                            <div class="stars">
-
-                                <i
-                                    *ngFor="let star of getStars(testimonial.rating)"
-                                    class="fa-solid fa-star"
-                                    [class.star-empty]="star === 0">
-                                </i>
-
-                            </div>
-
-                            <span>
-                                {{ testimonial.rating }}/5
-                            </span>
-
-                        </div>
-
-                    </td>
-
-
-                    <!-- Sort Order -->
-
-                    <td>
-
-                        <span class="sort-order">
-                            {{ testimonial.sort_order }}
-                        </span>
-
-                    </td>
-
-
-                    <!-- Status -->
-
-                    <td>
-
-                        <button
-                            type="button"
-                            class="status-badge"
-                            [class.active]="testimonial.status == 1"
-                            [class.inactive]="testimonial.status != 1"
-                            [disabled]="updatingStatusId === testimonial.id"
-                            (click)="changeStatus(testimonial)">
-
-                            <span class="status-dot"></span>
-
-                            <span
-                                *ngIf="
-                                    updatingStatusId !==
-                                    testimonial.id
-                                ">
-
-                                {{
-                                    testimonial.status == 1
-                                        ? 'Active'
-                                        : 'Inactive'
-                                }}
-
-                            </span>
-
-
-                            <span
-                                *ngIf="
-                                    updatingStatusId ===
-                                    testimonial.id
-                                ">
-
-                                Updating...
-
-                            </span>
-
-                        </button>
-
-                    </td>
-
-
-                    <!-- Actions -->
-
-                    <td>
-
-                        <div class="action-wrap">
-
-                            <button
-                                type="button"
-                                class="action-btn edit-btn"
-                                title="Edit testimonial"
-                                (click)="editTestimonial(testimonial)">
-
-                                <i class="fa-regular fa-pen-to-square"></i>
-
-                            </button>
-
-
-                            <button
-                                type="button"
-                                class="action-btn delete-btn"
-                                title="Delete testimonial"
-                                (click)="confirmDelete(testimonial)">
-
-                                <i class="fa-regular fa-trash-can"></i>
-
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
+                      </span>
+                    }
+                  </div>
+                </div>
+              </td>
+              <!-- Testimonial -->
+              <td>
+                <div
+                  class="testimonial-text"
+                  [title]="testimonial.testimonial">
+                  {{ testimonial.testimonial }}
+                </div>
+              </td>
+              <!-- Rating -->
+              <td>
+                <div class="rating-wrap">
+                  <div class="stars">
+                    @for (star of getStars(testimonial.rating); track star) {
+                      <i
+                        class="fa-solid fa-star"
+                        [class.star-empty]="star === 0">
+                      </i>
+                    }
+                  </div>
+                  <span>
+                    {{ testimonial.rating }}/5
+                  </span>
+                </div>
+              </td>
+              <!-- Sort Order -->
+              <td>
+                <span class="sort-order">
+                  {{ testimonial.sort_order }}
+                </span>
+              </td>
+              <!-- Status -->
+              <td>
+                <button
+                  type="button"
+                  class="status-badge"
+                  [class.active]="testimonial.status == 1"
+                  [class.inactive]="testimonial.status != 1"
+                  [disabled]="updatingStatusId === testimonial.id"
+                  (click)="changeStatus(testimonial)">
+                  <span class="status-dot"></span>
+                  @if (
+                    updatingStatusId !==
+                    testimonial.id
+                    ) {
+                    <span
+                      >
+                      {{
+                      testimonial.status == 1
+                      ? 'Active'
+                      : 'Inactive'
+                      }}
+                    </span>
+                  }
+                  @if (
+                    updatingStatusId ===
+                    testimonial.id
+                    ) {
+                    <span
+                      >
+                      Updating...
+                    </span>
+                  }
+                </button>
+              </td>
+              <!-- Actions -->
+              <td>
+                <div class="action-wrap">
+                  <button
+                    type="button"
+                    class="action-btn edit-btn"
+                    title="Edit testimonial"
+                    (click)="editTestimonial(testimonial)">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="action-btn delete-btn"
+                    title="Delete testimonial"
+                    (click)="confirmDelete(testimonial)">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
+  }
 
 
-    <!-- =====================================================
-         EMPTY STATE
-    ====================================================== -->
+  <!-- =====================================================
+  EMPTY STATE
+  ====================================================== -->
 
+  @if (
+    !isLoading &&
+    !paginatedTestimonials.length
+    ) {
     <div
-        class="empty-state"
-        *ngIf="
-            !isLoading &&
-            !paginatedTestimonials.length
-        ">
-
-        <div class="empty-icon">
-
-            <i class="fa-regular fa-comment-dots"></i>
-
-        </div>
-
-        <h3>
-            No Testimonials Found
-        </h3>
-
-        <p *ngIf="!searchText && !statusFilter">
-            You haven't added any testimonials yet.
+      class="empty-state"
+      >
+      <div class="empty-icon">
+        <i class="fa-regular fa-comment-dots"></i>
+      </div>
+      <h3>
+        No Testimonials Found
+      </h3>
+      @if (!searchText && !statusFilter) {
+        <p>
+          You haven't added any testimonials yet.
         </p>
-
-        <p *ngIf="searchText || statusFilter">
-            No testimonials match your current filters.
+      }
+      @if (searchText || statusFilter) {
+        <p>
+          No testimonials match your current filters.
         </p>
-
-
+      }
+      @if (!searchText && !statusFilter) {
         <button
-            *ngIf="!searchText && !statusFilter"
-            type="button"
-            class="empty-add-btn"
-            (click)="addTestimonial()">
-
-            <i class="fa-solid fa-plus"></i>
-
-            Add Testimonial
-
+          type="button"
+          class="empty-add-btn"
+          (click)="addTestimonial()">
+          <i class="fa-solid fa-plus"></i>
+          Add Testimonial
         </button>
-
-
+      }
+      @if (searchText || statusFilter) {
         <button
-            *ngIf="searchText || statusFilter"
-            type="button"
-            class="empty-reset-btn"
-            (click)="resetFilters()">
-
-            Clear Filters
-
+          type="button"
+          class="empty-reset-btn"
+          (click)="resetFilters()">
+          Clear Filters
         </button>
-
+      }
     </div>
+  }
 
 
-    <!-- =====================================================
-         TABLE FOOTER / PAGINATION
-    ====================================================== -->
+  <!-- =====================================================
+  TABLE FOOTER / PAGINATION
+  ====================================================== -->
 
+  @if (
+    !isLoading &&
+    filteredTestimonials.length
+    ) {
     <div
-        class="table-footer"
-        *ngIf="
-            !isLoading &&
-            filteredTestimonials.length
-        ">
-
-
-        <!-- Result Info -->
-
-        <div class="result-info">
-
-            Showing
-
-            <strong>
-                {{ resultStart }}
-            </strong>
-
-            to
-
-            <strong>
-                {{ resultEnd }}
-            </strong>
-
-            of
-
-            <strong>
-                {{ filteredTestimonials.length }}
-            </strong>
-
-            entries
-
-        </div>
-
-
-        <!-- Pagination -->
-
-        <div class="pagination-wrap">
-
-
-            <button
-                type="button"
-                class="pagination-btn arrow-btn"
-                [disabled]="currentPage === 1"
-                (click)="previousPage()">
-
-                <i class="fa-solid fa-chevron-left"></i>
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn"
-                *ngFor="let page of getPageNumbers()"
-                [class.active]="currentPage === page"
-                (click)="goToPage(page)">
-
-                {{ page }}
-
-            </button>
-
-
-            <button
-                type="button"
-                class="pagination-btn arrow-btn"
-                [disabled]="currentPage === totalPages"
-                (click)="nextPage()">
-
-                <i class="fa-solid fa-chevron-right"></i>
-
-            </button>
-
-        </div>
-
+      class="table-footer"
+      >
+      <!-- Result Info -->
+      <div class="result-info">
+        Showing
+        <strong>
+          {{ resultStart }}
+        </strong>
+        to
+        <strong>
+          {{ resultEnd }}
+        </strong>
+        of
+        <strong>
+          {{ filteredTestimonials.length }}
+        </strong>
+        entries
+      </div>
+      <!-- Pagination -->
+      <div class="pagination-wrap">
+        <button
+          type="button"
+          class="pagination-btn arrow-btn"
+          [disabled]="currentPage === 1"
+          (click)="previousPage()">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        @for (page of getPageNumbers(); track page) {
+          <button
+            type="button"
+            class="pagination-btn"
+            [class.active]="currentPage === page"
+            (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        }
+        <button
+          type="button"
+          class="pagination-btn arrow-btn"
+          [disabled]="currentPage === totalPages"
+          (click)="nextPage()">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
     </div>
+  }
 
 </div>
 
 
 <!-- =========================================================
-     DELETE CONFIRMATION MODAL
+DELETE CONFIRMATION MODAL
 ========================================================= -->
 
-<div
+@if (showDeleteModal) {
+  <div
     class="delete-modal-backdrop"
-    *ngIf="showDeleteModal"
     (click)="closeDeleteModal()">
-
-
     <div
-        class="delete-modal"
-        (click)="$event.stopPropagation()">
-
-
-        <div class="delete-modal-icon">
-
+      class="delete-modal"
+      (click)="$event.stopPropagation()">
+      <div class="delete-modal-icon">
+        <i class="fa-regular fa-trash-can"></i>
+      </div>
+      <h3>
+        Delete Testimonial?
+      </h3>
+      <p>
+        Are you sure you want to delete the testimonial from
+        <strong>
+          {{ selectedTestimonial?.name }}
+        </strong>?
+        This action cannot be undone.
+      </p>
+      <div class="delete-modal-actions">
+        <button
+          type="button"
+          class="cancel-delete-btn"
+          [disabled]="deletingId !== null"
+          (click)="closeDeleteModal()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="confirm-delete-btn"
+          [disabled]="deletingId !== null"
+          (click)="deleteTestimonial()">
+          @if (deletingId === null) {
             <i class="fa-regular fa-trash-can"></i>
-
-        </div>
-
-
-        <h3>
-            Delete Testimonial?
-        </h3>
-
-
-        <p>
-
-            Are you sure you want to delete the testimonial from
-
-            <strong>
-                {{ selectedTestimonial?.name }}
-            </strong>?
-
-            This action cannot be undone.
-
-        </p>
-
-
-        <div class="delete-modal-actions">
-
-            <button
-                type="button"
-                class="cancel-delete-btn"
-                [disabled]="deletingId !== null"
-                (click)="closeDeleteModal()">
-
-                Cancel
-
-            </button>
-
-
-            <button
-                type="button"
-                class="confirm-delete-btn"
-                [disabled]="deletingId !== null"
-                (click)="deleteTestimonial()">
-
-                <ng-container *ngIf="deletingId === null">
-
-                    <i class="fa-regular fa-trash-can"></i>
-
-                    Delete
-
-                </ng-container>
-
-
-                <ng-container *ngIf="deletingId !== null">
-
-                    <span class="button-spinner"></span>
-
-                    Deleting...
-
-                </ng-container>
-
-            </button>
-
-        </div>
-
+            Delete
+          }
+          @if (deletingId !== null) {
+            <span class="button-spinner"></span>
+            Deleting...
+          }
+        </button>
+      </div>
     </div>
-
-</div>
+  </div>
+}

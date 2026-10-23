@@ -1,622 +1,466 @@
 <div class="page-management">
 
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+  <!-- =====================================================
+  HEADER
+  ====================================================== -->
 
-    <div class="page-header">
+  <div class="page-header">
 
-        <div>
+    <div>
 
-            <div class="breadcrumb-text">
+      <div class="breadcrumb-text">
 
-                <span>
-                    Content Management
-                </span>
+        <span>
+          Content Management
+        </span>
 
-                <i class="fa-solid fa-chevron-right"></i>
+        <i class="fa-solid fa-chevron-right"></i>
 
-                <strong>
-                    Pages
-                </strong>
+        <strong>
+          Pages
+        </strong>
 
-            </div>
-
-
-            <h1>
-                Page Management
-            </h1>
+      </div>
 
 
-            <p>
-                Manage your website pages, content and visibility.
-            </p>
-
-        </div>
+      <h1>
+        Page Management
+      </h1>
 
 
-        <a
-            routerLink="/page/add"
-            class="add-page-btn">
+      <p>
+        Manage your website pages, content and visibility.
+      </p>
 
-            <i class="fa-solid fa-plus"></i>
+    </div>
 
-            Add New Page
 
-        </a>
+    <a
+      routerLink="/page/add"
+      class="add-page-btn">
+
+      <i class="fa-solid fa-plus"></i>
+
+      Add New Page
+
+    </a>
+
+  </div>
+
+
+
+  <!-- =====================================================
+  FILTER
+  ====================================================== -->
+
+  <div class="filter-card">
+
+    <div class="filter-left">
+
+
+      <!-- SEARCH -->
+
+      <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+          type="text"
+          [(ngModel)]="search"
+          (keyup.enter)="onSearch()"
+          placeholder="Search page title or slug...">
+
+      </div>
+
+
+
+      <!-- STATUS -->
+
+      <select
+        class="status-select"
+        [(ngModel)]="status"
+        (change)="onStatusChange()">
+
+        <option value="">
+          All Status
+        </option>
+
+        <option value="1">
+          Active
+        </option>
+
+        <option value="0">
+          Inactive
+        </option>
+
+      </select>
+
+
+
+      <!-- SEARCH -->
+
+      <button
+        type="button"
+        class="search-btn"
+        (click)="onSearch()">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        Search
+
+      </button>
+
+
+
+      <!-- RESET -->
+
+      @if (
+        search ||
+        status !== ''
+        ) {
+        <button
+          type="button"
+          class="reset-btn"
+          (click)="resetFilters()">
+          <i class="fa-solid fa-rotate-left"></i>
+          Reset
+        </button>
+      }
 
     </div>
 
 
 
-    <!-- =====================================================
-         FILTER
-    ====================================================== -->
+    <!-- SHOW ENTRIES -->
 
-    <div class="filter-card">
+    <div class="filter-right">
 
-        <div class="filter-left">
-
-
-            <!-- SEARCH -->
-
-            <div class="search-box">
-
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-                <input
-                    type="text"
-                    [(ngModel)]="search"
-                    (keyup.enter)="onSearch()"
-                    placeholder="Search page title or slug...">
-
-            </div>
+      <span>
+        Show
+      </span>
 
 
+      <select
+        [(ngModel)]="perPage"
+        (change)="changePerPage()">
 
-            <!-- STATUS -->
+        <option [ngValue]="10">
+          10
+        </option>
 
-            <select
-                class="status-select"
-                [(ngModel)]="status"
-                (change)="onStatusChange()">
+        <option [ngValue]="20">
+          20
+        </option>
 
-                <option value="">
-                    All Status
-                </option>
+        <option [ngValue]="50">
+          50
+        </option>
 
-                <option value="1">
-                    Active
-                </option>
-
-                <option value="0">
-                    Inactive
-                </option>
-
-            </select>
+      </select>
 
 
-
-            <!-- SEARCH -->
-
-            <button
-                type="button"
-                class="search-btn"
-                (click)="onSearch()">
-
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-                Search
-
-            </button>
-
-
-
-            <!-- RESET -->
-
-            <button
-                type="button"
-                class="reset-btn"
-                *ngIf="
-                    search ||
-                    status !== ''
-                "
-                (click)="resetFilters()">
-
-                <i class="fa-solid fa-rotate-left"></i>
-
-                Reset
-
-            </button>
-
-        </div>
-
-
-
-        <!-- SHOW ENTRIES -->
-
-        <div class="filter-right">
-
-            <span>
-                Show
-            </span>
-
-
-            <select
-                [(ngModel)]="perPage"
-                (change)="changePerPage()">
-
-                <option [ngValue]="10">
-                    10
-                </option>
-
-                <option [ngValue]="20">
-                    20
-                </option>
-
-                <option [ngValue]="50">
-                    50
-                </option>
-
-            </select>
-
-
-            <span>
-                entries
-            </span>
-
-        </div>
+      <span>
+        entries
+      </span>
 
     </div>
 
+  </div>
 
 
-    <!-- =====================================================
-         TABLE
-    ====================================================== -->
 
-    <div class="table-card">
+  <!-- =====================================================
+  TABLE
+  ====================================================== -->
+
+  <div class="table-card">
 
 
-        <!-- =================================================
-             LOADING
-        ================================================== -->
+    <!-- =================================================
+    LOADING
+    ================================================== -->
 
+    @if (isLoading) {
+      <div
+        class="table-loading"
+        >
         <div
-            class="table-loading"
-            *ngIf="isLoading">
-
-            <div
-                class="spinner-border"
-                role="status">
-            </div>
-
-
-            <span>
-                Loading pages...
-            </span>
-
+          class="spinner-border"
+          role="status">
         </div>
-
-
-
-        <!-- =================================================
-             DATA
-        ================================================== -->
-
-        <div
-            class="table-responsive"
-            *ngIf="!isLoading">
-
-
-            <table class="page-table">
-
-
-                <thead>
-
-                    <tr>
-
-                        <th class="serial-column">
-                            #
-                        </th>
-
-                        <th>
-                            Page
-                        </th>
-
-                        <th>
-                            URL Slug
-                        </th>
-
-                        <th>
-                            Status
-                        </th>
-
-                        <th>
-                            Updated
-                        </th>
-
-                        <th class="action-column">
-                            Actions
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-
-                <tbody>
-
-
-                    <tr
-                        *ngFor="
-                            let page of pages;
-                            let i = index
-                        ">
-
-
-                        <!-- SERIAL -->
-
-                        <td>
-
-                            <span class="serial-number">
-
-                                {{ getSerial(i) }}
-
-                            </span>
-
-                        </td>
-
-
-
-                        <!-- PAGE -->
-
-                        <td>
-
-                            <div class="page-info">
-
-                                <div class="page-icon">
-
-                                    <i class="fa-regular fa-file-lines"></i>
-
-                                </div>
-
-
-                                <div>
-
-                                    <strong>
-
-                                        {{ page.title }}
-
-                                    </strong>
-
-
-                                    <span
-                                        *ngIf="
-                                            page.short_description
-                                        ">
-
-                                        {{
-                                            page.short_description
-                                            | slice:0:70
-                                        }}
-
-
-                                        <ng-container
-                                            *ngIf="
-                                                page.short_description?.length > 70
-                                            ">
-
-                                            ...
-
-                                        </ng-container>
-
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-                        </td>
-
-
-
-                        <!-- SLUG -->
-
-                        <td>
-
-                            <span class="slug-text">
-
-                                /{{ page.slug }}
-
-                            </span>
-
-                        </td>
-
-
-
-                        <!-- STATUS -->
-
-                        <td>
-
-                            <button
-                                type="button"
-                                class="status-badge"
-                                [class.active]="page.status == 1"
-                                [class.inactive]="page.status != 1"
-                                [disabled]="statusUpdatingId === page.id"
-                                (click)="toggleStatus(page)">
-
-
-                                <span
-                                    *ngIf="
-                                        statusUpdatingId !== page.id
-                                    ">
-                                </span>
-
-
-                                <span
-                                    *ngIf="
-                                        statusUpdatingId === page.id
-                                    "
+        <span>
+          Loading pages...
+        </span>
+      </div>
+    }
+
+
+
+    <!-- =================================================
+    DATA
+    ================================================== -->
+
+    @if (!isLoading) {
+      <div
+        class="table-responsive"
+        >
+        <table class="page-table">
+          <thead>
+            <tr>
+              <th class="serial-column">
+                #
+              </th>
+              <th>
+                Page
+              </th>
+              <th>
+                URL Slug
+              </th>
+              <th>
+                Status
+              </th>
+              <th>
+                Updated
+              </th>
+              <th class="action-column">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (
+              page of pages; track
+              page; let i = $index) {
+              <tr
+                >
+                <!-- SERIAL -->
+                <td>
+                  <span class="serial-number">
+                    {{ getSerial(i) }}
+                  </span>
+                </td>
+                <!-- PAGE -->
+                <td>
+                  <div class="page-info">
+                    <div class="page-icon">
+                      <i class="fa-regular fa-file-lines"></i>
+                    </div>
+                    <div>
+                      <strong>
+                        {{ page.title }}
+                      </strong>
+                      @if (
+                        page.short_description
+                        ) {
+                        <span
+                          >
+                          {{
+                          page.short_description
+                          | slice:0:70
+                          }}
+                          @if (
+                            page.short_description?.length > 70
+                            ) {
+                            ...
+                          }
+                        </span>
+                      }
+                    </div>
+                  </div>
+                </td>
+                <!-- SLUG -->
+                <td>
+                  <span class="slug-text">
+                    /{{ page.slug }}
+                  </span>
+                </td>
+                <!-- STATUS -->
+                <td>
+                  <button
+                    type="button"
+                    class="status-badge"
+                    [class.active]="page.status == 1"
+                    [class.inactive]="page.status != 1"
+                    [disabled]="statusUpdatingId === page.id"
+                    (click)="toggleStatus(page)">
+                    @if (
+                      statusUpdatingId !== page.id
+                      ) {
+                      <span
+                        >
+                      </span>
+                    }
+                    @if (
+                      statusUpdatingId === page.id
+                      ) {
+                      <span
                                     class="
                                         spinner-border
                                         spinner-border-sm
                                     ">
-                                </span>
-
-
-                                {{
-                                    page.status == 1
-                                        ? 'Active'
-                                        : 'Inactive'
-                                }}
-
-                            </button>
-
-                        </td>
-
-
-
-                        <!-- DATE -->
-
-                        <td>
-
-                            <span class="date-text">
-
-                                {{
-                                    (
-                                        page.updated_at ||
-                                        page.created_at
-                                    )
-                                    | date:'dd MMM yyyy'
-                                }}
-
-                            </span>
-
-                        </td>
-
-
-
-                        <!-- ACTION -->
-
-                        <td>
-
-                            <div class="action-buttons">
-
-
-                                <!-- EDIT -->
-
-                                <button
-                                    type="button"
-                                    class="action-btn edit"
-                                    title="Edit Page"
-                                    (click)="editPage(page.id)">
-
-                                    <i class="fa-regular fa-pen-to-square"></i>
-
-                                </button>
-
-
-
-                                <!-- DELETE -->
-
-                                <button
-                                    type="button"
-                                    class="action-btn delete"
-                                    title="Delete Page"
-                                    [disabled]="deletingId === page.id"
-                                    (click)="deletePage(page)">
-
-
-                                    <i
-                                        *ngIf="
-                                            deletingId !== page.id
-                                        "
-                                        class="fa-regular fa-trash-can">
-                                    </i>
-
-
-                                    <span
-                                        *ngIf="
-                                            deletingId === page.id
-                                        "
+                      </span>
+                    }
+                    {{
+                    page.status == 1
+                    ? 'Active'
+                    : 'Inactive'
+                    }}
+                  </button>
+                </td>
+                <!-- DATE -->
+                <td>
+                  <span class="date-text">
+                    {{
+                    (
+                    page.updated_at ||
+                    page.created_at
+                    )
+                    | date:'dd MMM yyyy'
+                    }}
+                  </span>
+                </td>
+                <!-- ACTION -->
+                <td>
+                  <div class="action-buttons">
+                    <!-- EDIT -->
+                    <button
+                      type="button"
+                      class="action-btn edit"
+                      title="Edit Page"
+                      (click)="editPage(page.id)">
+                      <i class="fa-regular fa-pen-to-square"></i>
+                    </button>
+                    <!-- DELETE -->
+                    <button
+                      type="button"
+                      class="action-btn delete"
+                      title="Delete Page"
+                      [disabled]="deletingId === page.id"
+                      (click)="deletePage(page)">
+                      @if (
+                        deletingId !== page.id
+                        ) {
+                        <i
+                          class="fa-regular fa-trash-can">
+                        </i>
+                      }
+                      @if (
+                        deletingId === page.id
+                        ) {
+                        <span
                                         class="
                                             spinner-border
                                             spinner-border-sm
                                         ">
-                                    </span>
-
-                                </button>
-
-
-                            </div>
-
-                        </td>
-
-
-                    </tr>
-
-
-
-                    <!-- =================================================
-                         EMPTY
-                    ================================================== -->
-
-                    <tr *ngIf="pages.length === 0">
-
-                        <td
-                            colspan="6"
-                            class="empty-cell">
-
-
-                            <div class="empty-pages">
-
-                                <div class="empty-icon">
-
-                                    <i class="fa-regular fa-file-lines"></i>
-
-                                </div>
-
-
-                                <strong>
-                                    No pages found
-                                </strong>
-
-
-                                <span>
-                                    Try changing your search or filters.
-                                </span>
+                        </span>
+                      }
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+            <!-- =================================================
+            EMPTY
+            ================================================== -->
+            @if (pages.length === 0) {
+              <tr>
+                <td
+                  colspan="6"
+                  class="empty-cell">
+                  <div class="empty-pages">
+                    <div class="empty-icon">
+                      <i class="fa-regular fa-file-lines"></i>
+                    </div>
+                    <strong>
+                      No pages found
+                    </strong>
+                    <span>
+                      Try changing your search or filters.
+                    </span>
+                    <a routerLink="/page/add">
+                      <i class="fa-solid fa-plus"></i>
+                      Add New Page
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
 
 
-                                <a routerLink="/page/add">
 
-                                    <i class="fa-solid fa-plus"></i>
+    <!-- =================================================
+    PAGINATION
+    ================================================== -->
 
-                                    Add New Page
-
-                                </a>
-
-                            </div>
-
-                        </td>
-
-                    </tr>
-
-
-                </tbody>
-
-            </table>
-
+    @if (
+      !isLoading &&
+      total > 0
+      ) {
+      <div
+        class="table-footer"
+        >
+        <div class="pagination-info">
+          Showing
+          <strong>
+            {{
+            ((currentPage - 1) * perPage) + 1
+            }}
+          </strong>
+          to
+          <strong>
+            {{
+            currentPage * perPage > total
+            ? total
+            : currentPage * perPage
+            }}
+          </strong>
+          of
+          <strong>
+            {{ total }}
+          </strong>
+          entries
         </div>
-
-
-
-        <!-- =================================================
-             PAGINATION
-        ================================================== -->
-
-        <div
-            class="table-footer"
-            *ngIf="
-                !isLoading &&
-                total > 0
-            ">
-
-
-            <div class="pagination-info">
-
-                Showing
-
-                <strong>
-
-                    {{
-                        ((currentPage - 1) * perPage) + 1
-                    }}
-
-                </strong>
-
-                to
-
-                <strong>
-
-                    {{
-                        currentPage * perPage > total
-                            ? total
-                            : currentPage * perPage
-                    }}
-
-                </strong>
-
-                of
-
-                <strong>
-
-                    {{ total }}
-
-                </strong>
-
-                entries
-
-            </div>
-
-
-
-            <div class="pagination">
-
-
-                <!-- PREVIOUS -->
-
-                <button
-                    type="button"
-                    [disabled]="currentPage === 1"
-                    (click)="previousPage()">
-
-                    <i class="fa-solid fa-chevron-left"></i>
-
-                </button>
-
-
-
-                <!-- PAGE NUMBERS -->
-
-                <button
-                    type="button"
-                    *ngFor="
-                        let number of pageNumbers
-                    "
+        <div class="pagination">
+          <!-- PREVIOUS -->
+          <button
+            type="button"
+            [disabled]="currentPage === 1"
+            (click)="previousPage()">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <!-- PAGE NUMBERS -->
+          @for (
+            number of pageNumbers
+            ; track
+            number) {
+            <button
+              type="button"
                     [class.active]="
                         number === currentPage
                     "
-                    (click)="goToPage(number)">
-
-                    {{ number }}
-
-                </button>
-
-
-
-                <!-- NEXT -->
-
-                <button
-                    type="button"
+              (click)="goToPage(number)">
+              {{ number }}
+            </button>
+          }
+          <!-- NEXT -->
+          <button
+            type="button"
                     [disabled]="
                         currentPage === lastPage
                     "
-                    (click)="nextPage()">
-
-                    <i class="fa-solid fa-chevron-right"></i>
-
-                </button>
-
-
-            </div>
-
+            (click)="nextPage()">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
+      </div>
+    }
 
 
-    </div>
+  </div>
 
 </div>

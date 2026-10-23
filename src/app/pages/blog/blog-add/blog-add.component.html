@@ -1,1437 +1,1332 @@
 <!-- =========================================================
-     PAGE HEADER
+PAGE HEADER
 ========================================================= -->
 
 <div class="page-header">
 
-    <div>
+  <div>
 
-        <div class="breadcrumb-text">
+    <div class="breadcrumb-text">
 
-            Content Management
+      Content Management
 
-            <span>/</span>
+      <span>/</span>
 
-            <a routerLink="/blog/list">
-                Blogs
-            </a>
+      <a routerLink="/blog/list">
+        Blogs
+      </a>
 
-            <span>/</span>
+      <span>/</span>
 
-            <strong>
-                Add Blog
-            </strong>
-
-        </div>
-
-
-        <h1>
-            Add Blog
-        </h1>
-
-
-        <p>
-            Create a new article for the Medclinic website.
-        </p>
+      <strong>
+        Add Blog
+      </strong>
 
     </div>
 
+
+    <h1>
+      Add Blog
+    </h1>
+
+
+    <p>
+      Create a new article for the Medclinic website.
+    </p>
+
+  </div>
+
 </div>
 
 
 <!-- =========================================================
-     MESSAGES
+MESSAGES
 ========================================================= -->
 
-<div
+@if (successMessage) {
+  <div
     class="message-box success-message"
-    *ngIf="successMessage">
-
+    >
     <i class="fa-solid fa-circle-check"></i>
-
     <span>
-        {{ successMessage }}
+      {{ successMessage }}
     </span>
+  </div>
+}
 
-</div>
 
-
-<div
+@if (errorMessage) {
+  <div
     class="message-box error-message"
-    *ngIf="errorMessage">
-
+    >
     <i class="fa-solid fa-circle-exclamation"></i>
-
     <span>
-        {{ errorMessage }}
+      {{ errorMessage }}
     </span>
-
-</div>
+  </div>
+}
 
 
 <!-- =========================================================
-     FORM
+FORM
 ========================================================= -->
 
 <form
-    #blogForm="ngForm"
-    (ngSubmit)="submitForm()"
-    novalidate>
+  #blogForm="ngForm"
+  (ngSubmit)="submitForm()"
+  novalidate>
 
 
-    <!--
-        IMPORTANT:
-        Do not add align-items-start here.
-        It will break the sticky Publish card.
-    -->
+  <!--
+  IMPORTANT:
+  Do not add align-items-start here.
+  It will break the sticky Publish card.
+  -->
 
-    <div class="row g-3">
+  <div class="row g-3">
 
 
-        <!-- =================================================
-             LEFT COLUMN
-        ================================================== -->
+    <!-- =================================================
+    LEFT COLUMN
+    ================================================== -->
 
-        <div class="col-xl-8 col-lg-7">
+    <div class="col-xl-8 col-lg-7">
 
 
-            <!-- =============================================
-                 BLOG INFORMATION
-            ============================================== -->
+      <!-- =============================================
+      BLOG INFORMATION
+      ============================================== -->
 
-            <div class="form-card">
+      <div class="form-card">
 
-                <div class="form-card-header">
+        <div class="form-card-header">
 
-                    <div class="card-heading-wrap">
-
-                        <div class="card-icon">
-
-                            <i class="fa-regular fa-newspaper"></i>
-
-                        </div>
-
-
-                        <div>
-
-                            <h3>
-                                Blog Information
-                            </h3>
-
-                            <p>
-                                Enter the main information for this article.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-card-body">
-
-
-                    <!-- =====================================
-                         TITLE
-                    ====================================== -->
-
-                    <div class="form-group">
-
-                        <label>
-                            Blog Title
-                            <span class="required">*</span>
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="title"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.title"
-                            #title="ngModel"
-                            (ngModelChange)="onTitleChange()"
-                            required
-                            maxlength="255"
-                            placeholder="Enter blog title">
-
-
-                        <div
-                            class="field-error"
-                            *ngIf="
-                                title.invalid &&
-                                (title.dirty || title.touched)
-                            ">
-
-                            Blog title is required.
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         SLUG
-                    ====================================== -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Slug
-                            <span class="required">*</span>
-                        </label>
-
-
-                        <div class="slug-input-wrap">
-
-
-                            <div class="slug-prefix">
-                                /
-                            </div>
-
-
-                            <input
-                                type="text"
-                                name="slug"
-                                class="form-control-custom slug-input"
-                                [(ngModel)]="formData.slug"
-                                #slug="ngModel"
-                                (change)="onSlugChange()"
-                                required
-                                maxlength="255"
-                                placeholder="blog-url-slug">
-
-
-                            <button
-                                type="button"
-                                class="slug-refresh-btn"
-                                title="Regenerate slug from title"
-                                (click)="regenerateSlug()">
-
-                                <i class="fa-solid fa-rotate"></i>
-
-                            </button>
-
-                        </div>
-
-
-                        <div
-                            class="field-error"
-                            *ngIf="
-                                slug.invalid &&
-                                (slug.dirty || slug.touched)
-                            ">
-
-                            Blog slug is required.
-
-                        </div>
-
-
-                        <div class="field-help">
-
-                            Used in the public blog URL.
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         SHORT DESCRIPTION
-                    ====================================== -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Short Description
-                        </label>
-
-
-                        <textarea
-                            name="short_description"
-                            class="form-control-custom short-description"
-                            [(ngModel)]="formData.short_description"
-                            rows="4"
-                            maxlength="1000"
-                            placeholder="Enter a short introduction or summary of this article...">
-                        </textarea>
-
-
-                        <div class="field-footer">
-
-                            <span>
-                                Used as the blog summary on listing pages.
-                            </span>
-
-
-                            <span>
-
-                                {{
-                                    formData.short_description?.length ||
-                                    0
-                                }}
-
-                                characters
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =============================================
-     BLOG CONTENT
-============================================== -->
-
-<div class="form-card">
-
-    <div class="form-card-header blog-content-header">
-
-        <div class="card-heading-wrap">
+          <div class="card-heading-wrap">
 
             <div class="card-icon">
 
-                <i class="fa-regular fa-file-lines"></i>
+              <i class="fa-regular fa-newspaper"></i>
 
             </div>
 
 
             <div>
 
-                <h3>
-                    Blog Content
-                </h3>
+              <h3>
+                Blog Information
+              </h3>
 
-                <p>
-                    Write and format the full content for this article.
-                </p>
+              <p>
+                Enter the main information for this article.
+              </p>
 
             </div>
 
+          </div>
+
         </div>
 
 
-        <!-- =====================================
-             VISUAL / HTML SWITCH
-        ====================================== -->
+        <div class="form-card-body">
 
-        <div class="editor-mode-switch">
+
+          <!-- =====================================
+          TITLE
+          ====================================== -->
+
+          <div class="form-group">
+
+            <label>
+              Blog Title
+              <span class="required">*</span>
+            </label>
+
+
+            <input
+              type="text"
+              name="title"
+              class="form-control-custom"
+              [(ngModel)]="formData.title"
+              #title="ngModel"
+              (ngModelChange)="onTitleChange()"
+              required
+              maxlength="255"
+              placeholder="Enter blog title">
+
+
+            @if (
+              title.invalid &&
+              (title.dirty || title.touched)
+              ) {
+              <div
+                class="field-error"
+                >
+                Blog title is required.
+              </div>
+            }
+
+          </div>
+
+
+          <!-- =====================================
+          SLUG
+          ====================================== -->
+
+          <div class="form-group form-space">
+
+            <label>
+              Slug
+              <span class="required">*</span>
+            </label>
+
+
+            <div class="slug-input-wrap">
+
+
+              <div class="slug-prefix">
+                /
+              </div>
+
+
+              <input
+                type="text"
+                name="slug"
+                class="form-control-custom slug-input"
+                [(ngModel)]="formData.slug"
+                #slug="ngModel"
+                (change)="onSlugChange()"
+                required
+                maxlength="255"
+                placeholder="blog-url-slug">
+
+
+              <button
+                type="button"
+                class="slug-refresh-btn"
+                title="Regenerate slug from title"
+                (click)="regenerateSlug()">
+
+                <i class="fa-solid fa-rotate"></i>
+
+              </button>
+
+            </div>
+
+
+            @if (
+              slug.invalid &&
+              (slug.dirty || slug.touched)
+              ) {
+              <div
+                class="field-error"
+                >
+                Blog slug is required.
+              </div>
+            }
+
+
+            <div class="field-help">
+
+              Used in the public blog URL.
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+          SHORT DESCRIPTION
+          ====================================== -->
+
+          <div class="form-group form-space">
+
+            <label>
+              Short Description
+            </label>
+
+
+            <textarea
+              name="short_description"
+              class="form-control-custom short-description"
+              [(ngModel)]="formData.short_description"
+              rows="4"
+              maxlength="1000"
+              placeholder="Enter a short introduction or summary of this article...">
+            </textarea>
+
+
+            <div class="field-footer">
+
+              <span>
+                Used as the blog summary on listing pages.
+              </span>
+
+
+              <span>
+
+                {{
+                formData.short_description?.length ||
+                0
+                }}
+
+                characters
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =============================================
+      BLOG CONTENT
+      ============================================== -->
+
+      <div class="form-card">
+
+        <div class="form-card-header blog-content-header">
+
+          <div class="card-heading-wrap">
+
+            <div class="card-icon">
+
+              <i class="fa-regular fa-file-lines"></i>
+
+            </div>
+
+
+            <div>
+
+              <h3>
+                Blog Content
+              </h3>
+
+              <p>
+                Write and format the full content for this article.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+          VISUAL / HTML SWITCH
+          ====================================== -->
+
+          <div class="editor-mode-switch">
 
             <button
-                type="button"
-                class="editor-mode-btn"
-                [class.active]="editorMode === 'visual'"
-                (click)="setEditorMode('visual')">
+              type="button"
+              class="editor-mode-btn"
+              [class.active]="editorMode === 'visual'"
+              (click)="setEditorMode('visual')">
 
-                <i class="fa-regular fa-eye"></i>
+              <i class="fa-regular fa-eye"></i>
 
-                Visual
+              Visual
 
             </button>
 
 
             <button
-                type="button"
-                class="editor-mode-btn"
-                [class.active]="editorMode === 'html'"
-                (click)="setEditorMode('html')">
+              type="button"
+              class="editor-mode-btn"
+              [class.active]="editorMode === 'html'"
+              (click)="setEditorMode('html')">
 
-                <i class="fa-solid fa-code"></i>
+              <i class="fa-solid fa-code"></i>
 
-                HTML
+              HTML
 
             </button>
 
+          </div>
+
         </div>
 
-    </div>
+
+        <div class="form-card-body">
 
 
-    <div class="form-card-body">
-
-
-        <div class="form-group">
+          <div class="form-group">
 
             <label>
 
-                Content
+              Content
 
-                <span class="required">
-                    *
-                </span>
+              <span class="required">
+                *
+              </span>
 
             </label>
 
 
             <!-- =================================
-                 VISUAL EDITOR
+            VISUAL EDITOR
             ================================== -->
 
-            <div
+            @if (editorMode === 'visual') {
+              <div
                 class="blog-editor-wrapper"
-                *ngIf="editorMode === 'visual'"
                 [class.editor-error]="
                     contentTouched &&
                     !stripHtmlContent(formData.content)
                 ">
-
                 <ckeditor
-                    [editor]="Editor"
-                    [config]="editorConfig"
-                    [(ngModel)]="formData.content"
-                    name="content_visual"
-                    (focus)="onEditorFocus()">
+                  [editor]="Editor"
+                  [config]="editorConfig"
+                  [(ngModel)]="formData.content"
+                  name="content_visual"
+                  (focus)="onEditorFocus()">
                 </ckeditor>
-
-            </div>
+              </div>
+            }
 
 
             <!-- =================================
-                 HTML SOURCE EDITOR
+            HTML SOURCE EDITOR
             ================================== -->
 
-            <div
+            @if (editorMode === 'html') {
+              <div
                 class="html-editor-wrapper"
-                *ngIf="editorMode === 'html'">
-
-
+                >
                 <div class="html-editor-toolbar">
-
-                    <div>
-
-                        <i class="fa-solid fa-code"></i>
-
-                        HTML Source
-
-                    </div>
-
-
-                    <span>
-                        Edit raw HTML
-                    </span>
-
+                  <div>
+                    <i class="fa-solid fa-code"></i>
+                    HTML Source
+                  </div>
+                  <span>
+                    Edit raw HTML
+                  </span>
                 </div>
-
-
                 <textarea
-                    name="content_html"
-                    class="html-source-editor"
-                    [(ngModel)]="formData.content"
-                    (focus)="onEditorFocus()"
-                    spellcheck="false"
+                  name="content_html"
+                  class="html-source-editor"
+                  [(ngModel)]="formData.content"
+                  (focus)="onEditorFocus()"
+                  spellcheck="false"
                     placeholder="<h2>Blog heading</h2>
 
 <p>Write your content here...</p>">
                 </textarea>
 
             </div>
+}
 
 
             <!-- =================================
                  ERROR
             ================================== -->
 
-            <div
-                class="field-error"
-                *ngIf="
+            @if (
                     contentTouched &&
                     !stripHtmlContent(formData.content)
-                ">
-
+                ) {
+<div
+                class="field-error"
+                >
                 Blog content is required.
-
-            </div>
+              </div>
+            }
 
 
             <!-- =================================
-                 FOOTER
+            FOOTER
             ================================== -->
 
             <div class="editor-footer">
 
 
-                <div *ngIf="editorMode === 'visual'">
-
-                    <i class="fa-solid fa-circle-info"></i>
-
-                    <span>
-                        Use the toolbar to format your article.
-                    </span>
-
+              @if (editorMode === 'visual') {
+                <div>
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>
+                    Use the toolbar to format your article.
+                  </span>
                 </div>
+              }
 
 
-                <div *ngIf="editorMode === 'html'">
-
-                    <i class="fa-solid fa-code"></i>
-
-                    <span>
-                        Changes made here will appear in Visual mode.
-                    </span>
-
+              @if (editorMode === 'html') {
+                <div>
+                  <i class="fa-solid fa-code"></i>
+                  <span>
+                    Changes made here will appear in Visual mode.
+                  </span>
                 </div>
+              }
 
 
-                <span>
+              <span>
 
-                    {{
-                        stripHtmlContent(
-                            formData.content
-                        ).length
-                    }}
+                {{
+                stripHtmlContent(
+                formData.content
+                ).length
+                }}
 
-                    characters
+                characters
 
-                </span>
+              </span>
 
             </div>
 
+          </div>
+
         </div>
 
-    </div>
-
-</div>
+      </div>
 
 
 
 
-            <!-- =============================================
-                 FEATURED IMAGE
-            ============================================== -->
+      <!-- =============================================
+      FEATURED IMAGE
+      ============================================== -->
 
-            <div class="form-card">
+      <div class="form-card">
 
-                <div class="form-card-header">
+        <div class="form-card-header">
 
-                    <div class="card-heading-wrap">
+          <div class="card-heading-wrap">
 
-                        <div class="card-icon">
+            <div class="card-icon">
 
-                            <i class="fa-regular fa-image"></i>
+              <i class="fa-regular fa-image"></i>
 
-                        </div>
-
-
-                        <div>
-
-                            <h3>
-                                Featured Image
-                            </h3>
-
-                            <p>
-                                Upload the main image displayed with this article.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
+            </div>
 
 
-                <div class="form-card-body">
+            <div>
+
+              <h3>
+                Featured Image
+              </h3>
+
+              <p>
+                Upload the main image displayed with this article.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
 
 
-                    <!-- =====================================
-                         IMAGE PREVIEW
-                    ====================================== -->
-
-                    <div
-                        class="featured-image-box"
-                        *ngIf="previewImage">
+        <div class="form-card-body">
 
 
-                        <div class="featured-image-preview">
+          <!-- =====================================
+          IMAGE PREVIEW
+          ====================================== -->
 
-                            <img
-                                [src]="previewImage"
+          @if (previewImage) {
+            <div
+              class="featured-image-box"
+              >
+              <div class="featured-image-preview">
+                <img
+                  [src]="previewImage"
                                 [alt]="
                                     formData.title ||
                                     'Blog featured image'
                                 ">
-
-                        </div>
-
-
-                        <div class="featured-image-footer">
-
-
-                            <div class="image-ready-status">
-
-                                <div class="ready-icon">
-
-                                    <i class="fa-solid fa-check"></i>
-
-                                </div>
-
-
-                                <div>
-
-                                    <strong>
-                                        Featured Image Ready
-                                    </strong>
-
-                                    <span>
-                                        Cropped to 1200 × 675 pixels
-                                    </span>
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="image-actions">
-
-
-                                <label
-                                    for="blogFeaturedImageInput"
-                                    class="image-btn change-image-btn">
-
-                                    <i class="fa-solid fa-pen"></i>
-
-                                    Change Image
-
-                                </label>
-
-
-                                <button
-                                    type="button"
-                                    class="image-btn remove-image-btn"
-                                    (click)="removeImage()">
-
-                                    <i class="fa-regular fa-trash-can"></i>
-
-                                    Remove
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         EMPTY IMAGE
-                    ====================================== -->
-
-                    <label
-                        class="featured-image-upload"
-                        for="blogFeaturedImageInput"
-                        *ngIf="!previewImage">
-
-
-                        <div class="upload-icon">
-
-                            <i class="fa-solid fa-cloud-arrow-up"></i>
-
-                        </div>
-
-
-                        <strong>
-                            Upload Featured Image
-                        </strong>
-
-
-                        <span>
-                            Click to select JPG, PNG or WEBP
-                        </span>
-
-
-                        <small>
-                            Maximum 5 MB • Output 1200 × 675 px
-                        </small>
-
-                    </label>
-
-
-                    <!-- =====================================
-                         FILE INPUT
-                    ====================================== -->
-
-                    <input
-                        id="blogFeaturedImageInput"
-                        type="file"
-                        hidden
-                        accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
-                        (change)="onFileSelected($event)">
-
-
-                    <!-- =====================================
-                         IMAGE ERROR
-                    ====================================== -->
-
-                    <div
-                        class="image-error"
-                        *ngIf="imageError">
-
-                        <i class="fa-solid fa-circle-exclamation"></i>
-
-                        {{ imageError }}
-
-                    </div>
-
-
-                    <!-- =====================================
-                         IMAGE REQUIREMENTS
-                    ====================================== -->
-
-                    <div class="image-requirement-box">
-
-                        <div class="requirement-icon">
-
-                            <i class="fa-solid fa-circle-info"></i>
-
-                        </div>
-
-
-                        <div>
-
-                            <strong>
-                                Featured Image Requirements
-                            </strong>
-
-
-                            <p>
-
-                                Images are cropped to a
-
-                                <b>
-                                    16:9 aspect ratio
-                                </b>
-
-                                with a final output of
-
-                                <b>
-                                    1200 × 675 pixels
-                                </b>.
-
-                                JPG, PNG and WEBP files up to
-                                5 MB are supported.
-
-                            </p>
-
-                        </div>
-
-                    </div>
-
+              </div>
+              <div class="featured-image-footer">
+                <div class="image-ready-status">
+                  <div class="ready-icon">
+                    <i class="fa-solid fa-check"></i>
+                  </div>
+                  <div>
+                    <strong>
+                      Featured Image Ready
+                    </strong>
+                    <span>
+                      Cropped to 1200 × 675 pixels
+                    </span>
+                  </div>
                 </div>
+                <div class="image-actions">
+                  <label
+                    for="blogFeaturedImageInput"
+                    class="image-btn change-image-btn">
+                    <i class="fa-solid fa-pen"></i>
+                    Change Image
+                  </label>
+                  <button
+                    type="button"
+                    class="image-btn remove-image-btn"
+                    (click)="removeImage()">
+                    <i class="fa-regular fa-trash-can"></i>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+
+
+          <!-- =====================================
+          EMPTY IMAGE
+          ====================================== -->
+
+          @if (!previewImage) {
+            <label
+              class="featured-image-upload"
+              for="blogFeaturedImageInput"
+              >
+              <div class="upload-icon">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+              </div>
+              <strong>
+                Upload Featured Image
+              </strong>
+              <span>
+                Click to select JPG, PNG or WEBP
+              </span>
+              <small>
+                Maximum 5 MB • Output 1200 × 675 px
+              </small>
+            </label>
+          }
+
+
+          <!-- =====================================
+          FILE INPUT
+          ====================================== -->
+
+          <input
+            id="blogFeaturedImageInput"
+            type="file"
+            hidden
+            accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+            (change)="onFileSelected($event)">
+
+
+          <!-- =====================================
+          IMAGE ERROR
+          ====================================== -->
+
+          @if (imageError) {
+            <div
+              class="image-error"
+              >
+              <i class="fa-solid fa-circle-exclamation"></i>
+              {{ imageError }}
+            </div>
+          }
+
+
+          <!-- =====================================
+          IMAGE REQUIREMENTS
+          ====================================== -->
+
+          <div class="image-requirement-box">
+
+            <div class="requirement-icon">
+
+              <i class="fa-solid fa-circle-info"></i>
 
             </div>
 
 
-            <!-- =============================================
-                 PUBLISHING DETAILS
-            ============================================== -->
+            <div>
 
-            <div class="form-card">
-
-                <div class="form-card-header">
-
-                    <div class="card-heading-wrap">
-
-                        <div class="card-icon">
-
-                            <i class="fa-regular fa-calendar"></i>
-
-                        </div>
+              <strong>
+                Featured Image Requirements
+              </strong>
 
 
-                        <div>
+              <p>
 
-                            <h3>
-                                Publishing Details
-                            </h3>
+                Images are cropped to a
 
-                            <p>
-                                Configure the author and publication date.
-                            </p>
+                <b>
+                  16:9 aspect ratio
+                </b>
 
-                        </div>
+                with a final output of
 
-                    </div>
+                <b>
+                  1200 × 675 pixels
+                </b>.
 
-                </div>
+                JPG, PNG and WEBP files up to
+                5 MB are supported.
 
+              </p>
 
-                <div class="form-card-body">
+            </div>
 
-                    <div class="row g-3">
+          </div>
 
+        </div>
 
-                        <!-- AUTHOR -->
-
-                        <div class="col-md-6">
-
-                            <div class="form-group">
-
-                                <label>
-                                    Author
-                                </label>
+      </div>
 
 
-                                <div class="input-icon-wrap">
+      <!-- =============================================
+      PUBLISHING DETAILS
+      ============================================== -->
 
-                                    <i class="fa-regular fa-user"></i>
+      <div class="form-card">
 
+        <div class="form-card-header">
 
-                                    <input
-                                        type="text"
-                                        name="author"
-                                        class="form-control-custom"
-                                        [(ngModel)]="formData.author"
-                                        maxlength="150"
-                                        placeholder="e.g. Medclinic Team">
+          <div class="card-heading-wrap">
 
-                                </div>
+            <div class="card-icon">
 
-                            </div>
-
-                        </div>
-
-
-                        <!-- PUBLISHED DATE -->
-
-                        <div class="col-md-6">
-
-                            <div class="form-group">
-
-                                <label>
-                                    Published Date
-                                </label>
-
-
-                                <input
-                                    type="date"
-                                    name="published_date"
-                                    class="form-control-custom"
-                                    [(ngModel)]="formData.published_date">
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
+              <i class="fa-regular fa-calendar"></i>
 
             </div>
 
 
-            <!-- =============================================
-                 SEO
-            ============================================== -->
+            <div>
 
-            <div class="form-card">
+              <h3>
+                Publishing Details
+              </h3>
 
-                <div class="form-card-header">
-
-                    <div class="card-heading-wrap">
-
-                        <div class="card-icon">
-
-                            <i class="fa-solid fa-magnifying-glass"></i>
-
-                        </div>
-
-
-                        <div>
-
-                            <h3>
-                                Search Engine Optimisation
-                            </h3>
-
-                            <p>
-                                Configure optional search engine metadata.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="form-card-body">
-
-
-                    <!-- =====================================
-                         META TITLE
-                    ====================================== -->
-
-                    <div class="form-group">
-
-                        <label>
-                            Meta Title
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="meta_title"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.meta_title"
-                            maxlength="255"
-                            placeholder="SEO page title">
-
-
-                        <div class="field-footer">
-
-                            <span>
-                                Recommended: approximately 50–60 characters.
-                            </span>
-
-
-                            <span>
-
-                                {{
-                                    formData.meta_title?.length ||
-                                    0
-                                }}
-
-                                characters
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         META DESCRIPTION
-                    ====================================== -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Meta Description
-                        </label>
-
-
-                        <textarea
-                            name="meta_description"
-                            class="form-control-custom seo-description"
-                            [(ngModel)]="formData.meta_description"
-                            rows="4"
-                            placeholder="Short description for search engines...">
-                        </textarea>
-
-
-                        <div class="field-footer">
-
-                            <span>
-                                Recommended: approximately 150–160 characters.
-                            </span>
-
-
-                            <span>
-
-                                {{
-                                    formData.meta_description?.length ||
-                                    0
-                                }}
-
-                                characters
-
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =====================================
-                         META KEYWORDS
-                    ====================================== -->
-
-                    <div class="form-group form-space">
-
-                        <label>
-                            Meta Keywords
-                        </label>
-
-
-                        <input
-                            type="text"
-                            name="meta_keywords"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.meta_keywords"
-                            placeholder="health, medical, clinic, doctor">
-
-
-                        <div class="field-help">
-                            Separate keywords with commas.
-                        </div>
-
-                    </div>
-
-                </div>
+              <p>
+                Configure the author and publication date.
+              </p>
 
             </div>
+
+          </div>
 
         </div>
 
 
-        <!-- =================================================
-             RIGHT COLUMN
-        ================================================== -->
+        <div class="form-card-body">
 
-        <div class="col-xl-4 col-lg-5">
+          <div class="row g-3">
 
 
-            <!-- =============================================
-                 PUBLISH
-            ============================================== -->
+            <!-- AUTHOR -->
 
-            <div class="publish-card">
+            <div class="col-md-6">
 
+              <div class="form-group">
 
-                <div class="publish-header">
-
-
-                    <div>
-
-                        <h3>
-                            Publish
-                        </h3>
-
-                        <p>
-                            Configure and save this blog article.
-                        </p>
-
-                    </div>
+                <label>
+                  Author
+                </label>
 
 
-                    <div class="publish-icon">
+                <div class="input-icon-wrap">
 
-                        <i class="fa-solid fa-paper-plane"></i>
+                  <i class="fa-regular fa-user"></i>
 
-                    </div>
+
+                  <input
+                    type="text"
+                    name="author"
+                    class="form-control-custom"
+                    [(ngModel)]="formData.author"
+                    maxlength="150"
+                    placeholder="e.g. Medclinic Team">
 
                 </div>
 
+              </div>
 
-                <div class="publish-body">
-
-
-                    <!-- =====================================
-                         STATUS
-                    ====================================== -->
-
-                    <div class="publish-field">
-
-                        <label>
-                            Status
-                        </label>
+            </div>
 
 
-                        <div class="status-options">
+            <!-- PUBLISHED DATE -->
+
+            <div class="col-md-6">
+
+              <div class="form-group">
+
+                <label>
+                  Published Date
+                </label>
 
 
-                            <!-- ACTIVE -->
+                <input
+                  type="date"
+                  name="published_date"
+                  class="form-control-custom"
+                  [(ngModel)]="formData.published_date">
 
-                            <label
-                                class="status-option"
-                                [class.selected]="formData.status == 1">
+              </div>
 
+            </div>
 
-                                <input
-                                    type="radio"
-                                    name="status"
-                                    [value]="1"
-                                    [(ngModel)]="formData.status">
+          </div>
 
+        </div>
 
-                                <span class="status-radio"></span>
-
-
-                                <div>
-
-                                    <strong>
-                                        Active
-                                    </strong>
-
-                                    <small>
-                                        Visible on the website
-                                    </small>
-
-                                </div>
-
-                            </label>
+      </div>
 
 
-                            <!-- INACTIVE -->
+      <!-- =============================================
+      SEO
+      ============================================== -->
 
-                            <label
-                                class="status-option"
-                                [class.selected]="formData.status == 0">
+      <div class="form-card">
 
+        <div class="form-card-header">
 
-                                <input
-                                    type="radio"
-                                    name="status"
-                                    [value]="0"
-                                    [(ngModel)]="formData.status">
+          <div class="card-heading-wrap">
 
+            <div class="card-icon">
 
-                                <span class="status-radio"></span>
+              <i class="fa-solid fa-magnifying-glass"></i>
 
-
-                                <div>
-
-                                    <strong>
-                                        Inactive
-                                    </strong>
-
-                                    <small>
-                                        Hidden from the website
-                                    </small>
-
-                                </div>
-
-                            </label>
-
-                        </div>
-
-                    </div>
+            </div>
 
 
-                    <!-- =====================================
-                         SORT ORDER
-                    ====================================== -->
+            <div>
 
-                    <div class="publish-field">
+              <h3>
+                Search Engine Optimisation
+              </h3>
 
-                        <label>
-                            Sort Order
-                        </label>
+              <p>
+                Configure optional search engine metadata.
+              </p>
 
+            </div>
 
-                        <input
-                            type="number"
-                            name="sort_order"
-                            class="form-control-custom"
-                            [(ngModel)]="formData.sort_order"
-                            min="0"
-                            placeholder="0">
+          </div>
+
+        </div>
 
 
-                        <small class="field-help">
-                            Lower numbers appear first.
-                        </small>
-
-                    </div>
+        <div class="form-card-body">
 
 
-                    <!-- =====================================
-                         SUMMARY
-                    ====================================== -->
+          <!-- =====================================
+          META TITLE
+          ====================================== -->
 
-                    <div class="publish-summary">
+          <div class="form-group">
 
-
-                        <div class="summary-row">
-
-                            <span>
-                                Featured Image
-                            </span>
+            <label>
+              Meta Title
+            </label>
 
 
-                            <strong
-                                [class.ready]="previewImage">
-
-                                {{
-                                    previewImage
-                                        ? 'Ready'
-                                        : 'Not Added'
-                                }}
-
-                            </strong>
-
-                        </div>
+            <input
+              type="text"
+              name="meta_title"
+              class="form-control-custom"
+              [(ngModel)]="formData.meta_title"
+              maxlength="255"
+              placeholder="SEO page title">
 
 
-                        <div class="summary-row">
+            <div class="field-footer">
 
-                            <span>
-                                Content
-                            </span>
+              <span>
+                Recommended: approximately 50–60 characters.
+              </span>
 
 
-                            <strong
+              <span>
+
+                {{
+                formData.meta_title?.length ||
+                0
+                }}
+
+                characters
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+          META DESCRIPTION
+          ====================================== -->
+
+          <div class="form-group form-space">
+
+            <label>
+              Meta Description
+            </label>
+
+
+            <textarea
+              name="meta_description"
+              class="form-control-custom seo-description"
+              [(ngModel)]="formData.meta_description"
+              rows="4"
+              placeholder="Short description for search engines...">
+            </textarea>
+
+
+            <div class="field-footer">
+
+              <span>
+                Recommended: approximately 150–160 characters.
+              </span>
+
+
+              <span>
+
+                {{
+                formData.meta_description?.length ||
+                0
+                }}
+
+                characters
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+          META KEYWORDS
+          ====================================== -->
+
+          <div class="form-group form-space">
+
+            <label>
+              Meta Keywords
+            </label>
+
+
+            <input
+              type="text"
+              name="meta_keywords"
+              class="form-control-custom"
+              [(ngModel)]="formData.meta_keywords"
+              placeholder="health, medical, clinic, doctor">
+
+
+            <div class="field-help">
+              Separate keywords with commas.
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================
+    RIGHT COLUMN
+    ================================================== -->
+
+    <div class="col-xl-4 col-lg-5">
+
+
+      <!-- =============================================
+      PUBLISH
+      ============================================== -->
+
+      <div class="publish-card">
+
+
+        <div class="publish-header">
+
+
+          <div>
+
+            <h3>
+              Publish
+            </h3>
+
+            <p>
+              Configure and save this blog article.
+            </p>
+
+          </div>
+
+
+          <div class="publish-icon">
+
+            <i class="fa-solid fa-paper-plane"></i>
+
+          </div>
+
+        </div>
+
+
+        <div class="publish-body">
+
+
+          <!-- =====================================
+          STATUS
+          ====================================== -->
+
+          <div class="publish-field">
+
+            <label>
+              Status
+            </label>
+
+
+            <div class="status-options">
+
+
+              <!-- ACTIVE -->
+
+              <label
+                class="status-option"
+                [class.selected]="formData.status == 1">
+
+
+                <input
+                  type="radio"
+                  name="status"
+                  [value]="1"
+                  [(ngModel)]="formData.status">
+
+
+                <span class="status-radio"></span>
+
+
+                <div>
+
+                  <strong>
+                    Active
+                  </strong>
+
+                  <small>
+                    Visible on the website
+                  </small>
+
+                </div>
+
+              </label>
+
+
+              <!-- INACTIVE -->
+
+              <label
+                class="status-option"
+                [class.selected]="formData.status == 0">
+
+
+                <input
+                  type="radio"
+                  name="status"
+                  [value]="0"
+                  [(ngModel)]="formData.status">
+
+
+                <span class="status-radio"></span>
+
+
+                <div>
+
+                  <strong>
+                    Inactive
+                  </strong>
+
+                  <small>
+                    Hidden from the website
+                  </small>
+
+                </div>
+
+              </label>
+
+            </div>
+
+          </div>
+
+
+          <!-- =====================================
+          SORT ORDER
+          ====================================== -->
+
+          <div class="publish-field">
+
+            <label>
+              Sort Order
+            </label>
+
+
+            <input
+              type="number"
+              name="sort_order"
+              class="form-control-custom"
+              [(ngModel)]="formData.sort_order"
+              min="0"
+              placeholder="0">
+
+
+            <small class="field-help">
+              Lower numbers appear first.
+            </small>
+
+          </div>
+
+
+          <!-- =====================================
+          SUMMARY
+          ====================================== -->
+
+          <div class="publish-summary">
+
+
+            <div class="summary-row">
+
+              <span>
+                Featured Image
+              </span>
+
+
+              <strong
+                [class.ready]="previewImage">
+
+                {{
+                previewImage
+                ? 'Ready'
+                : 'Not Added'
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Content
+              </span>
+
+
+              <strong
                                 [class.ready]="
                                     stripHtmlContent(
                                         formData.content
                                     )
                                 ">
 
-                                {{
-                                    stripHtmlContent(
-                                        formData.content
-                                    )
-                                        ? 'Ready'
-                                        : 'Not Added'
-                                }}
+                {{
+                stripHtmlContent(
+                formData.content
+                )
+                ? 'Ready'
+                : 'Not Added'
+                }}
 
-                            </strong>
+              </strong>
 
-                        </div>
-
-
-                        <div class="summary-row">
-
-                            <span>
-                                Author
-                            </span>
+            </div>
 
 
-                            <strong>
+            <div class="summary-row">
 
-                                {{
-                                    formData.author ||
-                                    'Not Set'
-                                }}
-
-                            </strong>
-
-                        </div>
+              <span>
+                Author
+              </span>
 
 
-                        <div class="summary-row">
+              <strong>
 
-                            <span>
-                                Publish Date
-                            </span>
+                {{
+                formData.author ||
+                'Not Set'
+                }}
 
+              </strong>
 
-                            <strong>
-
-                                {{
-                                    formData.published_date ||
-                                    'Not Set'
-                                }}
-
-                            </strong>
-
-                        </div>
+            </div>
 
 
-                        <div class="summary-row">
+            <div class="summary-row">
 
-                            <span>
-                                Status
-                            </span>
+              <span>
+                Publish Date
+              </span>
 
 
-                            <strong
+              <strong>
+
+                {{
+                formData.published_date ||
+                'Not Set'
+                }}
+
+              </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+              <span>
+                Status
+              </span>
+
+
+              <strong
                                 [class.active-status]="
                                     formData.status == 1
                                 ">
 
-                                {{
-                                    formData.status == 1
-                                        ? 'Active'
-                                        : 'Inactive'
-                                }}
+                {{
+                formData.status == 1
+                ? 'Active'
+                : 'Inactive'
+                }}
 
-                            </strong>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =========================================
-                     PUBLISH FOOTER
-                ========================================== -->
-
-                <div class="publish-footer">
-
-
-                    <button
-                        type="button"
-                        class="cancel-btn"
-                        [disabled]="isSubmitting"
-                        (click)="cancel()">
-
-                        Cancel
-
-                    </button>
-
-
-                    <button
-                        type="submit"
-                        class="save-btn"
-                        [disabled]="isSubmitting">
-
-
-                        <ng-container
-                            *ngIf="!isSubmitting">
-
-                            <i class="fa-solid fa-check"></i>
-
-                            Save Blog
-
-                        </ng-container>
-
-
-                        <ng-container
-                            *ngIf="isSubmitting">
-
-                            <span class="button-spinner"></span>
-
-                            Saving...
-
-                        </ng-container>
-
-                    </button>
-
-                </div>
+              </strong>
 
             </div>
 
+          </div>
+
         </div>
 
+
+        <!-- =========================================
+        PUBLISH FOOTER
+        ========================================== -->
+
+        <div class="publish-footer">
+
+
+          <button
+            type="button"
+            class="cancel-btn"
+            [disabled]="isSubmitting"
+            (click)="cancel()">
+
+            Cancel
+
+          </button>
+
+
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="isSubmitting">
+
+
+            @if (!isSubmitting) {
+              <i class="fa-solid fa-check"></i>
+              Save Blog
+            }
+
+
+            @if (isSubmitting) {
+              <span class="button-spinner"></span>
+              Saving...
+            }
+
+          </button>
+
+        </div>
+
+      </div>
+
     </div>
+
+  </div>
 
 </form>
 
 
 <!-- =========================================================
-     IMAGE CROPPER MODAL
+IMAGE CROPPER MODAL
 ========================================================= -->
 
-<div
+@if (showCropperModal) {
+  <div
     class="cropper-backdrop"
-    *ngIf="showCropperModal">
-
-
+    >
     <div class="cropper-modal">
-
-
-        <!-- =============================================
-             HEADER
-        ============================================== -->
-
-        <div class="cropper-modal-header">
-
-
-            <div>
-
-                <h3>
-                    Crop Featured Image
-                </h3>
-
-                <p>
-                    Position the image inside the 16:9 crop area.
-                </p>
-
-            </div>
-
-
-            <button
-                type="button"
-                class="cropper-close"
-                (click)="cancelCrop()">
-
-                <i class="fa-solid fa-xmark"></i>
-
-            </button>
-
+      <!-- =============================================
+      HEADER
+      ============================================== -->
+      <div class="cropper-modal-header">
+        <div>
+          <h3>
+            Crop Featured Image
+          </h3>
+          <p>
+            Position the image inside the 16:9 crop area.
+          </p>
         </div>
-
-
-        <!-- =============================================
-             BODY
-        ============================================== -->
-
-        <div class="cropper-modal-body">
-
-
-            <div
-                class="cropper-loading"
-                *ngIf="cropperLoading">
-
-                <span class="cropper-spinner"></span>
-
-                Loading image...
-
-            </div>
-
-
-            <image-cropper
-                [imageChangedEvent]="imageChangedEvent"
-                [maintainAspectRatio]="true"
-                [aspectRatio]="16 / 9"
-                [resizeToWidth]="1200"
-                [resizeToHeight]="675"
-                [onlyScaleDown]="false"
-                [cropperMinWidth]="600"
-                [format]="'jpeg'"
-                [imageQuality]="92"
-                [alignImage]="'center'"
-                (imageCropped)="imageCropped($event)"
-                (imageLoaded)="imageLoaded()"
-                (cropperReady)="cropperReady()"
-                (loadImageFailed)="loadImageFailed()">
-            </image-cropper>
-
-
-            <div class="cropper-size-info">
-
-                <i class="fa-solid fa-crop-simple"></i>
-
-                Final output:
-
-                <strong>
-                    1200 × 675 px
-                </strong>
-
-            </div>
-
+        <button
+          type="button"
+          class="cropper-close"
+          (click)="cancelCrop()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <!-- =============================================
+      BODY
+      ============================================== -->
+      <div class="cropper-modal-body">
+        @if (cropperLoading) {
+          <div
+            class="cropper-loading"
+            >
+            <span class="cropper-spinner"></span>
+            Loading image...
+          </div>
+        }
+        <image-cropper
+          [imageChangedEvent]="imageChangedEvent"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="16 / 9"
+          [resizeToWidth]="1200"
+          [resizeToHeight]="675"
+          [onlyScaleDown]="false"
+          [cropperMinWidth]="600"
+          [format]="'jpeg'"
+          [imageQuality]="92"
+          [alignImage]="'center'"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded()"
+          (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()">
+        </image-cropper>
+        <div class="cropper-size-info">
+          <i class="fa-solid fa-crop-simple"></i>
+          Final output:
+          <strong>
+            1200 × 675 px
+          </strong>
         </div>
-
-
-        <!-- =============================================
-             FOOTER
-        ============================================== -->
-
-        <div class="cropper-modal-footer">
-
-
-            <button
-                type="button"
-                class="crop-cancel-btn"
-                (click)="cancelCrop()">
-
-                Cancel
-
-            </button>
-
-
-            <button
-                type="button"
-                class="crop-apply-btn"
-                [disabled]="!croppedBlob"
-                (click)="applyCrop()">
-
-                <i class="fa-solid fa-check"></i>
-
-                Apply Crop
-
-            </button>
-
-        </div>
-
+      </div>
+      <!-- =============================================
+      FOOTER
+      ============================================== -->
+      <div class="cropper-modal-footer">
+        <button
+          type="button"
+          class="crop-cancel-btn"
+          (click)="cancelCrop()">
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="crop-apply-btn"
+          [disabled]="!croppedBlob"
+          (click)="applyCrop()">
+          <i class="fa-solid fa-check"></i>
+          Apply Crop
+        </button>
+      </div>
     </div>
-
-</div>
+  </div>
+}
